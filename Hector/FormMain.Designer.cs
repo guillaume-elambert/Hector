@@ -1,4 +1,6 @@
-﻿namespace Hector
+﻿using System.Windows.Forms;
+
+namespace Hector
 {
     partial class FormMain
     {
@@ -6,6 +8,7 @@
         /// Variable nécessaire au concepteur.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
 
         /// <summary>
         /// Nettoyage des ressources utilisées.
@@ -28,89 +31,124 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.actualiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.SuspendLayout();
+            this.MenuStrip = new System.Windows.Forms.MenuStrip();
+            this.FichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ActualiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.StatusStrip = new System.Windows.Forms.StatusStrip();
+            this.SplitContainer = new System.Windows.Forms.SplitContainer();
+            this.TreeView = new System.Windows.Forms.TreeView();
+            this.ListView = new System.Windows.Forms.ListView();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.MenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
+            this.SplitContainer.Panel1.SuspendLayout();
+            this.SplitContainer.Panel2.SuspendLayout();
+            this.SplitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // MenuStrip
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fichierToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FichierToolStripMenuItem});
+            this.MenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.MenuStrip.Name = "MenuStrip";
+            this.MenuStrip.Size = new System.Drawing.Size(800, 24);
+            this.MenuStrip.TabIndex = 0;
+            this.MenuStrip.Text = "MenuStrip";
             // 
-            // fichierToolStripMenuItem
+            // FichierToolStripMenuItem
             // 
-            this.fichierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.actualiserToolStripMenuItem,
-            this.importerToolStripMenuItem,
-            this.exporterToolStripMenuItem});
-            this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
-            this.fichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.fichierToolStripMenuItem.Text = "Fichier";
+            this.FichierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ActualiserToolStripMenuItem,
+            this.ImporterToolStripMenuItem,
+            this.ExporterToolStripMenuItem});
+            this.FichierToolStripMenuItem.Name = "FichierToolStripMenuItem";
+            this.FichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.FichierToolStripMenuItem.Text = "Fichier";
             // 
-            // actualiserToolStripMenuItem
+            // ActualiserToolStripMenuItem
             // 
-            this.actualiserToolStripMenuItem.Name = "actualiserToolStripMenuItem";
-            this.actualiserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.actualiserToolStripMenuItem.Text = "Actualiser";
+            this.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem";
+            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.ActualiserToolStripMenuItem.Text = "Actualiser";
             // 
-            // importerToolStripMenuItem
+            // ImporterToolStripMenuItem
             // 
-            this.importerToolStripMenuItem.Name = "importerToolStripMenuItem";
-            this.importerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.importerToolStripMenuItem.Text = "Importer";
+            this.ImporterToolStripMenuItem.Name = "ImporterToolStripMenuItem";
+            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.ImporterToolStripMenuItem.Text = "Importer";
+            this.ImporterToolStripMenuItem.Click += new System.EventHandler(this.ImporterToolStripMenuItem_Click);
             // 
-            // exporterToolStripMenuItem
+            // ExporterToolStripMenuItem
             // 
-            this.exporterToolStripMenuItem.Name = "exporterToolStripMenuItem";
-            this.exporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exporterToolStripMenuItem.Text = "Exporter";
+            this.ExporterToolStripMenuItem.Name = "ExporterToolStripMenuItem";
+            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.ExporterToolStripMenuItem.Text = "Exporter";
             // 
-            // statusStrip1
+            // StatusStrip
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
+            this.StatusStrip.Location = new System.Drawing.Point(0, 428);
+            this.StatusStrip.Name = "StatusStrip";
+            this.StatusStrip.Size = new System.Drawing.Size(800, 22);
+            this.StatusStrip.TabIndex = 1;
+            this.StatusStrip.Text = "StatusStrip";
             // 
-            // splitContainer1
+            // SplitContainer
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Panel1MinSize = 200;
-            this.splitContainer1.Size = new System.Drawing.Size(800, 404);
-            this.splitContainer1.SplitterDistance = 266;
-            this.splitContainer1.TabIndex = 2;
+            this.SplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SplitContainer.Location = new System.Drawing.Point(0, 24);
+            this.SplitContainer.Name = "SplitContainer";
+            // 
+            // SplitContainer.Panel1
+            // 
+            this.SplitContainer.Panel1.Controls.Add(this.TreeView);
+            this.SplitContainer.Panel1MinSize = 200;
+            // 
+            // SplitContainer.Panel2
+            // 
+            this.SplitContainer.Panel2.Controls.Add(this.ListView);
+            this.SplitContainer.Size = new System.Drawing.Size(800, 404);
+            this.SplitContainer.SplitterDistance = 266;
+            this.SplitContainer.TabIndex = 2;
+            // 
+            // TreeView
+            // 
+            this.TreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TreeView.Location = new System.Drawing.Point(0, 0);
+            this.TreeView.Name = "TreeView";
+            this.TreeView.Size = new System.Drawing.Size(266, 404);
+            this.TreeView.TabIndex = 0;
+            // 
+            // ListView
+            // 
+            this.ListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListView.HideSelection = false;
+            this.ListView.Location = new System.Drawing.Point(0, 0);
+            this.ListView.Name = "ListView";
+            this.ListView.Size = new System.Drawing.Size(530, 404);
+            this.ListView.TabIndex = 0;
+            this.ListView.UseCompatibleStateImageBehavior = false;
+            this.ListView.View = System.Windows.Forms.View.Details;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.SplitContainer);
+            this.Controls.Add(this.StatusStrip);
+            this.Controls.Add(this.MenuStrip);
+            this.MainMenuStrip = this.MenuStrip;
             this.Name = "FormMain";
-            this.Text = "Form1";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.Text = "Hector";
+            this.MenuStrip.ResumeLayout(false);
+            this.MenuStrip.PerformLayout();
+            this.SplitContainer.Panel1.ResumeLayout(false);
+            this.SplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).EndInit();
+            this.SplitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,13 +156,16 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem actualiserToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exporterToolStripMenuItem;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.MenuStrip MenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem FichierToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ActualiserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ImporterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExporterToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip StatusStrip;
+        private System.Windows.Forms.SplitContainer SplitContainer;
+        private System.Windows.Forms.TreeView TreeView;
+        private System.Windows.Forms.ListView ListView;
+        private ColorDialog colorDialog1;
     }
 }
 
