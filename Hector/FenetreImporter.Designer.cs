@@ -32,9 +32,11 @@
             this.ContenuFichierTextBox = new System.Windows.Forms.TextBox();
             this.NomFichierTextBox = new System.Windows.Forms.TextBox();
             this.GroupeBoutonsIntégration = new System.Windows.Forms.GroupBox();
-            this.BoutonAjout = new System.Windows.Forms.Button();
             this.BoutonEcrasement = new System.Windows.Forms.Button();
+            this.BoutonAjout = new System.Windows.Forms.Button();
+            this.GroupeContenuFichier = new System.Windows.Forms.GroupBox();
             this.GroupeBoutonsIntégration.SuspendLayout();
+            this.GroupeContenuFichier.SuspendLayout();
             this.SuspendLayout();
             // 
             // BoutonImporter
@@ -49,12 +51,12 @@
             // 
             // ContenuFichierTextBox
             // 
-            this.ContenuFichierTextBox.Location = new System.Drawing.Point(9, 60);
+            this.ContenuFichierTextBox.Location = new System.Drawing.Point(6, 19);
             this.ContenuFichierTextBox.Multiline = true;
             this.ContenuFichierTextBox.Name = "ContenuFichierTextBox";
             this.ContenuFichierTextBox.ReadOnly = true;
             this.ContenuFichierTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ContenuFichierTextBox.Size = new System.Drawing.Size(463, 219);
+            this.ContenuFichierTextBox.Size = new System.Drawing.Size(451, 223);
             this.ContenuFichierTextBox.TabIndex = 1;
             // 
             // NomFichierTextBox
@@ -75,7 +77,17 @@
             this.GroupeBoutonsIntégration.TabIndex = 5;
             this.GroupeBoutonsIntégration.TabStop = false;
             this.GroupeBoutonsIntégration.Text = "Intégration dans la base de données";
-            this.GroupeBoutonsIntégration.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // BoutonEcrasement
+            // 
+            this.BoutonEcrasement.Enabled = false;
+            this.BoutonEcrasement.Location = new System.Drawing.Point(250, 23);
+            this.BoutonEcrasement.Name = "BoutonEcrasement";
+            this.BoutonEcrasement.Size = new System.Drawing.Size(179, 23);
+            this.BoutonEcrasement.TabIndex = 1;
+            this.BoutonEcrasement.Text = "Écraser";
+            this.BoutonEcrasement.UseVisualStyleBackColor = true;
+            this.BoutonEcrasement.Click += new System.EventHandler(this.BoutonEcrasement_Click);
             // 
             // BoutonAjout
             // 
@@ -86,16 +98,17 @@
             this.BoutonAjout.TabIndex = 0;
             this.BoutonAjout.Text = "Ajouter";
             this.BoutonAjout.UseVisualStyleBackColor = true;
+            this.BoutonAjout.Click += new System.EventHandler(this.BoutonAjout_Click);
             // 
-            // BoutonEcrasement
+            // GroupeContenuFichier
             // 
-            this.BoutonEcrasement.Enabled = false;
-            this.BoutonEcrasement.Location = new System.Drawing.Point(250, 23);
-            this.BoutonEcrasement.Name = "BoutonEcrasement";
-            this.BoutonEcrasement.Size = new System.Drawing.Size(179, 23);
-            this.BoutonEcrasement.TabIndex = 1;
-            this.BoutonEcrasement.Text = "Écrasement";
-            this.BoutonEcrasement.UseVisualStyleBackColor = true;
+            this.GroupeContenuFichier.Controls.Add(this.ContenuFichierTextBox);
+            this.GroupeContenuFichier.Location = new System.Drawing.Point(9, 41);
+            this.GroupeContenuFichier.Name = "GroupeContenuFichier";
+            this.GroupeContenuFichier.Size = new System.Drawing.Size(463, 248);
+            this.GroupeContenuFichier.TabIndex = 6;
+            this.GroupeContenuFichier.TabStop = false;
+            this.GroupeContenuFichier.Text = "Contenu du fichier";
             // 
             // FenetreImporter
             // 
@@ -104,12 +117,15 @@
             this.ClientSize = new System.Drawing.Size(484, 361);
             this.Controls.Add(this.GroupeBoutonsIntégration);
             this.Controls.Add(this.NomFichierTextBox);
-            this.Controls.Add(this.ContenuFichierTextBox);
             this.Controls.Add(this.BoutonImporter);
+            this.Controls.Add(this.GroupeContenuFichier);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "FenetreImporter";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Importer";
             this.GroupeBoutonsIntégration.ResumeLayout(false);
+            this.GroupeContenuFichier.ResumeLayout(false);
+            this.GroupeContenuFichier.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,5 +139,6 @@
         private System.Windows.Forms.GroupBox GroupeBoutonsIntégration;
         private System.Windows.Forms.Button BoutonEcrasement;
         private System.Windows.Forms.Button BoutonAjout;
+        private System.Windows.Forms.GroupBox GroupeContenuFichier;
     }
 }

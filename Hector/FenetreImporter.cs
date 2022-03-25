@@ -1,24 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hector
 {
     public partial class FenetreImporter : Form
     {
-        public FenetreImporter()
+        private string ContenuFichier;
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="Connexion">Connexion à la base de données</param>
+        public FenetreImporter(ConnexionBDD Connexion)
         {
             InitializeComponent();
         }
 
 
+        /// <summary>
+        /// Action du click sur le bouton d'ajout.
+        /// </summary>
+        /// <param name="sender">L'objet appelant</param>
+        /// <param name="e">Les arguments</param>
         private void BoutonImporter_Click(object sender, EventArgs e)
         {
             var DialogueFichier = new OpenFileDialog()
@@ -36,7 +40,7 @@ namespace Hector
 
             using (StreamReader StreamReader = new StreamReader(Fichier))
             {
-                string ContenuFichier = StreamReader.ReadToEnd();
+                ContenuFichier = StreamReader.ReadToEnd();
                 ContenuFichierTextBox.Text = ContenuFichier;
             }
             Fichier.Close();
@@ -45,9 +49,18 @@ namespace Hector
             BoutonEcrasement.Enabled = true;
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void BoutonAjout_Click(object sender, EventArgs e)
         {
-
+                
         }
+
+        private void BoutonEcrasement_Click(object sender, EventArgs e)
+        {
+            ViderBaseDonnees();
+        }
+
+
+        
+
     }
 }

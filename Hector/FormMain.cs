@@ -17,16 +17,22 @@ namespace Hector
         /// <summary>
         /// Chemin vers la base de données SQLite.
         /// </summary>
-        private string CheminVersSQLite = Application.StartupPath + "Hector.SQLite";
+        public static string CheminVersSQLite = Application.StartupPath + "\\Hector.SQLite";
+
+        /// <summary>
+        /// La connexion vers la base de données
+        /// </summary>
+        private ConnexionBDD Connexion;
 
         public FormMain()
         {
+            Connexion = new ConnexionBDD(CheminVersSQLite);
             InitializeComponent();
         }
 
         private void ImporterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FenetreImporter FormulaireImporter = new FenetreImporter();
+            FenetreImporter FormulaireImporter = new FenetreImporter(Connexion);
             FormulaireImporter.ShowDialog();   
             //var DialogBox = new show
             /*var openFileDialog1 = new OpenFileDialog()
