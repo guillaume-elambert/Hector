@@ -10,5 +10,11 @@ namespace Hector
     {
         private int RefMarque { get; set; }
         private string Nom { get; set; }
+
+        public Marque(int RefMarque, string Nom)
+        {
+            this.RefMarque = RefMarque;
+            this.Nom = Nom;
+        }
     }
 }

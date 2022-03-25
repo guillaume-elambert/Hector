@@ -11,5 +11,12 @@ namespace Hector
         private int RefSousFamille { get; set; }
         private Famille Famille { get; set; }
         private string Nom { get; set; }
+
+        public SousFamille(int RefSousFamille, Famille famille, string Nom)
+        {
+            this.RefSousFamille = RefSousFamille;
+            this.Famille = Famille;
+            this.Nom = Nom;
+        }
     }
 }
