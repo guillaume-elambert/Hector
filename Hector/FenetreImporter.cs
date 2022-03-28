@@ -56,7 +56,7 @@ namespace Hector
 
         private void BoutonEcrasement_Click(object sender, EventArgs e)
         {
-            ViderBaseDonnees();
+            //ViderBaseDonnees();
         }
 
 
