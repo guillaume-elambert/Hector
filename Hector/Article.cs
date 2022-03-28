@@ -8,12 +8,12 @@ namespace Hector
 {
     internal class Article
     {
-        private string RefArticle { get; set; }
-        private string Description { get; set; }
-        private Marque Marque { get; set; }
-        private SousFamille SousFamille { get; set; }
-        private float Prix { get; set; }
-        private int Quantite { get; set; }
+        public string RefArticle { get; set; }
+        public string Description { get; set; }
+        public Marque Marque { get; set; }
+        public SousFamille SousFamille { get; set; }
+        public float Prix { get; set; }
+        public int Quantite { get; set; }
 
 
         public Article(string RefArticle, string Description, Marque Marque, SousFamille SousFamille, float Prix, int Quantite)

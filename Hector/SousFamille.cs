@@ -8,8 +8,17 @@ namespace Hector
 {
     internal class SousFamille
     {
-        private int RefSousFamille { get; set; }
-        private Famille Famille { get; set; }
-        private string Nom { get; set; }
+        public int RefSousFamille { get; set; }
+        public Famille Famille { get; set; }
+        public string Nom { get; set; }
+
+        public SousFamille(int RefSousFamille) : this(RefSousFamille, null, null) { }
+
+        public SousFamille(int RefSousFamille, Famille Famille, string Nom)
+        {
+            this.RefSousFamille = RefSousFamille;
+            this.Famille = Famille;
+            this.Nom = Nom;
+        }
     }
 }

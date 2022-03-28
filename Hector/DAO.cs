@@ -11,6 +11,6 @@ namespace Hector
         void Inserer(T Objet);
         void Supprimer(T Objet);
         void Modifier(T Objet);
-        T Obtenir(T Objet);
+        void Obtenir(T Objet);
     }
 }

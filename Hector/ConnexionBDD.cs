@@ -59,21 +59,57 @@ namespace Hector
         /// <summary>
         /// Méthode pour executer une commande
         /// </summary>
-        /// <param name="Commande">La/les commande(s) à effectuer.</param>
+        /// <param name="Commande">La commande à effectuer.</param>
+        /// <param name="Parametres">Les paramètres de la commande.</param>
         /// <returns></returns>
-        public int ExecuterCommande(string Commande)
+        public int ExecuterCommande(string Commande, SQLiteParameter[] Parametres)
         {
             try
             { 
                 Connexion.Open();
                 SQLiteCommand CommandeSQLite = new SQLiteCommand(Commande, Connexion);
                 CommandeSQLite.CommandType = CommandType.Text;
+
+                foreach(SQLiteParameter Parametre in Parametres)
+                {
+                    CommandeSQLite.Parameters.Add(Parametre);
+                }
+
                 return CommandeSQLite.ExecuteNonQuery();
             }
             finally
             {
                 Connexion.Close();
             }
-}
+        }
+
+
+
+        /// <summary>
+        /// Méthode qui permet d'executer une commande qui retourne un résulat.
+        /// </summary>
+        /// <param name="Commande">La commande à effectuer.</param>
+        /// <param name="Parametres">Les paramètres de la commande.</param>
+        /// <returns>L'objet SQLiteDataReader correspondant au résultat de la requête</returns>
+        public SQLiteDataReader ExecuterCommandeAvecResultat(string Commande, SQLiteParameter[] Parametres)
+        {
+            try
+            {
+                Connexion.Open();
+                SQLiteCommand CommandeSQLite = new SQLiteCommand(Commande, Connexion);
+                CommandeSQLite.CommandType = CommandType.Text;
+
+                foreach (SQLiteParameter Parametre in Parametres)
+                {
+                    CommandeSQLite.Parameters.Add(Parametre);
+                }
+
+                return CommandeSQLite.ExecuteReader();
+            }
+            finally
+            {
+                Connexion.Close();
+            }
+        }
     }
 }
