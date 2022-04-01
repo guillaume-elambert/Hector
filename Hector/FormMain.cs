@@ -27,6 +27,24 @@ namespace Hector
             FenetreImporter FormulaireImporter = new FenetreImporter(Connexion);
             FormulaireImporter.ShowDialog();
         }
-
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            TreeNode NoeudCourant = ArbreArticles.SelectedNode;
+            switch (NoeudCourant.Text)
+            {
+                case "RacineArticles" :
+                    //Recupérer tous les articles de la base de données
+                    break;
+                case "RacineFamille":
+                    //Recuperer juste les articles par rapport à leur famille et non avec les marques
+                    break;
+                case "EcritureEtCorrection":
+                    //Recuperer les objets qui appartiennent à la sous famille ecriture et correction
+                    break;
+                case "SousFamilleEC":
+                    break;
+            }
+        }
     }
-}
+} 
+

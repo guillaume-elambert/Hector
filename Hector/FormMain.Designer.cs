@@ -31,6 +31,19 @@ namespace Hector
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Tous les articles");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Stylos, feutres & rollers");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Ecriture & Correction", new System.Windows.Forms.TreeNode[] {
+            treeNode2});
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Papier laser");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Papier", new System.Windows.Forms.TreeNode[] {
+            treeNode4});
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Familles", new System.Windows.Forms.TreeNode[] {
+            treeNode3,
+            treeNode5});
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Clairefontaine");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Marques", new System.Windows.Forms.TreeNode[] {
+            treeNode7});
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.FichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ActualiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,6 +51,7 @@ namespace Hector
             this.ExporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.SplitContainer = new System.Windows.Forms.SplitContainer();
+            this.ArbreArticles = new System.Windows.Forms.TreeView();
             this.TreeView = new System.Windows.Forms.TreeView();
             this.ListView = new System.Windows.Forms.ListView();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
@@ -103,6 +117,7 @@ namespace Hector
             // 
             // SplitContainer.Panel1
             // 
+            this.SplitContainer.Panel1.Controls.Add(this.ArbreArticles);
             this.SplitContainer.Panel1.Controls.Add(this.TreeView);
             this.SplitContainer.Panel1MinSize = 200;
             // 
@@ -112,6 +127,35 @@ namespace Hector
             this.SplitContainer.Size = new System.Drawing.Size(800, 404);
             this.SplitContainer.SplitterDistance = 266;
             this.SplitContainer.TabIndex = 2;
+            // 
+            // ArbreArticles
+            // 
+            this.ArbreArticles.Location = new System.Drawing.Point(12, 3);
+            this.ArbreArticles.Name = "ArbreArticles";
+            treeNode1.Checked = true;
+            treeNode1.Name = "RacinesArticles";
+            treeNode1.Text = "Tous les articles";
+            treeNode2.Name = "SousFamilleEC";
+            treeNode2.Text = "Stylos, feutres & rollers";
+            treeNode3.Name = "EcritureEtCorrection";
+            treeNode3.Text = "Ecriture & Correction";
+            treeNode4.Name = "SousFamilleP";
+            treeNode4.Text = "Papier laser";
+            treeNode5.Name = "Papier";
+            treeNode5.Text = "Papier";
+            treeNode6.Name = "RacineFamille";
+            treeNode6.Text = "Familles";
+            treeNode7.Name = "Clairefontaine";
+            treeNode7.Text = "Clairefontaine";
+            treeNode8.Name = "Marques";
+            treeNode8.Text = "Marques";
+            this.ArbreArticles.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode6,
+            treeNode8});
+            this.ArbreArticles.Size = new System.Drawing.Size(251, 398);
+            this.ArbreArticles.TabIndex = 1;
+            this.ArbreArticles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // TreeView
             // 
@@ -166,6 +210,7 @@ namespace Hector
         private System.Windows.Forms.TreeView TreeView;
         private System.Windows.Forms.ListView ListView;
         private ColorDialog colorDialog1;
+        private TreeView ArbreArticles;
     }
 }
 
