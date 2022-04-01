@@ -32,6 +32,8 @@
             this.ContenuFichierTextBox = new System.Windows.Forms.TextBox();
             this.NomFichierTextBox = new System.Windows.Forms.TextBox();
             this.GroupeBoutonsIntégration = new System.Windows.Forms.GroupBox();
+            this.BarreProgressionTotale = new System.Windows.Forms.ProgressBar();
+            this.BarreProgressionIntermediaire = new System.Windows.Forms.ProgressBar();
             this.BoutonEcrasement = new System.Windows.Forms.Button();
             this.BoutonAjout = new System.Windows.Forms.Button();
             this.GroupeContenuFichier = new System.Windows.Forms.GroupBox();
@@ -56,7 +58,7 @@
             this.ContenuFichierTextBox.Name = "ContenuFichierTextBox";
             this.ContenuFichierTextBox.ReadOnly = true;
             this.ContenuFichierTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ContenuFichierTextBox.Size = new System.Drawing.Size(451, 223);
+            this.ContenuFichierTextBox.Size = new System.Drawing.Size(638, 223);
             this.ContenuFichierTextBox.TabIndex = 1;
             // 
             // NomFichierTextBox
@@ -64,26 +66,44 @@
             this.NomFichierTextBox.Location = new System.Drawing.Point(178, 14);
             this.NomFichierTextBox.Name = "NomFichierTextBox";
             this.NomFichierTextBox.ReadOnly = true;
-            this.NomFichierTextBox.Size = new System.Drawing.Size(294, 20);
+            this.NomFichierTextBox.Size = new System.Drawing.Size(481, 20);
             this.NomFichierTextBox.TabIndex = 2;
             // 
             // GroupeBoutonsIntégration
             // 
+            this.GroupeBoutonsIntégration.Controls.Add(this.BarreProgressionTotale);
+            this.GroupeBoutonsIntégration.Controls.Add(this.BarreProgressionIntermediaire);
             this.GroupeBoutonsIntégration.Controls.Add(this.BoutonEcrasement);
             this.GroupeBoutonsIntégration.Controls.Add(this.BoutonAjout);
-            this.GroupeBoutonsIntégration.Location = new System.Drawing.Point(9, 295);
+            this.GroupeBoutonsIntégration.Location = new System.Drawing.Point(9, 317);
             this.GroupeBoutonsIntégration.Name = "GroupeBoutonsIntégration";
-            this.GroupeBoutonsIntégration.Size = new System.Drawing.Size(463, 54);
+            this.GroupeBoutonsIntégration.Size = new System.Drawing.Size(650, 105);
             this.GroupeBoutonsIntégration.TabIndex = 5;
             this.GroupeBoutonsIntégration.TabStop = false;
             this.GroupeBoutonsIntégration.Text = "Intégration dans la base de données";
             // 
+            // BarreProgressionTotale
+            // 
+            this.BarreProgressionTotale.Enabled = false;
+            this.BarreProgressionTotale.Location = new System.Drawing.Point(7, 83);
+            this.BarreProgressionTotale.Name = "BarreProgressionTotale";
+            this.BarreProgressionTotale.Size = new System.Drawing.Size(637, 12);
+            this.BarreProgressionTotale.TabIndex = 3;
+            // 
+            // BarreProgressionIntermediaire
+            // 
+            this.BarreProgressionIntermediaire.Enabled = false;
+            this.BarreProgressionIntermediaire.Location = new System.Drawing.Point(7, 65);
+            this.BarreProgressionIntermediaire.Name = "BarreProgressionIntermediaire";
+            this.BarreProgressionIntermediaire.Size = new System.Drawing.Size(637, 12);
+            this.BarreProgressionIntermediaire.TabIndex = 2;
+            // 
             // BoutonEcrasement
             // 
             this.BoutonEcrasement.Enabled = false;
-            this.BoutonEcrasement.Location = new System.Drawing.Point(250, 23);
+            this.BoutonEcrasement.Location = new System.Drawing.Point(397, 23);
             this.BoutonEcrasement.Name = "BoutonEcrasement";
-            this.BoutonEcrasement.Size = new System.Drawing.Size(179, 23);
+            this.BoutonEcrasement.Size = new System.Drawing.Size(180, 23);
             this.BoutonEcrasement.TabIndex = 1;
             this.BoutonEcrasement.Text = "Écraser";
             this.BoutonEcrasement.UseVisualStyleBackColor = true;
@@ -92,9 +112,9 @@
             // BoutonAjout
             // 
             this.BoutonAjout.Enabled = false;
-            this.BoutonAjout.Location = new System.Drawing.Point(28, 23);
+            this.BoutonAjout.Location = new System.Drawing.Point(73, 23);
             this.BoutonAjout.Name = "BoutonAjout";
-            this.BoutonAjout.Size = new System.Drawing.Size(179, 23);
+            this.BoutonAjout.Size = new System.Drawing.Size(180, 23);
             this.BoutonAjout.TabIndex = 0;
             this.BoutonAjout.Text = "Ajouter";
             this.BoutonAjout.UseVisualStyleBackColor = true;
@@ -103,9 +123,9 @@
             // GroupeContenuFichier
             // 
             this.GroupeContenuFichier.Controls.Add(this.ContenuFichierTextBox);
-            this.GroupeContenuFichier.Location = new System.Drawing.Point(9, 41);
+            this.GroupeContenuFichier.Location = new System.Drawing.Point(9, 53);
             this.GroupeContenuFichier.Name = "GroupeContenuFichier";
-            this.GroupeContenuFichier.Size = new System.Drawing.Size(463, 248);
+            this.GroupeContenuFichier.Size = new System.Drawing.Size(650, 248);
             this.GroupeContenuFichier.TabIndex = 6;
             this.GroupeContenuFichier.TabStop = false;
             this.GroupeContenuFichier.Text = "Contenu du fichier";
@@ -114,7 +134,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 361);
+            this.ClientSize = new System.Drawing.Size(670, 434);
             this.Controls.Add(this.GroupeBoutonsIntégration);
             this.Controls.Add(this.NomFichierTextBox);
             this.Controls.Add(this.BoutonImporter);
@@ -140,5 +160,7 @@
         private System.Windows.Forms.Button BoutonEcrasement;
         private System.Windows.Forms.Button BoutonAjout;
         private System.Windows.Forms.GroupBox GroupeContenuFichier;
+        private System.Windows.Forms.ProgressBar BarreProgressionTotale;
+        private System.Windows.Forms.ProgressBar BarreProgressionIntermediaire;
     }
 }

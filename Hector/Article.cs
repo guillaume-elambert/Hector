@@ -23,5 +23,10 @@
             this.Prix = Prix;
             this.Quantite = Quantite;
         }
+
+        public override string ToString()
+        {
+            return RefArticle + "; " + Description + "; Marque : {" + Marque + "}; Famille : {" + SousFamille + "}; " + Prix + "; " + Quantite;
+        }
     }
 }

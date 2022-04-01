@@ -26,24 +26,6 @@ namespace Hector
         {
             FenetreImporter FormulaireImporter = new FenetreImporter(Connexion);
             FormulaireImporter.ShowDialog();
-            //var DialogBox = new show
-            /*var openFileDialog1 = new OpenFileDialog()
-            {
-                FileName = "",
-                Title = "Import .csv file"
-
-            };
-            openFileDialog1.InitialDirectory = Application.StartupPath;
-            openFileDialog1.Filter = "csv files (*.csv)|*.csv";
-            openFileDialog1.ShowDialog();
-
-            var myStream = openFileDialog1.OpenFile();
-            using (StreamReader reader = new StreamReader(myStream))
-            {
-                var fileContent = reader.ReadToEnd();
-            }
-            //textBox1.Text = fileContent;
-            myStream.Close();*/
         }
 
     }

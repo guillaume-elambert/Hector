@@ -26,29 +26,9 @@ namespace Hector
         /// Méthode d'insertion d'un objet Marque dans la base de données.
         /// </summary>
         /// <param name="Marque">La marque à insérer</param>
-        public void Inserer(Marque Marque)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Inserer(Marque Marque)
         {
-            /*bool RefSpecifee = Marque.RefMarque != -1;
-
-            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
-                new SQLiteParameter("@nom", Marque.Nom)
-            };
-
-            string Commande;
-
-            if (RefSpecifee)
-            {
-                Parametres.Add(new SQLiteParameter("@refMarque", Marque.RefMarque));
-
-                Commande = "INSERT INTO Marques " +
-                    "(RefMarque, Nom) VALUES " +
-                    "(@refMarque, @nom);";
-                
-                Connexion.ExecuterCommande(Commande, Parametres);
-                return;
-            }*/
-
-
             List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@nom", Marque.Nom)
             };
@@ -58,12 +38,14 @@ namespace Hector
                     "(Nom) VALUES " +
                     "(@nom) RETURNING RefMarque;";
 
-            LigneSQLite Resultat = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres)[0];
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null) return false;
+
+
+            LigneSQLite Resultat = ResultatSQLite[0];
             Marque.RefMarque = Resultat.Attribut<int>(0);
 
-            /*DataRow Resultat = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres).Rows[0];
-
-            Marque.RefMarque = Convert.ToInt32(Resultat["RefMarque"]);*/
+            return true;
 
         }
 
@@ -72,12 +54,17 @@ namespace Hector
         /// Méthode d'insertion d'une liste d'objets Marque dans la base de données.
         /// </summary>
         /// <param name="ListeMarques">La liste des marque à insérer</param>
-        public void Inserer(List<Marque> ListeMarques)
+        /// <returns>true si toutes les insertions réussies, false sinon</returns>
+        public bool Inserer(List<Marque> ListeMarques)
         {
+            bool ARetourner = true;
+
             foreach (Marque Marque in ListeMarques)
             {
-                Inserer(Marque);
+                ARetourner &= Inserer(Marque);
             }
+
+            return ARetourner;
         }
 
 
@@ -85,7 +72,8 @@ namespace Hector
         /// Méthode de modification d'une Marque en base de données.
         /// </summary>
         /// <param name="Marque">La marque à modifier</param>
-        public void Modifier(Marque Marque)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Modifier(Marque Marque)
         {
             List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refMarque", Marque.RefMarque),
@@ -96,7 +84,7 @@ namespace Hector
                 "Nom = @nom" +
                 "WHERE RefMarque = @refMarque;";
 
-            Connexion.ExecuterCommande(Commande, Parametres);
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
         }
 
 
@@ -104,13 +92,17 @@ namespace Hector
         /// Méthode de modification d'une liste de Marques en base de données.
         /// </summary>
         /// <param name="ListeMarques">La liste des marques à modifier</param>
-        public void Modifier(List<Marque> ListeMarques)
+        /// <returns>true si toutes les modifications réussies, false sinon</returns>
+        public bool Modifier(List<Marque> ListeMarques)
         {
+            bool ARetourner = true;
+
             foreach (Marque Marque in ListeMarques)
             {
-                Modifier(Marque);
+                ARetourner &= Modifier(Marque);
             }
 
+            return ARetourner;
         }
 
 
@@ -118,7 +110,8 @@ namespace Hector
         /// Méthode pour obtenir une Marque depuis la base de données.
         /// </summary>
         /// <param name="Marque">La marque à chercher (à partir de son id)</param>
-        public void Obtenir(Marque Marque)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Obtenir(Marque Marque)
         {
             List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refMarque", Marque.RefMarque)
@@ -126,28 +119,30 @@ namespace Hector
 
             string Commande = "SELECT Nom FROM Marques WHERE RefMarque = @refMarque;";
 
-            LigneSQLite Resultat = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres)[0];
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null) return false;
+
+            LigneSQLite Resultat = ResultatSQLite[0];
             Marque.Nom = Resultat.Attribut<string>(0);
 
-            /*
-            DataRow Resultat = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres).Rows[0];
-            
-            Marque.Nom = Resultat.Field<string>("Nom");
-            */
-
-
+            return true;
         }
 
         /// <summary>
         /// Méthode pour obtenir une liste de Marques depuis la base de données.
         /// </summary>
         /// <param name="ListeMarques">La liste des marque à chercher (à partir de leur id)</param>
-        public void Obtenir(List<Marque> ListeMarques)
+        /// <returns>true si toutes les obtentions réussies, false sinon</returns>
+        public bool Obtenir(List<Marque> ListeMarques)
         {
+            bool ARetourner = true;
+
             foreach (Marque Marque in ListeMarques)
             {
-                Obtenir(Marque);
+                ARetourner &= Obtenir(Marque);
             }
+
+            return ARetourner;
         }
 
 
@@ -155,30 +150,38 @@ namespace Hector
         /// Méthode de supression d'une Marque en base de données.
         /// </summary>
         /// <param name="Marque">La marque à supprimer</param>
-        public void Supprimer(Marque Marque)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Supprimer(Marque Marque)
         {
+            return true;
         }
 
         /// <summary>
         /// Méthode de supression d'une liste de Marques en base de données.
         /// </summary>
         /// <param name="ListeMarques">La liste des marques à supprimer</param>
-        public void Supprimer(List<Marque> ListeMarques)
+        /// <returns>true si toutes les suppression réussies, false sinon</returns>
+        public bool Supprimer(List<Marque> ListeMarques)
         {
+            bool ARetourner = true;
+
             foreach (Marque Marque in ListeMarques)
             {
-                Supprimer(Marque);
+                ARetourner &= Supprimer(Marque);
             }
+
+            return ARetourner;
         }
 
 
         /// <summary>
         /// Méthode pour supprimer le contenu de la table.
         /// </summary>
-        public void ViderTable()
+        /// <returns>true si réussi, false sinon</returns>
+        public bool ViderTable()
         {
             string Commande = "DELETE FROM Marques;";
-            Connexion.ExecuterCommande(Commande);
+            return Connexion.ExecuterCommande(Commande) != -1;
         }
     }
 }

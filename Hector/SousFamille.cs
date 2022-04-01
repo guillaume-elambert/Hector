@@ -20,5 +20,10 @@
             this.Famille = Famille;
             this.Nom = Nom;
         }
+
+        public override string ToString()
+        {
+            return Nom;
+        }
     }
 }
