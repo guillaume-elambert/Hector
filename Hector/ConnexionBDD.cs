@@ -1,6 +1,7 @@
-﻿using System.Data.SQLite;
-
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 
 namespace Hector
 {
@@ -21,38 +22,47 @@ namespace Hector
         }
 
         /// <summary>
-        /// Méthode pour vider la base de données
+        /// Méthode qui permet d'ouvrir la connexion
         /// </summary>
-        public void ViderBaseDonnees()
+        public void Open()
         {
-
-            //Liste de tables de la base de données
-            string[] Tables = new string[] {
-                ////"Articles",
-                "Familles",
-                "Marques",
-                "SousFamilles",
-                "sqlite_sequence"
-            };
-
-            string Commande = "";
-
-            foreach (string Table in Tables)
+            if (Connexion != null)
             {
-                Commande += "DELETE FROM " + Table + ";";
+                Connexion?.Open();
             }
+        }
 
-            try
+
+        /// <summary>
+        /// Méthode qui permet de fermer la connexion
+        /// </summary>
+        public void Close()
+        {
+            if (Connexion != null)
             {
-                Connexion.Open();
-                SQLiteCommand CommandeSQLite = new SQLiteCommand(Commande, Connexion);
-                CommandeSQLite.CommandType = CommandType.Text;
-                CommandeSQLite.ExecuteNonQuery();
+                Connexion?.Close();
             }
-            finally
-            {
-                Connexion.Close();
-            }
+        }
+
+
+        /// <summary>
+        /// Méthode qui permet de vider la table sqlite_sequence de la base de données
+        /// </summary>
+        public void ViderTableSQLiteSequence()
+        {
+            string Commande = "DELETE FROM sqlite_sequence;";
+
+            this.ExecuterCommande(Commande);
+        }
+
+        /// <summary>
+        /// Méthode pour executer une commande
+        /// </summary>
+        /// <param name="Commande">La commande à effectuer.</param>
+        /// <returns>Le nombre de ligne afféctées par la requête ou -1 si erreur</returns>
+        public int ExecuterCommande(string Commande)
+        {
+            return ExecuterCommande(Commande, new List<SQLiteParameter>());
         }
 
 
@@ -61,21 +71,29 @@ namespace Hector
         /// </summary>
         /// <param name="Commande">La commande à effectuer.</param>
         /// <param name="Parametres">Les paramètres de la commande.</param>
-        /// <returns></returns>
-        public int ExecuterCommande(string Commande, SQLiteParameter[] Parametres)
+        /// <returns>Le nombre de ligne afféctées par la requête ou -1 si erreur</returns>
+        public int ExecuterCommande(string Commande, List<SQLiteParameter> Parametres)
         {
             try
-            { 
+            {
                 Connexion.Open();
                 SQLiteCommand CommandeSQLite = new SQLiteCommand(Commande, Connexion);
                 CommandeSQLite.CommandType = CommandType.Text;
 
-                foreach(SQLiteParameter Parametre in Parametres)
+                foreach (SQLiteParameter Parametre in Parametres)
                 {
                     CommandeSQLite.Parameters.Add(Parametre);
                 }
 
-                return CommandeSQLite.ExecuteNonQuery();
+                try
+                {
+                    return CommandeSQLite.ExecuteNonQuery();
+                }
+                catch (SQLiteException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return -1;
+                }
             }
             finally
             {
@@ -90,8 +108,8 @@ namespace Hector
         /// </summary>
         /// <param name="Commande">La commande à effectuer.</param>
         /// <param name="Parametres">Les paramètres de la commande.</param>
-        /// <returns>L'objet SQLiteDataReader correspondant au résultat de la requête</returns>
-        public SQLiteDataReader ExecuterCommandeAvecResultat(string Commande, SQLiteParameter[] Parametres)
+        /// <returns>L'objet ResultatSQLite correspondant au résultat de la requête ou null si erreur</returns>
+        public ResultatSQLite ExecuterCommandeAvecResultat(string Commande, List<SQLiteParameter> Parametres)
         {
             try
             {
@@ -104,12 +122,32 @@ namespace Hector
                     CommandeSQLite.Parameters.Add(Parametre);
                 }
 
-                return CommandeSQLite.ExecuteReader();
+                try
+                {
+                    ResultatSQLite ContenuRequete = new ResultatSQLite(CommandeSQLite.ExecuteReader());
+                    return ContenuRequete;
+                }
+                catch (SQLiteException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
             }
             finally
             {
                 Connexion.Close();
             }
+        }
+
+
+        /// <summary>
+        /// Méthode qui permet d'executer une commande qui retourne un résulat.
+        /// </summary>
+        /// <param name="Commande">La commande à effectuer.</param>
+        /// <returns>L'objet ResultatSQLite correspondant au résultat de la requête ou null si erreur</returns>
+        public ResultatSQLite ExecuterCommandeAvecResultat(string Commande)
+        {
+            return ExecuterCommandeAvecResultat(Commande, new List<SQLiteParameter>());
         }
     }
 }

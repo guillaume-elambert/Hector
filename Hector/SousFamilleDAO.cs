@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hector
 {
@@ -29,19 +25,44 @@ namespace Hector
         /// Méthode d'insertion d'un objet SousFamille dans la base de données.
         /// </summary>
         /// <param name="SousFamille">La sous-famille à insérer</param>
-        public void Inserer(SousFamille SousFamille)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Inserer(SousFamille SousFamille)
         {
-            SQLiteParameter[] Parametres = {
-                new SQLiteParameter("@refSousFamille", SousFamille.RefSousFamille),
+
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>(){
                 new SQLiteParameter("@refFamille", SousFamille.Famille.RefFamille),
                 new SQLiteParameter("@nom", SousFamille.Nom)
             };
 
-            string Commande = "INSERT INTO SousFamilles " +
-                "(RefSousFamille, RefFamille, Nom) VALUES " +
-                "(@refSousFamille, @refFamille , @nom);";
-            Connexion.ExecuterCommande(Commande, Parametres);
+            string Commande;
+            Commande = "INSERT INTO SousFamilles " +
+                "(RefFamille, Nom) VALUES " +
+                "(@refFamille , @nom) RETURNING RefSousFamille;";
 
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null) return false;
+
+            LigneSQLite Resultat = ResultatSQLite[0];
+            SousFamille.RefSousFamille = Resultat.Attribut<int>(0);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Méthode d'insertion d'une liste d'objets SousFamille dans la base de données.
+        /// </summary>
+        /// <param name="ListeSousFamilles">La liste des sous-familles à insérer</param>
+        /// <returns>true si toutes les insertions réussies, false sinon</returns>
+        public bool Inserer(List<SousFamille> ListeSousFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (SousFamille SousFamille in ListeSousFamilles)
+            {
+                ARetourner &= Inserer(SousFamille);
+            }
+
+            return ARetourner;
         }
 
 
@@ -49,9 +70,11 @@ namespace Hector
         /// Méthode de modification d'une SousFamille en base de données.
         /// </summary>
         /// <param name="SousFamille">La sous-famille à modifier</param>
-        public void Modifier(SousFamille SousFamille)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Modifier(SousFamille SousFamille)
         {
-            SQLiteParameter[] Parametres = {
+
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refSousFamille", SousFamille.RefSousFamille),
                 new SQLiteParameter("@refFamille", SousFamille.Famille.RefFamille),
                 new SQLiteParameter("@nom", SousFamille.Nom)
@@ -62,7 +85,25 @@ namespace Hector
                 "Nom = @nom" +
                 "WHERE RefSousFamille = @refSousFamille;";
 
-            Connexion.ExecuterCommande(Commande, Parametres);
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
+        }
+
+
+        /// <summary>
+        /// Méthode de modification d'une liste de SousFamilles en base de données.
+        /// </summary>
+        /// <param name="ListeMarques">La liste des sous-familles à modifier</param>
+        /// <returns>true si toutes les modifications réussies, false sinon</returns>
+        public bool Modifier(List<SousFamille> ListeSousFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (SousFamille SousFamille in ListeSousFamilles)
+            {
+                ARetourner &= Modifier(SousFamille);
+            }
+
+            return ARetourner;
         }
 
 
@@ -70,33 +111,84 @@ namespace Hector
         /// Méthode pour obtenir une SousFamille depuis la base de données.
         /// </summary>
         /// <param name="SousFamille">La sous-famille à chercher (à partir de son id)</param>
-        public void Obtenir(SousFamille SousFamille)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Obtenir(SousFamille SousFamille)
         {
             FamilleDAO FamilleDAO = new FamilleDAO(Connexion);
 
-            SQLiteParameter[] Parametres = {
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refSousFamille", SousFamille.RefSousFamille)
             };
 
             string Commande = "SELECT RefFamille, Nom FROM SousFamilles WHERE RefSousFamille = @refSousFamille;";
 
-            using (SQLiteDataReader Resultat = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres))
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null) return false;
+
+            LigneSQLite Resultat = ResultatSQLite[0];
+            SousFamille.Famille = new Famille(Resultat.Attribut<int>(0));
+            FamilleDAO.Obtenir(SousFamille.Famille);
+            SousFamille.Nom = Resultat.Attribut<string>(1);
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Méthode pour obtenir une liste SousFamille depuis la base de données.
+        /// </summary>
+        /// <param name="ListeSousFamille">La liste des sous-familles à chercher (à partir de leur id)</param>
+        /// <returns>true si toutes les obtentions réussies, false sinon</returns>
+        public bool Obtenir(List<SousFamille> ListeSousFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (SousFamille SousFamille in ListeSousFamilles)
             {
-                SousFamille.Famille = new Famille(Resultat.GetInt32(1));
-                FamilleDAO.Obtenir(SousFamille.Famille);
-                SousFamille.Nom = Resultat.GetString(2);
+                ARetourner &= Obtenir(SousFamille);
             }
 
-
+            return ARetourner;
         }
 
 
         /// <summary>
         /// Méthode de supression d'une SousFamille en base de données.
         /// </summary>
-        /// <param name="SousFamille"></param>
-        public void Supprimer(SousFamille SousFamille)
+        /// <param name="SousFamille">La sous-famille à supprimer</param>
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Supprimer(SousFamille SousFamille)
         {
+            return true;
+        }
+
+
+        /// <summary>
+        /// Méthode de supression d'une liste de SousFamilles en base de données.
+        /// </summary>
+        /// <param name="ListeSousFamilles">La liste des sous-familles à supprimer</param>
+        /// <returns>true si toutes les suppressions réussies, false sinon</returns>
+        public bool Supprimer(List<SousFamille> ListeSousFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (SousFamille SousFamille in ListeSousFamilles)
+            {
+                ARetourner &= Supprimer(SousFamille);
+            }
+
+            return ARetourner;
+        }
+
+
+        /// <summary>
+        /// Méthode pour supprimer le contenu de la table.
+        /// </summary>
+        /// <returns>true si réussi, false sinon</returns>
+        public bool ViderTable()
+        {
+            string Commande = "DELETE FROM SousFamilles;";
+            return Connexion.ExecuterCommande(Commande) != -1;
         }
     }
 }

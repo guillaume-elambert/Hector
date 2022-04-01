@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hector
 {
@@ -24,13 +20,15 @@ namespace Hector
             this.Connexion = Connexion;
         }
 
+
         /// <summary>
         /// Méthode d'insertion d'un objet Article dans la base de données.
         /// </summary>
         /// <param name="Article">L'article à insérer</param>
-        public void Inserer(Article Article)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Inserer(Article Article)
         {
-            SQLiteParameter[] Parametres = {
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refArticle", Article.RefArticle),
                 new SQLiteParameter("@description", Article.Description),
                 new SQLiteParameter("@refSousFamille", Article.SousFamille.RefSousFamille),
@@ -40,10 +38,27 @@ namespace Hector
             };
 
             string Commande = "INSERT INTO Articles " +
-                "(RefArticle, Description, RefSousFamille, RefMarque, Prix, Quantite) VALUES " +
+                "(RefArticle, Description, RefSousFamille, RefMarque, PrixHT, Quantite) VALUES " +
                 "(@refArticle, @description, @refSousFamille, @refMarque, @prix, @quantite);";
-            Connexion.ExecuterCommande(Commande, Parametres);
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
 
+        }
+
+        /// <summary>
+        /// Méthode d'insertion d'une liste d'objets Article dans la base de données.
+        /// </summary>
+        /// <param name="ListeArticles">La liste des articles à insérer</param>
+        /// <returns>true si toutes les insertions réussies, false sinon</returns>
+        public bool Inserer(List<Article> ListeArticles)
+        {
+            bool ARetourner = true;
+
+            foreach (Article Article in ListeArticles)
+            {
+                ARetourner &= Inserer(Article);
+            }
+
+            return ARetourner;
         }
 
 
@@ -51,9 +66,10 @@ namespace Hector
         /// Méthode de modification d'un Article en base de données.
         /// </summary>
         /// <param name="Article">L'article à modifier</param>
-        public void Modifier(Article Article)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Modifier(Article Article)
         {
-            SQLiteParameter[] Parametres = {
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refArticle", Article.RefArticle),
                 new SQLiteParameter("@description", Article.Description),
                 new SQLiteParameter("@refSousFamille", Article.SousFamille.RefSousFamille),
@@ -66,11 +82,29 @@ namespace Hector
                 "Description = @description, " +
                 "RefSousFamille = @refSousFamille," +
                 "RefMarque = @refMarque," +
-                "Prix = @prix," +
+                "PrixHT = @prix," +
                 "Quantite = @quantite" +
                 "WHERE RefArticle = @refArticle;";
 
-            Connexion.ExecuterCommande(Commande, Parametres);
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
+        }
+
+
+        /// <summary>
+        /// Méthode de modification une liste d'Articles en base de données.
+        /// </summary>
+        /// <param name="ListeArticles">La liste des articles à modifier.</param>
+        /// <returns>true si toutes les modifications réussies, false sinon</returns>
+        public bool Modifier(List<Article> ListeArticles)
+        {
+            bool ARetourner = true;
+
+            foreach (Article Article in ListeArticles)
+            {
+                ARetourner &= Modifier(Article);
+            }
+
+            return ARetourner;
         }
 
 
@@ -78,27 +112,49 @@ namespace Hector
         /// Méthode pour obtenir un Article depuis la base de données.
         /// </summary>
         /// <param name="Article">L'article à chercher (à partir de son id)</param>
-        public void Obtenir(Article Article)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Obtenir(Article Article)
         {
             SousFamilleDAO SousFamilleDAO = new SousFamilleDAO(Connexion);
             MarqueDAO MarqueDAO = new MarqueDAO(Connexion);
 
-            SQLiteParameter[] Parametres = {
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refArticle", Article.RefArticle)
             };
 
-            string Commande = "SELECT Description, RefSousFamille, RefMarque, Prix, Quantite FROM Articles WHERE RefArticle = @refArticle;";
+            string Commande = "SELECT Description, RefSousFamille, RefMarque, PrixHT, Quantite FROM Articles WHERE RefArticle = @refArticle;";
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null) return false;
 
-            using (SQLiteDataReader Resultat = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres))
+            LigneSQLite Resultat = ResultatSQLite[0];
+
+            Article.Description = Resultat.Attribut<string>(0);
+            Article.Prix = Resultat.Attribut<float>(3);
+            Article.Quantite = Resultat.Attribut<int>(4);
+            Article.Marque = new Marque(Resultat.Attribut<int>(2));
+            Article.SousFamille = new SousFamille(Resultat.Attribut<int>(1));
+
+            SousFamilleDAO.Obtenir(Article.SousFamille);
+            MarqueDAO.Obtenir(Article.Marque);
+            return true;
+        }
+
+
+        /// <summary>
+        /// Méthode pour obtenir une liste d'Articles depuis la base de données.
+        /// </summary>
+        /// <param name="ListeArticles">Les articles à chercher (à partir de leur id)</param>
+        /// <returns>true si toutes les obtentions réussies, false sinon</returns>
+        public bool Obtenir(List<Article> ListeArticles)
+        {
+            bool ARetourner = true;
+
+            foreach (Article Article in ListeArticles)
             {
-                Article.Description = Resultat.GetString(1);
-                Article.Prix = Resultat.GetFloat(4);
-                Article.Quantite = Resultat.GetInt32(5);
-                Article.SousFamille = new SousFamille(Resultat.GetInt32(2));
-                SousFamilleDAO.Obtenir(Article.SousFamille);
+                ARetourner &= Obtenir(Article);
             }
 
-
+            return ARetourner;
         }
 
 
@@ -106,8 +162,39 @@ namespace Hector
         /// Méthode de supression d'un Article en base de données.
         /// </summary>
         /// <param name="Article"></param>
-        public void Supprimer(Article Article)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Supprimer(Article Article)
         {
+            return true;
+        }
+
+        /// <summary>
+        /// Méthode de supression d'une liste d'Articles en base de données.
+        /// </summary>
+        /// <param name="ListeArticles"></param>
+        /// <returns>true si toutes les suppressions réussies, false sinon</returns>
+        public bool Supprimer(List<Article> ListeArticles)
+        {
+            bool ARetourner = true;
+
+            foreach (Article Article in ListeArticles)
+            {
+                ARetourner &= Supprimer(Article);
+            }
+
+            return ARetourner;
+        }
+
+
+        /// <summary>
+        /// Méthode pour supprimer le contenu de la table.
+        /// </summary>
+        /// <returns>true si réussi, false sinon</returns>
+        public bool ViderTable()
+        {
+            string Commande = "DELETE FROM Articles;";
+            return Connexion.ExecuterCommande(Commande) != -1;
+
         }
     }
 }

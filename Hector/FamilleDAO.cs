@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hector
 {
@@ -30,18 +26,45 @@ namespace Hector
         /// Méthode d'insertion d'un objet Famille dans la base de données.
         /// </summary>
         /// <param name="Famille">La famille à insérer</param>
-        public void Inserer(Famille Famille)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Inserer(Famille Famille)
         {
-            SQLiteParameter[] Parametres = {
-                new SQLiteParameter("@refFamille", Famille.RefFamille),
+
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@nom", Famille.Nom)
             };
 
-            string Commande = "INSERT INTO Familles " +
-                "(RefFamille, Nom) VALUES " +
-                "(@refFamille, @nom);";
-            Connexion.ExecuterCommande(Commande, Parametres);
+            string Commande;
+            Commande = "INSERT INTO Familles " +
+                "(Nom) VALUES " +
+                "(@nom) RETURNING RefFamille;";
 
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null) return false;
+
+            LigneSQLite Resultat = ResultatSQLite[0];
+            Famille.RefFamille = Resultat.Attribut<int>(0);
+
+            return true;
+
+        }
+
+
+        /// <summary>
+        /// Méthode d'insertion d'une liste d'objets Famille dans la base de données.
+        /// </summary>
+        /// <param name="ListeFamilles">La liste des familles à insérer</param>
+        /// <returns>true si toutes les insertions réussies, false sinon</returns>
+        public bool Inserer(List<Famille> ListeFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (Famille Famille in ListeFamilles)
+            {
+                ARetourner &= Inserer(Famille);
+            }
+
+            return ARetourner;
         }
 
 
@@ -49,9 +72,10 @@ namespace Hector
         /// Méthode de modification d'une Famille en base de données.
         /// </summary>
         /// <param name="Famille">La famille à modifier</param>
-        public void Modifier(Famille Famille)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Modifier(Famille Famille)
         {
-            SQLiteParameter[] Parametres = {
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refFamille", Famille.RefFamille),
                 new SQLiteParameter("@nom", Famille.Nom)
             };
@@ -60,7 +84,25 @@ namespace Hector
                 "Nom = @nom" +
                 "WHERE RefFamille = @refFamille;";
 
-            Connexion.ExecuterCommande(Commande, Parametres);
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
+        }
+
+
+        /// <summary>
+        /// Méthode de modification d'une liste de Familles en base de données.
+        /// </summary>
+        /// <param name="ListeFamilles">La liste des familles à modifier</param>
+        /// <returns>true si toutes les modifications réussies, false sinon</returns>
+        public bool Modifier(List<Famille> ListeFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (Famille Famille in ListeFamilles)
+            {
+                ARetourner &= Modifier(Famille);
+            }
+
+            return ARetourner;
         }
 
 
@@ -68,29 +110,79 @@ namespace Hector
         /// Méthode pour obtenir une Famille depuis la base de données.
         /// </summary>
         /// <param name="Famille">La famille à chercher (à partir de son id)</param>
-        public void Obtenir(Famille Famille)
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Obtenir(Famille Famille)
         {
-            SQLiteParameter[] Parametres = {
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refFamille", Famille.RefFamille)
             };
 
             string Commande = "SELECT Nom FROM Familles WHERE RefFamille = @refFamille;";
 
-            using (SQLiteDataReader Resultat = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres))
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null) return false;
+
+            LigneSQLite Resultat = ResultatSQLite[0];
+            Famille.Nom = Resultat.Attribut<string>(0);
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Méthode pour obtenir une liste de Famille depuis la base de données.
+        /// </summary>
+        /// <param name="ListeFamilles">La liste des famille à chercher (à partir de leur id)</param>
+        /// <returns>true si toutes les obtentions réussies, false sinon</returns>
+        public bool Obtenir(List<Famille> ListeFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (Famille Famille in ListeFamilles)
             {
-                Famille.Nom = Resultat.GetString(1);
+                ARetourner &= Obtenir(Famille);
             }
 
-
+            return ARetourner;
         }
 
 
         /// <summary>
         /// Méthode de supression d'une Famille en base de données.
         /// </summary>
-        /// <param name="Famille"></param>
-        public void Supprimer(Famille Famille)
+        /// <param name="Famille">La famille à supprimer</param>
+        /// <returns>true si réussi, false sinon</returns>
+        public bool Supprimer(Famille Famille)
         {
+            return true;
+        }
+
+        /// <summary>
+        /// Méthode de supression d'une liste de Familles en base de données.
+        /// </summary>
+        /// <param name="ListeFamilles">La liste des familles à supprimer</param>
+        /// <returns>true si toutes les suppressions réussies, false sinon</returns>
+        public bool Supprimer(List<Famille> ListeFamilles)
+        {
+            bool ARetourner = true;
+
+            foreach (Famille Famille in ListeFamilles)
+            {
+                ARetourner &= Supprimer(Famille);
+            }
+
+            return ARetourner;
+        }
+
+
+        /// <summary>
+        /// Méthode pour supprimer le contenu de la table.
+        /// </summary>
+        /// <returns>true si réussi, false sinon</returns>
+        public bool ViderTable()
+        {
+            string Commande = "DELETE FROM Familles;";
+            return Connexion.ExecuterCommande(Commande) != -1;
         }
     }
 }

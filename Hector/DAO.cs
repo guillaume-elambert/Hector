@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Hector
 {
     internal interface DAO<T>
     {
-        void Inserer(T Objet);
-        void Supprimer(T Objet);
-        void Modifier(T Objet);
-        void Obtenir(T Objet);
+        bool Inserer(T Objet);
+        bool Inserer(List<T> ListeObjets);
+        bool Supprimer(T Objet);
+        bool Supprimer(List<T> ListeObjets);
+        bool Modifier(T Objet);
+        bool Modifier(List<T> ListeObjets);
+        bool Obtenir(T Objet);
+        bool Obtenir(List<T> ListeObjets);
+
+        bool ViderTable();
     }
 }

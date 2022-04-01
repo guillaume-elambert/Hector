@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Hector
+﻿namespace Hector
 {
     internal class Article
     {
@@ -15,6 +9,10 @@ namespace Hector
         public float Prix { get; set; }
         public int Quantite { get; set; }
 
+        public Article()
+        {
+            RefArticle = null;
+        }
 
         public Article(string RefArticle, string Description, Marque Marque, SousFamille SousFamille, float Prix, int Quantite)
         {
@@ -24,6 +22,11 @@ namespace Hector
             this.SousFamille = SousFamille;
             this.Prix = Prix;
             this.Quantite = Quantite;
+        }
+
+        public override string ToString()
+        {
+            return RefArticle + "; " + Description + "; Marque : {" + Marque + "}; Famille : {" + SousFamille + "}; " + Prix + "; " + Quantite;
         }
     }
 }
