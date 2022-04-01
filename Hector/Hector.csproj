@@ -92,6 +92,7 @@
     <Compile Include="ConnexionBDD.cs" />
     <Compile Include="DAO.cs" />
     <Compile Include="Famille.cs" />
+    <Compile Include="FamilleDAO.cs" />
     <Compile Include="FenetreImporter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,9 +106,11 @@
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Marque.cs" />
+    <Compile Include="MarqueDAO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SousFamille.cs" />
+    <Compile Include="SousFamilleDAO.cs" />
     <EmbeddedResource Include="FenetreImporter.resx">
       <DependentUpon>FenetreImporter.cs</DependentUpon>
     </EmbeddedResource>
