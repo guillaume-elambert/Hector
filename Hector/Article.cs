@@ -28,5 +28,10 @@
         {
             return RefArticle + "; " + Description + "; Marque : {" + Marque + "}; Famille : {" + SousFamille + "}; " + Prix + "; " + Quantite;
         }
+
+        public string ToStringDescription()
+        {
+            return Description;
+        }
     }
 }

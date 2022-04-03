@@ -196,5 +196,27 @@ namespace Hector
             return Connexion.ExecuterCommande(Commande) != -1;
 
         }
+
+        public List<Article> ObtenirArticles()
+        {
+            SQLiteCommand Commande = Connexion.getConnexion().CreateCommand();
+            Commande.CommandText = "SELECT * FROM Articles";
+            List<Article> TousLesArticles = new List<Article>();
+
+            SQLiteDataReader Resultat = Commande.ExecuteReader();
+
+            while (Resultat.Read())
+            {
+                Article Article = new Article();
+                Article.Description = (string)Resultat["Description"];
+                Article.Marque = (Marque)Resultat["Marque"];
+                Article.SousFamille = (SousFamille)Resultat["SousFamille"];
+                Article.Prix = (float)Resultat["Prix"];
+                Article.Quantite = (int)Resultat["Quantite"];
+                TousLesArticles.Add(Article);
+            }
+            return TousLesArticles;
+
+        }
     }
 }

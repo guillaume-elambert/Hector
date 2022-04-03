@@ -143,7 +143,7 @@ namespace Hector
             treeNode4.Text = "Papier laser";
             treeNode5.Name = "Papier";
             treeNode5.Text = "Papier";
-            treeNode6.Name = "RacineFamille";
+            treeNode6.Name = "Familles";
             treeNode6.Text = "Familles";
             treeNode7.Name = "Clairefontaine";
             treeNode7.Text = "Clairefontaine";
