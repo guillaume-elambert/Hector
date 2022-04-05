@@ -149,5 +149,11 @@ namespace Hector
         {
             return ExecuterCommandeAvecResultat(Commande, new List<SQLiteParameter>());
         }
+
+        public SQLiteConnection getConnexion()
+        {
+            return this.Connexion;
+        }
+       
     }
 }
