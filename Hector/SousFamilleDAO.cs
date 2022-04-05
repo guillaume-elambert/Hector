@@ -34,13 +34,14 @@ namespace Hector
                 new SQLiteParameter("@nom", SousFamille.Nom)
             };
 
-            string Commande;
-            Commande = "INSERT INTO SousFamilles " +
-                "(RefFamille, Nom) VALUES " +
-                "(@refFamille , @nom) RETURNING RefSousFamille;";
+            string Commande = "INSERT INTO SousFamilles (RefFamille, Nom) " +
+                "SELECT @refFamille, @nom " +
+                "WHERE NOT EXISTS ( " +
+                "   SELECT 1 FROM SousFamilles WHERE Nom = @nom " +
+                ") RETURNING RefSousFamille;";
 
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
-            if (ResultatSQLite == null) return false;
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
             SousFamille.RefSousFamille = Resultat.Attribut<int>(0);
@@ -123,7 +124,7 @@ namespace Hector
             string Commande = "SELECT RefFamille, Nom FROM SousFamilles WHERE RefSousFamille = @refSousFamille;";
 
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
-            if (ResultatSQLite == null) return false;
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
             SousFamille.Famille = new Famille(Resultat.Attribut<int>(0));
@@ -149,6 +150,59 @@ namespace Hector
             }
 
             return ARetourner;
+        }
+
+
+
+        /// <summary>
+        /// Méthode pour obtenir toutes les SousFamilles depuis la base de données.
+        /// </summary>
+        /// <returns>La liste des sous-familles stockées en base de données</returns>
+        public List<SousFamille> ObtenirTout()
+        {
+            FamilleDAO FamilleDAO = new FamilleDAO(Connexion);
+
+            string Commande = "SELECT RefFamille, Nom FROM SousFamilles;";
+
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
+
+            List<SousFamille> ListeSousFamilles = new List<SousFamille>();
+            Dictionary<int, Famille> Familles = new Dictionary<int, Famille>();
+
+            int RefFamille;
+            Famille LaFamille;
+            SousFamille SousFamille;
+
+            foreach (LigneSQLite Ligne in ResultatSQLite)
+            {
+                SousFamille = new SousFamille(Ligne.Attribut<int>(0));
+                SousFamille.Nom = Ligne.Attribut<string>(1);
+
+                
+                //On récupère la famille de la sous famille
+                RefFamille = Ligne.Attribut<int>(0);
+
+                //Si la Famille avait déjà été chargée et créée on la récupère
+                if (Familles.ContainsKey(RefFamille))
+                {
+                    LaFamille = Familles[RefFamille];
+                }
+                else
+                {
+                    LaFamille = new Famille(RefFamille);
+                    FamilleDAO.Obtenir(LaFamille);
+                    Familles.Add(RefFamille, SousFamille.Famille);
+                }
+                
+                SousFamille.Famille = LaFamille;
+
+                ListeSousFamilles.Add(SousFamille);
+            }
+
+            
+
+            return ListeSousFamilles;
         }
 
 

@@ -12,6 +12,7 @@
         public Article()
         {
             RefArticle = null;
+            Quantite = 0;
         }
 
         public Article(string RefArticle, string Description, Marque Marque, SousFamille SousFamille, float Prix, int Quantite)
@@ -26,7 +27,13 @@
 
         public override string ToString()
         {
-            return RefArticle + "; " + Description + "; Marque : {" + Marque + "}; Famille : {" + SousFamille + "}; " + Prix + "; " + Quantite;
+            return RefArticle + "; " + Description + "; Marque : {" + Marque + "}; Sous-famille : {" + SousFamille + "}; " + Prix + "; " + Quantite;
+        }
+
+
+        public string ToCSV()
+        {
+            return Description + ";" + RefArticle + ";" + Marque + ";" + SousFamille.Famille + ";" + SousFamille.Nom + ";" + Prix;
         }
     }
 }

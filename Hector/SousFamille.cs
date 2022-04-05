@@ -23,7 +23,7 @@
 
         public override string ToString()
         {
-            return Nom;
+            return Nom + "; Famille : {" + Famille + "}";
         }
     }
 }
