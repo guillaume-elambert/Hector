@@ -23,12 +23,22 @@ namespace Hector
             Connexion = new ConnexionBDD(CheminVersSQLite);
             InitializeComponent();
         }
-
+        
+        
         private void ImporterToolStripMenuItem_Click(object Emetteur, EventArgs Evenement)
         {
             FenetreImporter FormulaireImporter = new FenetreImporter(Connexion);
             FormulaireImporter.ShowDialog();
         }
+
+        
+        private void ExporterToolStripMenuItem_Click(object Emetteur, EventArgs Evenement)
+        {
+            FenetreExporter FormulaireExporter = new FenetreExporter(Connexion);
+            FormulaireExporter.ShowDialog();
+        }
+
+
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             List<Article> ListeArticle = new List<Article>();
