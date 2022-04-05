@@ -20,7 +20,7 @@ namespace Hector
         {
             this.Connexion = Connexion;
         }
-
+        public MarqueDAO() { }
 
         /// <summary>
         /// Méthode d'insertion d'un objet Marque dans la base de données.

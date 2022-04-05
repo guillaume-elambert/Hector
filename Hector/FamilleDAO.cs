@@ -21,6 +21,7 @@ namespace Hector
             this.Connexion = Connexion;
         }
 
+        public FamilleDAO() { }
 
         /// <summary>
         /// Méthode d'insertion d'un objet Famille dans la base de données.
@@ -183,6 +184,25 @@ namespace Hector
         {
             string Commande = "DELETE FROM Familles;";
             return Connexion.ExecuterCommande(Commande) != -1;
+        }
+
+        public List<string> ObtenirFamilles()
+        {
+            List<string> ListeFamilles = new List<string>();
+
+            string Commande = "SELECT Nom FROM Familles";
+
+            ConnexionBDD Connection = new ConnexionBDD("PATH je connais pas");
+            Connection.Open();
+            SQLiteCommand Command = new SQLiteCommand(Commande, Connection.getConnexion());
+               
+            SQLiteDataReader Reader = Command.ExecuteReader();    
+            while (Reader.Read())
+            {
+                ListeFamilles.Add(Reader.GetString(0));
+            }
+
+            return ListeFamilles;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
+using System;
 
 namespace Hector
 {
@@ -20,7 +21,7 @@ namespace Hector
             this.Connexion = Connexion;
         }
 
-
+        public ArticleDAO() { }
         /// <summary>
         /// Méthode d'insertion d'un objet Article dans la base de données.
         /// </summary>
@@ -197,26 +198,55 @@ namespace Hector
 
         }
 
-        public List<Article> ObtenirArticles()
+        public Article ObtenirArticle(string RefArticle)
         {
-            SQLiteCommand Commande = Connexion.getConnexion().CreateCommand();
-            Commande.CommandText = "SELECT * FROM Articles";
-            List<Article> TousLesArticles = new List<Article>();
+            string Commande = "SELECT * FROM Articles WHERE RefArticle = '" + RefArticle + "'";
+            ConnexionBDD Connection = new ConnexionBDD("CheminAVoir");
+            Connexion.Open();
 
-            SQLiteDataReader Resultat = Commande.ExecuteReader();
+            //Commande fait a la base de donnees
+            SQLiteCommand CommandeSQL = new SQLiteCommand(Commande, Connection.getConnexion());
 
-            while (Resultat.Read())
+            //On va lire le resultat
+            SQLiteDataReader DataReader = CommandeSQL.ExecuteReader();
+
+            if (DataReader.Read())
             {
-                Article Article = new Article();
-                Article.Description = (string)Resultat["Description"];
-                Article.Marque = (Marque)Resultat["Marque"];
-                Article.SousFamille = (SousFamille)Resultat["SousFamille"];
-                Article.Prix = (float)Resultat["Prix"];
-                Article.Quantite = (int)Resultat["Quantite"];
-                TousLesArticles.Add(Article);
-            }
-            return TousLesArticles;
+                MarqueDAO MarqueDAO = new MarqueDAO();
+                SousFamilleDAO SousFamilleDAO = new SousFamilleDAO();
+                Article ArticleCourant = new Article();
+                ArticleCourant.RefArticle = DataReader.GetString(0);
+                ArticleCourant.Description = DataReader.GetString(1);
+                //GROS PROBLEME ICI IL FAUDRAIT QUE LES BEAN SOIT DES INT POUR LES SOUSFAMILLE ET MARQUES
+                //ArticleCourant.SousFamille = (SousFamille) DataReader.GetString(2);
+                //Article.Marque = DataReader.GetInt16(3);
+                ArticleCourant.Prix = DataReader.GetFloat(4);
+                ArticleCourant.Quantite = DataReader.GetInt16(5);
 
+
+                return ArticleCourant;
+            }
+            return null;
+        }
+
+        public List<Article> ObtenirTousArticles()
+        {
+            List<Article> ListArticles = new List<Article>();
+            string Commande = "SELECT RefArticle FROM Articles";
+
+            ConnexionBDD Connection = new ConnexionBDD("CheminAVoir");
+            Connexion.Open();
+
+            SQLiteCommand CommandeSQL = new SQLiteCommand(Commande, Connection.getConnexion());
+
+            SQLiteDataReader DataReader = CommandeSQL.ExecuteReader();
+
+            while (DataReader.Read())
+            {
+                Article Article = ObtenirArticle(DataReader.GetString(0));
+                ListArticles.Add(Article);
+            }
+            return ListArticles;
         }
     }
 }

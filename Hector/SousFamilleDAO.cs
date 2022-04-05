@@ -20,6 +20,7 @@ namespace Hector
             this.Connexion = Connexion;
         }
 
+        public SousFamilleDAO() { }
 
         /// <summary>
         /// Méthode d'insertion d'un objet SousFamille dans la base de données.

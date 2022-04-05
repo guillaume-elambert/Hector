@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using System.Collections.Generic;
 
 namespace Hector
 {
@@ -30,36 +31,32 @@ namespace Hector
         }
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            List<Article> ListeArticle = new List<Article>();
+            ArticleDAO ArticleDAO = new ArticleDAO();
             switch (ArbreArticles.SelectedNode.Text)
             {
                 case "Tous les articles" :
                     //Recupérer tous les articles de la base de données
-                    SQLiteCommand Commande = Connexion.getConnexion().CreateCommand();
-                    Commande.CommandText = "SELECT * FROM Articles";
-                    SQLiteDataReader Resultat = Commande.ExecuteReader();
+                    ListeArticle = ArticleDAO.ObtenirTousArticles();
 
-                    while (Resultat.Read())
+                    foreach(Article Article in ListeArticle)
                     {
-                        Article Article = new Article();
-                        Article.Description = (string)Resultat["Description"];
-                        Article.Marque = (Marque)Resultat["Marque"];
-                        Article.SousFamille = (SousFamille)Resultat["SousFamille"];
-                        Article.Prix = (float)Resultat["Prix"];
-                        Article.Quantite = (int)Resultat["Quantite"];
-                        ListView.Items.Add(Article.ToString());
+                        ListViewItem Item = new ListViewItem(Article.RefArticle);
+                        Item.SubItems.Add(Article.Description);
+                       // Item.SubItems.Add(Article.SousFamille);
+                        //Item.SubItems.Add(Article.Marque);
+                        Item.SubItems.Add(Article.Prix.ToString());
+                        Item.SubItems.Add(Article.Quantite.ToString());
+                        ListView.Items.Add(Item);
                     }
-                        break;
+                    break;
                 case "Familles":
                     //Recuperer juste les articles par rapport à leur famille et non avec les marques
-                    SQLiteCommand Commande2 = Connexion.getConnexion().CreateCommand();
-                    Commande2.CommandText = "SELECT Description FROM Articles INNER JOIN SousFamille INNER JOIN Famille";
-                    SQLiteDataReader Resultat2 = Commande2.ExecuteReader();
-
-                    while (Resultat2.Read())
+                    FamilleDAO FamilleDAO = new FamilleDAO();
+                    List<string> ListeFamille = FamilleDAO.ObtenirFamilles();
+                    foreach(string Famille in ListeFamille)
                     {
-                        Article Article = new Article();
-                        Article.Description = (string)Resultat2["Description"];
-                        ListView.Items.Add(Article.ToStringDescription());
+                        ListView.Items.Add(new ListViewItem(Famille));
                     }
                     break;
                 case "Marques":
