@@ -24,7 +24,7 @@ namespace Hector
             InitializeComponent();
         }
 
-        private void ImporterToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ImporterToolStripMenuItem_Click(object Emetteur, EventArgs Evenement)
         {
             FenetreImporter FormulaireImporter = new FenetreImporter(Connexion);
             FormulaireImporter.ShowDialog();

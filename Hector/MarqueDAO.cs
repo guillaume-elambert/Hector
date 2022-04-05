@@ -33,13 +33,15 @@ namespace Hector
                 new SQLiteParameter("@nom", Marque.Nom)
             };
 
-            string Commande;
-            Commande = "INSERT INTO Marques " +
-                    "(Nom) VALUES " +
-                    "(@nom) RETURNING RefMarque;";
+            string Commande = "INSERT INTO Marques (Nom) " +
+                "SELECT @nom " +
+                "WHERE NOT EXISTS ( " +
+                "   SELECT 1 FROM Marques WHERE Nom = @nom " +
+                ") " +
+                "RETURNING RefMarque;";
 
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
-            if (ResultatSQLite == null) return false;
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
 
             LigneSQLite Resultat = ResultatSQLite[0];
@@ -120,7 +122,7 @@ namespace Hector
             string Commande = "SELECT Nom FROM Marques WHERE RefMarque = @refMarque;";
 
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
-            if (ResultatSQLite == null) return false;
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
             Marque.Nom = Resultat.Attribut<string>(0);
@@ -128,6 +130,7 @@ namespace Hector
             return true;
         }
 
+        
         /// <summary>
         /// Méthode pour obtenir une liste de Marques depuis la base de données.
         /// </summary>
@@ -145,6 +148,33 @@ namespace Hector
             return ARetourner;
         }
 
+
+
+        /// <summary>
+        /// Méthode pour obtenir toutes les Marques depuis la base de données.
+        /// </summary>
+        /// <returns>La liste des marques stockées en base de données</returns>
+        public List<Marque> ObtenirTout()
+        {
+
+            string Commande = "SELECT RefMarque, Nom FROM Marques;";
+
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
+            
+            List<Marque> ListeMarques = new List<Marque>();
+            Marque Marque;
+
+            foreach (LigneSQLite Ligne in ResultatSQLite)
+            {
+                Marque = new Marque();
+                Marque.RefMarque = Ligne.Attribut<int>(0);
+                Marque.Nom = Ligne.Attribut<string>(1);
+                ListeMarques.Add(Marque);
+            }
+
+            return ListeMarques;
+        }
 
         /// <summary>
         /// Méthode de supression d'une Marque en base de données.

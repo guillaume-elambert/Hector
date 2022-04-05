@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.BoutonImporter = new System.Windows.Forms.Button();
+            this.BoutonChoixFichier = new System.Windows.Forms.Button();
             this.ContenuFichierTextBox = new System.Windows.Forms.TextBox();
             this.NomFichierTextBox = new System.Windows.Forms.TextBox();
             this.GroupeBoutonsIntégration = new System.Windows.Forms.GroupBox();
@@ -41,15 +41,15 @@
             this.GroupeContenuFichier.SuspendLayout();
             this.SuspendLayout();
             // 
-            // BoutonImporter
+            // BoutonChoixFichier
             // 
-            this.BoutonImporter.Location = new System.Drawing.Point(9, 12);
-            this.BoutonImporter.Name = "BoutonImporter";
-            this.BoutonImporter.Size = new System.Drawing.Size(162, 23);
-            this.BoutonImporter.TabIndex = 0;
-            this.BoutonImporter.Text = "Séléctionner un fichier .csv";
-            this.BoutonImporter.UseVisualStyleBackColor = true;
-            this.BoutonImporter.Click += new System.EventHandler(this.BoutonImporter_Click);
+            this.BoutonChoixFichier.Location = new System.Drawing.Point(9, 12);
+            this.BoutonChoixFichier.Name = "BoutonChoixFichier";
+            this.BoutonChoixFichier.Size = new System.Drawing.Size(162, 23);
+            this.BoutonChoixFichier.TabIndex = 0;
+            this.BoutonChoixFichier.Text = "Séléctionner un fichier .csv";
+            this.BoutonChoixFichier.UseVisualStyleBackColor = true;
+            this.BoutonChoixFichier.Click += new System.EventHandler(this.BoutonChoixFichier_Click);
             // 
             // ContenuFichierTextBox
             // 
@@ -137,7 +137,7 @@
             this.ClientSize = new System.Drawing.Size(670, 434);
             this.Controls.Add(this.GroupeBoutonsIntégration);
             this.Controls.Add(this.NomFichierTextBox);
-            this.Controls.Add(this.BoutonImporter);
+            this.Controls.Add(this.BoutonChoixFichier);
             this.Controls.Add(this.GroupeContenuFichier);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "FenetreImporter";
@@ -153,7 +153,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button BoutonImporter;
+        private System.Windows.Forms.Button BoutonChoixFichier;
         private System.Windows.Forms.TextBox ContenuFichierTextBox;
         private System.Windows.Forms.TextBox NomFichierTextBox;
         private System.Windows.Forms.GroupBox GroupeBoutonsIntégration;

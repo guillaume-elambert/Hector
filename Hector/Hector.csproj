@@ -94,6 +94,12 @@
     <Compile Include="DAO.cs" />
     <Compile Include="Famille.cs" />
     <Compile Include="FamilleDAO.cs" />
+    <Compile Include="FenetreExporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FenetreExporter.Designer.cs">
+      <DependentUpon>FenetreExporter.cs</DependentUpon>
+    </Compile>
     <Compile Include="FenetreImporter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +121,9 @@
     <Compile Include="ResultatSQLite.cs" />
     <Compile Include="SousFamille.cs" />
     <Compile Include="SousFamilleDAO.cs" />
+    <EmbeddedResource Include="FenetreExporter.resx">
+      <DependentUpon>FenetreExporter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FenetreImporter.resx">
       <DependentUpon>FenetreImporter.cs</DependentUpon>
     </EmbeddedResource>

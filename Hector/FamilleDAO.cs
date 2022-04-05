@@ -30,18 +30,20 @@ namespace Hector
         /// <returns>true si réussi, false sinon</returns>
         public bool Inserer(Famille Famille)
         {
-
+            //if(Connexion.ExecuterCommandeAvecRes)
+            
             List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@nom", Famille.Nom)
             };
 
-            string Commande;
-            Commande = "INSERT INTO Familles " +
-                "(Nom) VALUES " +
-                "(@nom) RETURNING RefFamille;";
+            string Commande = "INSERT INTO Familles (Nom) " +
+                "SELECT @nom " +
+                "WHERE NOT EXISTS ( " +
+                "   SELECT 1 FROM Familles WHERE Nom = @nom " +
+                ") RETURNING RefFamille;";
 
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
-            if (ResultatSQLite == null) return false;
+            var ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
             Famille.RefFamille = Resultat.Attribut<int>(0);
@@ -121,7 +123,7 @@ namespace Hector
             string Commande = "SELECT Nom FROM Familles WHERE RefFamille = @refFamille;";
 
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
-            if (ResultatSQLite == null) return false;
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
             Famille.Nom = Resultat.Attribut<string>(0);
@@ -145,6 +147,33 @@ namespace Hector
             }
 
             return ARetourner;
+        }
+
+
+        /// <summary>
+        /// Méthode pour obtenir toutes les Familles depuis la base de données.
+        /// </summary>
+        /// <returns>La liste des familles stockées en base de données</returns>
+        public List<Famille> ObtenirTout()
+        {
+
+            string Commande = "SELECT RefFamille, Nom FROM Familles;";
+
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
+
+            List<Famille> ListeFamilles = new List<Famille>();
+
+            Famille Famille;
+            foreach (LigneSQLite Ligne in ResultatSQLite)
+            {
+                Famille = new Famille();
+                Famille.RefFamille = Ligne.Attribut<int>(0);
+                Famille.Nom = Ligne.Attribut<string>(1);
+                ListeFamilles.Add(Famille);
+            }
+
+            return ListeFamilles;
         }
 
 
@@ -174,7 +203,7 @@ namespace Hector
 
             return ARetourner;
         }
-
+        
 
         /// <summary>
         /// Méthode pour supprimer le contenu de la table.

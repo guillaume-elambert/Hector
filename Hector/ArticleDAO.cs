@@ -125,7 +125,7 @@ namespace Hector
 
             string Commande = "SELECT Description, RefSousFamille, RefMarque, PrixHT, Quantite FROM Articles WHERE RefArticle = @refArticle;";
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
-            if (ResultatSQLite == null) return false;
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
 
@@ -156,6 +156,90 @@ namespace Hector
             }
 
             return ARetourner;
+        }
+
+        /// <summary>
+        /// Méthode pour obtenir tous les d'Articles depuis la base de données.
+        /// </summary>
+        /// <returns>La liste des articles stockés en base de données</returns>
+        public List<Article> ObtenirTout()
+        {
+            SousFamilleDAO SousFamilleDAO = new SousFamilleDAO(Connexion);
+            MarqueDAO MarqueDAO = new MarqueDAO(Connexion);
+
+            string Commande = "SELECT RefArticle, Description, RefSousFamille, RefMarque, PrixHT, Quantite FROM Articles;";
+            
+            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+            if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
+
+            List<Article> ListeArticles = new List<Article>();
+            Dictionary<int, Marque> Marques = new Dictionary<int, Marque>();
+            Dictionary<int, SousFamille> SousFamilles = new Dictionary<int, SousFamille>();
+            Dictionary<int, Famille> Familles = new Dictionary<int, Famille>();
+
+            int RefMarque, RefSousFamille, RefFamille;
+            Marque LaMarque;
+            SousFamille LaSousFamille;
+            Famille LaFamille;
+            Article Article;
+
+            foreach (LigneSQLite Ligne in ResultatSQLite)
+            {
+                Article = new Article();
+                Article.RefArticle = Ligne.Attribut<string>(0);
+                Article.Description = Ligne.Attribut<string>(1);
+                Article.Prix = Ligne.Attribut<float>(4);
+                Article.Quantite = Ligne.Attribut<int>(5);
+                
+                RefMarque = Ligne.Attribut<int>(3);
+                RefSousFamille = Ligne.Attribut<int>(2);
+
+
+
+                //Si on a déjà cette marque on utilise celle existante sinon on la charge depuis la base de données
+                if (Marques.ContainsKey(RefMarque))
+                {
+                    LaMarque = Marques[RefMarque];
+                } else
+                {
+                    LaMarque = new Marque(RefMarque);
+                    MarqueDAO.Obtenir(LaMarque);
+                    Marques.Add(RefMarque, LaMarque);
+                }
+                
+                Article.Marque = LaMarque;
+
+
+                //Si on a déjà cette sous famille on utilise celle existante sinon on la charge depuis la base de données
+                if (SousFamilles.ContainsKey(RefSousFamille))
+                {
+                    LaSousFamille = SousFamilles[RefSousFamille];
+                } else
+                {
+                    LaSousFamille = new SousFamille(RefSousFamille);
+                    SousFamilleDAO.Obtenir(LaSousFamille);
+                    SousFamilles.Add(RefSousFamille, LaSousFamille);
+                }
+
+                Article.SousFamille = LaSousFamille;
+
+                //On récupère la famille de la sous famille
+                RefFamille = LaSousFamille.Famille.RefFamille;
+
+                //Si la Famille avait déjà été chargée et créée on la récupère
+                if (Familles.ContainsKey(RefFamille))
+                {
+                    LaFamille = Familles[RefFamille];
+                    LaSousFamille.Famille = LaFamille;
+                } else
+                {
+                    Familles.Add(RefFamille, LaSousFamille.Famille);
+                }
+
+                ListeArticles.Add(Article);
+            };
+
+            return ListeArticles;
         }
 
 
