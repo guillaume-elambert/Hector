@@ -208,6 +208,7 @@ namespace Hector
                 }
                 
                 Article.Marque = LaMarque;
+                LaMarque.AjouterArticle(Article);
 
 
                 //Si on a déjà cette sous famille on utilise celle existante sinon on la charge depuis la base de données
@@ -222,6 +223,7 @@ namespace Hector
                 }
 
                 Article.SousFamille = LaSousFamille;
+                LaSousFamille.AjouterArticle(Article);
 
                 //On récupère la famille de la sous famille
                 RefFamille = LaSousFamille.Famille.RefFamille;
@@ -233,9 +235,11 @@ namespace Hector
                     LaSousFamille.Famille = LaFamille;
                 } else
                 {
-                    Familles.Add(RefFamille, LaSousFamille.Famille);
+                    LaFamille = LaSousFamille.Famille;
+                    Familles.Add(RefFamille, LaFamille);
                 }
-
+                
+                LaFamille.AjouterSousFamille(LaSousFamille);
                 ListeArticles.Add(Article);
             };
 

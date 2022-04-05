@@ -1,4 +1,6 @@
-﻿namespace Hector
+﻿using System.Collections.Generic;
+
+namespace Hector
 {
     internal class SousFamille
     {
@@ -6,11 +8,10 @@
         public Famille Famille { get; set; }
         public string Nom { get; set; }
 
+        public List<Article> Articles { get; set; }
 
-        public SousFamille()
-        {
-            RefSousFamille = -1;
-        }
+
+        public SousFamille() : this(-1, null, null) { }
 
         public SousFamille(int RefSousFamille) : this(RefSousFamille, null, null) { }
 
@@ -19,6 +20,13 @@
             this.RefSousFamille = RefSousFamille;
             this.Famille = Famille;
             this.Nom = Nom;
+            Articles = new List<Article>();
+        }
+
+        public void AjouterArticle(Article Article)
+        {
+            if (Articles.Contains(Article)) return;
+            Articles.Add(Article);
         }
 
         public override string ToString()

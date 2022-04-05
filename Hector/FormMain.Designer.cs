@@ -31,19 +31,6 @@ namespace Hector
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Tous les articles");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Stylos, feutres & rollers");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Ecriture & Correction", new System.Windows.Forms.TreeNode[] {
-            treeNode2});
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Papier laser");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Papier", new System.Windows.Forms.TreeNode[] {
-            treeNode4});
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Familles", new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode5});
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Clairefontaine");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Marques", new System.Windows.Forms.TreeNode[] {
-            treeNode7});
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.FichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ActualiserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,20 +72,21 @@ namespace Hector
             // ActualiserToolStripMenuItem
             // 
             this.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem";
-            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.ActualiserToolStripMenuItem.Text = "Actualiser";
+            this.ActualiserToolStripMenuItem.Click += new System.EventHandler(this.ActualiserToolStripMenuItem_Click);
             // 
             // ImporterToolStripMenuItem
             // 
             this.ImporterToolStripMenuItem.Name = "ImporterToolStripMenuItem";
-            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.ImporterToolStripMenuItem.Text = "Importer";
             this.ImporterToolStripMenuItem.Click += new System.EventHandler(this.ImporterToolStripMenuItem_Click);
             // 
             // ExporterToolStripMenuItem
             // 
             this.ExporterToolStripMenuItem.Name = "ExporterToolStripMenuItem";
-            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.ExporterToolStripMenuItem.Text = "Exporter";
             this.ExporterToolStripMenuItem.Click += new System.EventHandler(this.ExporterToolStripMenuItem_Click);
             // 
@@ -131,32 +119,14 @@ namespace Hector
             // 
             // ArbreArticles
             // 
-            this.ArbreArticles.Location = new System.Drawing.Point(12, 3);
+            this.ArbreArticles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ArbreArticles.Location = new System.Drawing.Point(0, 0);
             this.ArbreArticles.Name = "ArbreArticles";
-            treeNode1.Checked = true;
-            treeNode1.Name = "RacinesArticles";
-            treeNode1.Text = "Tous les articles";
-            treeNode2.Name = "SousFamilleEC";
-            treeNode2.Text = "Stylos, feutres & rollers";
-            treeNode3.Name = "EcritureEtCorrection";
-            treeNode3.Text = "Ecriture & Correction";
-            treeNode4.Name = "SousFamilleP";
-            treeNode4.Text = "Papier laser";
-            treeNode5.Name = "Papier";
-            treeNode5.Text = "Papier";
-            treeNode6.Name = "Familles";
-            treeNode6.Text = "Familles";
-            treeNode7.Name = "Clairefontaine";
-            treeNode7.Text = "Clairefontaine";
-            treeNode8.Name = "Marques";
-            treeNode8.Text = "Marques";
-            this.ArbreArticles.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode6,
-            treeNode8});
-            this.ArbreArticles.Size = new System.Drawing.Size(251, 398);
+            this.ArbreArticles.Size = new System.Drawing.Size(266, 404);
             this.ArbreArticles.TabIndex = 1;
-            this.ArbreArticles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.ArbreArticles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ArbreArticles_AfterSelect);
             // 
             // TreeView
             // 
