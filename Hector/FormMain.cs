@@ -55,12 +55,6 @@ namespace Hector
                     Commande2.CommandText = "SELECT Description FROM Articles INNER JOIN SousFamille INNER JOIN Famille";
                     SQLiteDataReader Resultat2 = Commande2.ExecuteReader();
 
-<<<<<<< HEAD
-        private void ExporterToolStripMenuItem_Click(object Emetteur, EventArgs Evenement)
-        {
-            FenetreExporter FormulaireExporter = new FenetreExporter(Connexion);
-            FormulaireExporter.ShowDialog();
-=======
                     while (Resultat2.Read())
                     {
                         Article Article = new Article();
@@ -80,7 +74,6 @@ namespace Hector
                     //Recuperer les elements avec clairefontaines
                     break;
             }
->>>>>>> c4907b4f81257d1ff1b23d658ae14e4e742d16bd
         }
     }
 } 
