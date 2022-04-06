@@ -72,21 +72,22 @@ namespace Hector
             // ActualiserToolStripMenuItem
             // 
             this.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem";
-            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.ActualiserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ActualiserToolStripMenuItem.Text = "Actualiser";
             this.ActualiserToolStripMenuItem.Click += new System.EventHandler(this.ActualiserToolStripMenuItem_Click);
             // 
             // ImporterToolStripMenuItem
             // 
             this.ImporterToolStripMenuItem.Name = "ImporterToolStripMenuItem";
-            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ImporterToolStripMenuItem.Text = "Importer";
             this.ImporterToolStripMenuItem.Click += new System.EventHandler(this.ImporterToolStripMenuItem_Click);
             // 
             // ExporterToolStripMenuItem
             // 
             this.ExporterToolStripMenuItem.Name = "ExporterToolStripMenuItem";
-            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ExporterToolStripMenuItem.Text = "Exporter";
             this.ExporterToolStripMenuItem.Click += new System.EventHandler(this.ExporterToolStripMenuItem_Click);
             // 
@@ -146,6 +147,7 @@ namespace Hector
             this.ListView.TabIndex = 0;
             this.ListView.UseCompatibleStateImageBehavior = false;
             this.ListView.View = System.Windows.Forms.View.Details;
+            this.ListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListView_ColumnClick);
             // 
             // FormMain
             // 

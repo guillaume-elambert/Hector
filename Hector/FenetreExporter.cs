@@ -108,7 +108,9 @@ namespace Hector
             
             foreach (Article Article in Articles.Values)
             {
-                Fichier.Write(Article.ToCSV() + "\n");
+                for(int Compteur = 0; Compteur < Article.Quantite; ++Compteur){
+                    Fichier.Write(Article.ToCSV() + "\n");
+                }
             }
             Fichier.Close();
         }

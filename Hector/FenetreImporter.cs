@@ -256,7 +256,8 @@ namespace Hector
                     Article.Description = DescriptionArticle;
                     Article.RefArticle = RefArticle;
                     Article.Prix = float.Parse(PrixArticle);
-
+                    ++Article.Quantite;
+                    
                     Marque.Nom = NomMarque;
                     SousFamille.Nom = NomSousFamille;
                     Famille.Nom = NomFamille;
