@@ -60,7 +60,6 @@ namespace Hector
         { 
             ListView.Items.Clear();
             ListView.Columns.Clear();
-            ListViewItem Ligne;
 
             switch (ArbreArticles.SelectedNode.Name)
             {
@@ -97,11 +96,8 @@ namespace Hector
                     {
                         string RefMarque = Regex.Match(ArbreArticles.SelectedNode.Name, "^Marque_(.*)$").Groups[1].Value;
 
-                        AfficherMarquesListView(new Dictionary<string, Marque>() {
-                            {
-                                RefMarque, Marques[RefMarque]
-                            }
-                        });
+                        //On affiche dans la ListView uniquement les articles de la marque sur laquelle on à cliqué
+                        AfficherArticlesListView(Marques[RefMarque].Articles);
 
                         break;
                     }
@@ -110,11 +106,8 @@ namespace Hector
                     {
                         string RefSousFamille = Regex.Match(ArbreArticles.SelectedNode.Name, "^SousFamille_(.*)$").Groups[1].Value;
 
-                        AfficherSousFamillesListView(new Dictionary<string, SousFamille>() {
-                            {
-                                RefSousFamille, SousFamilles[RefSousFamille]
-                            }
-                        });
+                        //On affiche dans la ListView uniquement les articles de la sous-famille sur laquelle on à cliqué
+                        AfficherArticlesListView(SousFamilles[RefSousFamille].Articles);
 
                         break;
                     }
@@ -123,11 +116,11 @@ namespace Hector
                     {
                         string RefFamille = Regex.Match(ArbreArticles.SelectedNode.Name, "^Famille_(.*)$").Groups[1].Value;
 
-                        AfficherFamillesListView(new Dictionary<string, Famille>() {
-                            {
-                                RefFamille, Familles[RefFamille]
-                            }
-                        });
+                        //On affiche dans la ListView uniquement les articles de la famille sur laquelle on à cliqué
+                        foreach (SousFamille SousFamille in Familles[RefFamille].SousFamilles.Values)
+                        {
+                            AfficherArticlesListView(SousFamille.Articles);
+                        }
 
                         break;
                     }
@@ -212,7 +205,7 @@ namespace Hector
                 LeNoeudFamille = ArbreArticles.Nodes["Familles"].Nodes[PrefixeFamille + Famille.RefFamille.ToString()];
 
                 //Pour chaque sous-famille on ajoute la sous-famille et ses articles dans l'arbre
-                foreach (SousFamille SousFamille in Famille.SousFamilles)
+                foreach (SousFamille SousFamille in Famille.SousFamilles.Values)
                 {
 
                     //On ajoute un noeud pour la sous famille
@@ -222,7 +215,7 @@ namespace Hector
                     );
 
                     //On ajoute les articles de la sous-famille dans l'arbre
-                    foreach (Article Article in SousFamille.Articles)
+                    foreach (Article Article in SousFamille.Articles.Values)
                     {
                         //On ajoute un noeud pour l'article
                         LeNoeudSousFamille.Nodes.Add(
@@ -241,7 +234,7 @@ namespace Hector
             {
                 LeNoeudMarque = ArbreArticles.Nodes["Marques"].Nodes[PrefixeMarque + Marque.RefMarque.ToString()];
 
-                foreach(Article Article in Marque.Articles)
+                foreach(Article Article in Marque.Articles.Values)
                 {
                     LeNoeudMarque.Nodes.Add(
                         PrefixeArticle + Article.RefArticle,
@@ -256,10 +249,15 @@ namespace Hector
         {
             if (Articles == null || Articles.Count == 0) return;
 
-            ListView.Columns.Add("Référence", 100, HorizontalAlignment.Left);
-            ListView.Columns.Add("Déscription", 200, HorizontalAlignment.Left);
-            ListView.Columns.Add("Prix", 50, HorizontalAlignment.Left);
-            ListView.Columns.Add("Quantité", 60, HorizontalAlignment.Left);
+            string Prefixe = "Article_";
+            
+            if(!ListView.Columns.ContainsKey(Prefixe + "Référence")) ListView.Columns.Add(Prefixe + "Référence", "Référence", 80);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Déscription")) ListView.Columns.Add(Prefixe + "Déscription", "Déscription", 200);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Famille")) ListView.Columns.Add(Prefixe + "Famille", "Famille", 100);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Sous-famille")) ListView.Columns.Add(Prefixe + "Sous-famille", "Sous-famille", 100);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Marque")) ListView.Columns.Add(Prefixe + "Marque", "Marque", 100);
+            //if (!ListView.Columns.ContainsKey(Prefixe + "Prix")) ListView.Columns.Add(Prefixe + "Prix", "Prix", 50);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Quantité")) ListView.Columns.Add(Prefixe + "Quantité", "Quantité", 60);
 
             ListViewItem Ligne;
 
@@ -267,11 +265,14 @@ namespace Hector
             {
 
                 string[] Valeurs = {
-                            Article.RefArticle,
-                            Article.Description,
-                            Article.Prix.ToString(),
-                            Article.Quantite.ToString()
-                        };
+                    Article.RefArticle,
+                    Article.Description,
+                    Article.SousFamille.Famille.Nom,
+                    Article.SousFamille.Nom,
+                    Article.Marque.Nom,
+                    //Article.Prix.ToString(),
+                    Article.Quantite.ToString()
+                };
 
                 Ligne = new ListViewItem(Valeurs);
                 ListView.Items.Add(Ligne);
@@ -283,17 +284,19 @@ namespace Hector
         {
             if (Marques == null || Marques.Count == 0) return;
 
-            ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-            ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+            string Prefixe = "Marque_";
+
+            //if (!ListView.Columns.ContainsKey(Prefixe + "Référence")) ListView.Columns.Add(Prefixe + "Référence", "Référence", 80);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Nom")) ListView.Columns.Add(Prefixe + "Nom", "Nom", 300);
 
             ListViewItem Ligne;
             
             foreach (Marque Marque in Marques.Values)
             {
                 string[] Valeurs = {
-                            Marque.RefMarque.ToString(),
-                            Marque.Nom
-                        };
+                    //Marque.RefMarque.ToString(),
+                    Marque.Nom
+                };
 
                 Ligne = new ListViewItem(Valeurs);
                 ListView.Items.Add(Ligne);
@@ -304,15 +307,18 @@ namespace Hector
         {
             if (Familles == null || Familles.Count == 0) return;
 
-            ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-            ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+            string Prefixe = "Famille_";
+
+
+            //if (!ListView.Columns.ContainsKey(Prefixe + "Référence")) ListView.Columns.Add(Prefixe + "Référence", "Référence", 80);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Nom")) ListView.Columns.Add(Prefixe + "Nom", "Nom", 300);
 
             ListViewItem Ligne;
             
             foreach (Famille Famille in Familles.Values)
             {
                 string[] Valeurs = {
-                            Famille.RefFamille.ToString(),
+                            //Famille.RefFamille.ToString(),
                             Famille.Nom
                         };
 
@@ -326,17 +332,19 @@ namespace Hector
         {
             if (SousFamilles == null || SousFamilles.Count == 0) return;
 
-            ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-            ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+            string Prefixe = "SousFamille_";
+
+            //if (!ListView.Columns.ContainsKey(Prefixe + "Référence")) ListView.Columns.Add(Prefixe + "Référence", "Référence", 80);
+            if (!ListView.Columns.ContainsKey(Prefixe + "Nom")) ListView.Columns.Add(Prefixe + "Nom", "Nom", 300);
 
             ListViewItem Ligne;
 
             foreach (SousFamille SousFamille in SousFamilles.Values)
             {
                 string[] Valeurs = {
-                            SousFamille.RefSousFamille.ToString(),
-                            SousFamille.Nom
-                        };
+                    //SousFamille.RefSousFamille.ToString(),
+                    SousFamille.Nom
+                };
 
                 Ligne = new ListViewItem(Valeurs);
                 ListView.Items.Add(Ligne);

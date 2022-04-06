@@ -7,7 +7,7 @@ namespace Hector
         public int RefMarque { get; set; }
         public string Nom { get; set; }
 
-        public List<Article> Articles { get; set; }
+        public Dictionary<string, Article> Articles { get; set; }
 
 
         public Marque() : this(-1, null) { }
@@ -18,13 +18,12 @@ namespace Hector
         {
             this.RefMarque = RefMarque;
             this.Nom = Nom;
-            Articles = new List<Article>();
+            Articles = new Dictionary<string, Article>();
         }
 
         public void AjouterArticle(Article Article)
         {
-            if (Articles.Contains(Article)) return;
-            Articles.Add(Article);
+            Articles[Article.RefArticle] = Article;
         }
 
         public override string ToString()
