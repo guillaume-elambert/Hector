@@ -159,7 +159,7 @@ namespace Hector
         /// Méthode pour obtenir toutes les SousFamilles depuis la base de données.
         /// </summary>
         /// <returns>La liste des sous-familles stockées en base de données</returns>
-        public List<SousFamille> ObtenirTout()
+        public Dictionary<string, SousFamille> ObtenirTout()
         {
             FamilleDAO FamilleDAO = new FamilleDAO(Connexion);
 
@@ -168,7 +168,7 @@ namespace Hector
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
 
-            List<SousFamille> ListeSousFamilles = new List<SousFamille>();
+            Dictionary<string, SousFamille> SousFamilles = new Dictionary<string, SousFamille>();
             Dictionary<int, Famille> Familles = new Dictionary<int, Famille>();
 
             int RefFamille;
@@ -198,12 +198,10 @@ namespace Hector
                 
                 SousFamille.Famille = LaFamille;
 
-                ListeSousFamilles.Add(SousFamille);
+                SousFamilles[SousFamille.RefSousFamille.ToString()] = SousFamille;
             }
 
-            
-
-            return ListeSousFamilles;
+            return SousFamilles;
         }
 
 

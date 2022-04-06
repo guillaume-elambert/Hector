@@ -154,7 +154,7 @@ namespace Hector
         /// Méthode pour obtenir toutes les Familles depuis la base de données.
         /// </summary>
         /// <returns>La liste des familles stockées en base de données</returns>
-        public List<Famille> ObtenirTout()
+        public Dictionary<string, Famille> ObtenirTout()
         {
 
             string Commande = "SELECT RefFamille, Nom FROM Familles;";
@@ -162,7 +162,7 @@ namespace Hector
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
 
-            List<Famille> ListeFamilles = new List<Famille>();
+            Dictionary<string, Famille> Familles = new Dictionary<string, Famille>();
 
             Famille Famille;
             foreach (LigneSQLite Ligne in ResultatSQLite)
@@ -170,10 +170,10 @@ namespace Hector
                 Famille = new Famille();
                 Famille.RefFamille = Ligne.Attribut<int>(0);
                 Famille.Nom = Ligne.Attribut<string>(1);
-                ListeFamilles.Add(Famille);
+                Familles[Famille.RefFamille.ToString()] = Famille;
             }
 
-            return ListeFamilles;
+            return Familles;
         }
 
 

@@ -12,7 +12,7 @@ namespace Hector
         bool Modifier(List<T> ListeObjets);
         bool Obtenir(T Objet);
         bool Obtenir(List<T> ListeObjets);
-        List<T> ObtenirTout();
+        Dictionary<string, T> ObtenirTout();
 
         bool ViderTable();
     }

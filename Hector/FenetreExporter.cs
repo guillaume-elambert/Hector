@@ -104,9 +104,9 @@ namespace Hector
             StreamWriter Fichier = new StreamWriter(NomFichierTextBox.Text);
             Fichier.Write("Description;Ref;Marque;Famille;Sous-Famille;Prix H.T.\n");
             
-            List<Article> Articles = ArticleDAO.ObtenirTout();
+            Dictionary<string, Article> Articles = ArticleDAO.ObtenirTout();
             
-            foreach (Article Article in Articles)
+            foreach (Article Article in Articles.Values)
             {
                 Fichier.Write(Article.ToCSV() + "\n");
             }

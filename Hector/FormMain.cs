@@ -8,10 +8,10 @@ namespace Hector
 {
     public partial class FormMain : Form
     {
-        private List<Article> Articles;
-        private List<Marque> Marques;
-        private List<SousFamille> SousFamilles;
-        private List<Famille> Familles;
+        private Dictionary<string, Article> Articles;
+        private Dictionary<string, Marque> Marques;
+        private Dictionary<string, SousFamille> SousFamilles;
+        private Dictionary<string, Famille> Familles;
         
         private ArticleDAO ArticleDAO;
 
@@ -33,12 +33,12 @@ namespace Hector
             Connexion = new ConnexionBDD(CheminVersSQLite);
             ArticleDAO = new ArticleDAO(Connexion);
 
-            Articles = new List<Article>();
-            Marques = new List<Marque>();
-            SousFamilles = new List<SousFamille>();
-            Familles = new List<Famille>();
+            Articles = new Dictionary<string, Article>();
+            Marques = new Dictionary<string, Marque>();
+            SousFamilles = new Dictionary<string, SousFamille>();
+            Familles = new Dictionary<string, Famille>();
 
-            ActualiserDonnées();
+            ActualiserDonnees();
         }
         
         
@@ -65,158 +65,71 @@ namespace Hector
             switch (ArbreArticles.SelectedNode.Name)
             {
                 case "Articles" :
-                    if (Articles == null || Articles.Count == 0) return;
-
-                    ListView.Columns.Add("Référence", 100, HorizontalAlignment.Left);
-                    ListView.Columns.Add("Déscription", 200, HorizontalAlignment.Left);
-                    ListView.Columns.Add("Prix", 50, HorizontalAlignment.Left);
-                    ListView.Columns.Add("Quantité", 60, HorizontalAlignment.Left);
-
-                    foreach (Article Article in Articles)
-                    {
-
-                        string[] Valeurs = { 
-                            Article.RefArticle,
-                            Article.Description,
-                            Article.Prix.ToString(),
-                            Article.Quantite.ToString()
-                        };
-                        
-                        Ligne = new ListViewItem(Valeurs);                        
-                        ListView.Items.Add(Ligne);
-                    }
-                    
+                    //On affiche l'ensemble des articles dans la ListView
+                    AfficherArticlesListView(Articles);
                     break;
                     
                 case "Familles":
-                    if (Familles == null || Familles.Count == 0) return;
-
-
-                    ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-                    ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
-
-                    foreach (Famille Famille in Familles)
-                    {
-                        string[] Valeurs = {
-                            Famille.RefFamille.ToString(),
-                            Famille.Nom 
-                        };
-
-                        Ligne = new ListViewItem(Valeurs);
-                        ListView.Items.Add(Ligne);
-                    }
+                    //On affiche l'ensemble des familles dans la ListView
+                    AfficherFamillesListView(Familles);
                     break;
                     
                 case "Marques":
-                    if (Marques == null || Marques.Count == 0) return;
-                    
-                    ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-                    ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
-
-                    foreach (Marque Marque in Marques)
-                    {
-                        string[] Valeurs = {
-                            Marque.RefMarque.ToString(),
-                            Marque.Nom
-                        };
-
-                        Ligne = new ListViewItem(Valeurs);
-                        ListView.Items.Add(Ligne);
-                    }
+                    //On affiche l'ensemble des marques dans la ListView
+                    AfficherMarquesListView(Marques);
                     break;
 
                 default:
-                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "Article_.*")) {
-                        string RefArticle = Regex.Match(ArbreArticles.SelectedNode.Name, "Article_(.*)").Groups[1].Value;
+                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "^Article_.*$")) {
+                        string RefArticle = Regex.Match(ArbreArticles.SelectedNode.Name, "^Article_(.*)$").Groups[1].Value;
 
-                        ListView.Columns.Add("Référence", 100, HorizontalAlignment.Left);
-                        ListView.Columns.Add("Déscription", 200, HorizontalAlignment.Left);
-                        ListView.Columns.Add("Prix", 50, HorizontalAlignment.Left);
-                        ListView.Columns.Add("Quantité", 60, HorizontalAlignment.Left);
+                        //On affiche dans la ListView uniquement l'article sur lequel on à cliqué
+                        AfficherArticlesListView(new Dictionary<string, Article>() { 
+                            {
+                                RefArticle, Articles[RefArticle] 
+                            } 
+                        });
 
-                        foreach (Article Article in Articles)
-                        {
-
-                            if (RefArticle != Article.RefArticle) continue;
-                            
-                            string[] Valeurs = {
-                                Article.RefArticle,
-                                Article.Description,
-                                Article.Prix.ToString(),
-                                Article.Quantite.ToString()
-                            };
-
-                            Ligne = new ListViewItem(Valeurs);
-                            ListView.Items.Add(Ligne);
-                        }
-                        
-                        return;
+                        break;
                     }
 
-                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "Marque_.*"))
+                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "^Marque_.*$"))
                     {
-                        string RefMarque = Regex.Match(ArbreArticles.SelectedNode.Name, "Marque_(.*)").Groups[1].Value;
+                        string RefMarque = Regex.Match(ArbreArticles.SelectedNode.Name, "^Marque_(.*)$").Groups[1].Value;
 
-                        ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-                        ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+                        AfficherMarquesListView(new Dictionary<string, Marque>() {
+                            {
+                                RefMarque, Marques[RefMarque]
+                            }
+                        });
 
-                        foreach (Marque Marque in Marques)
-                        {
-                            if (RefMarque != Marque.RefMarque.ToString()) continue;
-                            
-                            string[] Valeurs = {
-                                Marque.RefMarque.ToString(),
-                                Marque.Nom
-                            };
-
-                            Ligne = new ListViewItem(Valeurs);
-                            ListView.Items.Add(Ligne);
-                        }
-                        return;
+                        break;
                     }
 
-                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "SousFamille_.*"))
+                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "^SousFamille_.*$"))
                     {
-                        string RefSousFamille = Regex.Match(ArbreArticles.SelectedNode.Name, "SousFamille_(.*)").Groups[1].Value;
+                        string RefSousFamille = Regex.Match(ArbreArticles.SelectedNode.Name, "^SousFamille_(.*)$").Groups[1].Value;
 
-                        ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-                        ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+                        AfficherSousFamillesListView(new Dictionary<string, SousFamille>() {
+                            {
+                                RefSousFamille, SousFamilles[RefSousFamille]
+                            }
+                        });
 
-                        foreach (SousFamille SousFamille in SousFamilles)
-                        {
-                            if (RefSousFamille != SousFamille.RefSousFamille.ToString()) continue;
-
-                            string[] Valeurs = {
-                                SousFamille.RefSousFamille.ToString(),
-                                SousFamille.Nom
-                            };
-
-                            Ligne = new ListViewItem(Valeurs);
-                            ListView.Items.Add(Ligne);
-                        }
-                        return;
+                        break;
                     }
 
-                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "Famille_.*"))
+                    if (Regex.IsMatch(ArbreArticles.SelectedNode.Name, "^Famille_.*$"))
                     {
-                        string RefFamille = Regex.Match(ArbreArticles.SelectedNode.Name, "Famille_(.*)").Groups[1].Value;
+                        string RefFamille = Regex.Match(ArbreArticles.SelectedNode.Name, "^Famille_(.*)$").Groups[1].Value;
 
-                        ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
-                        ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+                        AfficherFamillesListView(new Dictionary<string, Famille>() {
+                            {
+                                RefFamille, Familles[RefFamille]
+                            }
+                        });
 
-                        foreach (Famille Famille in Familles)
-                        {
-                            if (RefFamille != Famille.RefFamille.ToString()) continue;
-
-                            string[] Valeurs = {
-                                Famille.RefFamille.ToString(),
-                                Famille.Nom
-                            };
-
-                            Ligne = new ListViewItem(Valeurs);
-                            ListView.Items.Add(Ligne);
-                        }
-                        return;
+                        break;
                     }
 
                     break;
@@ -225,10 +138,10 @@ namespace Hector
 
         private void ActualiserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ActualiserDonnées();
+            ActualiserDonnees();
         }
 
-        private void ActualiserDonnées()
+        private void ActualiserDonnees()
         {
             Articles = ArticleDAO.ObtenirTout();
             Marques.Clear();
@@ -249,14 +162,20 @@ namespace Hector
             string PrefixeSousFamille = "SousFamille_";
             string PrefixeFamille = "Famille_";
 
-            foreach (Article Article in Articles)
+            string RefMarque, RefSousFamille, RefFamille;
+
+            foreach (Article Article in Articles.Values)
             {
                 //ArbreArticles.Nodes["Articles"].Nodes.Add(Article.RefArticle);
-                
-                if (!Marques.Contains(Article.Marque))
+
+                RefMarque = Article.Marque.RefMarque.ToString();
+                RefSousFamille = Article.SousFamille.RefSousFamille.ToString();
+                RefFamille = Article.SousFamille.Famille.RefFamille.ToString();
+
+                if (!Marques.ContainsKey(RefMarque))
                 {
                     //On stocke la marque dans la liste des marques
-                    Marques.Add(Article.Marque);
+                    Marques[RefMarque] = Article.Marque;
 
                     //On ajoute la marque dans l'arbre
                     ArbreArticles.Nodes["Marques"].Nodes.Add(
@@ -266,16 +185,16 @@ namespace Hector
                 }
 
 
-                if (!SousFamilles.Contains(Article.SousFamille))
+                if (!SousFamilles.ContainsKey(RefSousFamille))
                 {
                     //On stocke la sous-famille dans la liste des sous-familles
-                    SousFamilles.Add(Article.SousFamille);
+                    SousFamilles[RefSousFamille] = Article.SousFamille;
                 }
 
-                if (!Familles.Contains(Article.SousFamille.Famille))
+                if (!Familles.ContainsKey(RefFamille))
                 {
                     //On stocke la famille dans la liste des familles
-                    Familles.Add(Article.SousFamille.Famille);
+                    Familles[RefFamille] = Article.SousFamille.Famille;
 
                     //On ajoute la famille dans l'arbre
                     ArbreArticles.Nodes["Familles"].Nodes.Add(
@@ -288,7 +207,7 @@ namespace Hector
             TreeNode LeNoeudFamille, LeNoeudSousFamille;
 
             //Pour chaque marque on ajoute les sous-familles dans l'arbre
-            foreach (Famille Famille in Familles)
+            foreach (Famille Famille in Familles.Values)
             {
                 LeNoeudFamille = ArbreArticles.Nodes["Familles"].Nodes[PrefixeFamille + Famille.RefFamille.ToString()];
 
@@ -318,7 +237,7 @@ namespace Hector
 
             TreeNode LeNoeudMarque;
                 
-            foreach(Marque Marque in Marques)
+            foreach(Marque Marque in Marques.Values)
             {
                 LeNoeudMarque = ArbreArticles.Nodes["Marques"].Nodes[PrefixeMarque + Marque.RefMarque.ToString()];
 
@@ -329,6 +248,98 @@ namespace Hector
                         Article.Description
                     );
                 }
+            }
+        }
+
+    
+        private void AfficherArticlesListView(Dictionary<string, Article> Articles)
+        {
+            if (Articles == null || Articles.Count == 0) return;
+
+            ListView.Columns.Add("Référence", 100, HorizontalAlignment.Left);
+            ListView.Columns.Add("Déscription", 200, HorizontalAlignment.Left);
+            ListView.Columns.Add("Prix", 50, HorizontalAlignment.Left);
+            ListView.Columns.Add("Quantité", 60, HorizontalAlignment.Left);
+
+            ListViewItem Ligne;
+
+            foreach (Article Article in Articles.Values)
+            {
+
+                string[] Valeurs = {
+                            Article.RefArticle,
+                            Article.Description,
+                            Article.Prix.ToString(),
+                            Article.Quantite.ToString()
+                        };
+
+                Ligne = new ListViewItem(Valeurs);
+                ListView.Items.Add(Ligne);
+            }
+        }
+
+
+        private void AfficherMarquesListView(Dictionary<string, Marque> Marques)
+        {
+            if (Marques == null || Marques.Count == 0) return;
+
+            ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
+            ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+
+            ListViewItem Ligne;
+            
+            foreach (Marque Marque in Marques.Values)
+            {
+                string[] Valeurs = {
+                            Marque.RefMarque.ToString(),
+                            Marque.Nom
+                        };
+
+                Ligne = new ListViewItem(Valeurs);
+                ListView.Items.Add(Ligne);
+            }
+        }
+
+        private void AfficherFamillesListView(Dictionary<string, Famille> Familles)
+        {
+            if (Familles == null || Familles.Count == 0) return;
+
+            ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
+            ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+
+            ListViewItem Ligne;
+            
+            foreach (Famille Famille in Familles.Values)
+            {
+                string[] Valeurs = {
+                            Famille.RefFamille.ToString(),
+                            Famille.Nom
+                        };
+
+                Ligne = new ListViewItem(Valeurs);
+                ListView.Items.Add(Ligne);
+            }
+        }
+
+
+        private void AfficherSousFamillesListView(Dictionary<string, SousFamille> SousFamilles)
+        {
+            if (SousFamilles == null || SousFamilles.Count == 0) return;
+
+            ListView.Columns.Add("Référence", 80, HorizontalAlignment.Left);
+            ListView.Columns.Add("Nom", 100, HorizontalAlignment.Left);
+
+            ListViewItem Ligne;
+
+            foreach (SousFamille SousFamille in SousFamilles.Values)
+            {
+                string[] Valeurs = {
+                            SousFamille.RefSousFamille.ToString(),
+                            SousFamille.Nom
+                        };
+
+                Ligne = new ListViewItem(Valeurs);
+                ListView.Items.Add(Ligne);
             }
         }
     }

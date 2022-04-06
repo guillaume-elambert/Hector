@@ -162,7 +162,7 @@ namespace Hector
         /// Méthode pour obtenir tous les d'Articles depuis la base de données.
         /// </summary>
         /// <returns>La liste des articles stockés en base de données</returns>
-        public List<Article> ObtenirTout()
+        public Dictionary<string, Article> ObtenirTout()
         {
             SousFamilleDAO SousFamilleDAO = new SousFamilleDAO(Connexion);
             MarqueDAO MarqueDAO = new MarqueDAO(Connexion);
@@ -172,7 +172,7 @@ namespace Hector
             ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
 
-            List<Article> ListeArticles = new List<Article>();
+            Dictionary<string, Article> Articles = new Dictionary<string, Article>();
             Dictionary<int, Marque> Marques = new Dictionary<int, Marque>();
             Dictionary<int, SousFamille> SousFamilles = new Dictionary<int, SousFamille>();
             Dictionary<int, Famille> Familles = new Dictionary<int, Famille>();
@@ -240,10 +240,10 @@ namespace Hector
                 }
                 
                 LaFamille.AjouterSousFamille(LaSousFamille);
-                ListeArticles.Add(Article);
+                Articles[Article.RefArticle] = Article;
             };
 
-            return ListeArticles;
+            return Articles;
         }
 
 
