@@ -65,7 +65,6 @@
             // 
             // BoutonAnnuler
             // 
-            this.BoutonAnnuler.Enabled = false;
             this.BoutonAnnuler.Location = new System.Drawing.Point(430, 59);
             this.BoutonAnnuler.Name = "BoutonAnnuler";
             this.BoutonAnnuler.Size = new System.Drawing.Size(109, 23);

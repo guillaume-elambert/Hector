@@ -3,6 +3,9 @@ using System.Data.SQLite;
 
 namespace Hector
 {
+    /// <summary>
+    /// Classe DAO des familles.
+    /// </summary>
     internal class FamilleDAO : DAO<Famille>
     {
 
@@ -122,7 +125,7 @@ namespace Hector
 
             string Commande = "SELECT Nom FROM Familles WHERE RefFamille = @refFamille;";
 
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
@@ -154,15 +157,15 @@ namespace Hector
         /// Méthode pour obtenir toutes les Familles depuis la base de données.
         /// </summary>
         /// <returns>La liste des familles stockées en base de données</returns>
-        public List<Famille> ObtenirTout()
+        public Dictionary<string, Famille> ObtenirTout()
         {
 
             string Commande = "SELECT RefFamille, Nom FROM Familles;";
 
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+            TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
 
-            List<Famille> ListeFamilles = new List<Famille>();
+            Dictionary<string, Famille> Familles = new Dictionary<string, Famille>();
 
             Famille Famille;
             foreach (LigneSQLite Ligne in ResultatSQLite)
@@ -170,10 +173,10 @@ namespace Hector
                 Famille = new Famille();
                 Famille.RefFamille = Ligne.Attribut<int>(0);
                 Famille.Nom = Ligne.Attribut<string>(1);
-                ListeFamilles.Add(Famille);
+                Familles[Famille.RefFamille.ToString()] = Famille;
             }
 
-            return ListeFamilles;
+            return Familles;
         }
 
 
@@ -184,9 +187,16 @@ namespace Hector
         /// <returns>true si réussi, false sinon</returns>
         public bool Supprimer(Famille Famille)
         {
-            return true;
+            //Liste des paramètres SQL à passer à la requête
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
+                new SQLiteParameter("@refFamille", Famille.RefFamille)
+            };
+
+            string Commande = "DELETE FROM Familles WHERE RefFamille = @refFamille;";
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
         }
 
+        
         /// <summary>
         /// Méthode de supression d'une liste de Familles en base de données.
         /// </summary>
@@ -213,25 +223,6 @@ namespace Hector
         {
             string Commande = "DELETE FROM Familles;";
             return Connexion.ExecuterCommande(Commande) != -1;
-        }
-
-        public List<string> ObtenirFamilles()
-        {
-            List<string> ListeFamilles = new List<string>();
-
-            string Commande = "SELECT Nom FROM Familles";
-
-            ConnexionBDD Connection = new ConnexionBDD("PATH je connais pas");
-            Connection.Open();
-            SQLiteCommand Command = new SQLiteCommand(Commande, Connection.getConnexion());
-               
-            SQLiteDataReader Reader = Command.ExecuteReader();    
-            while (Reader.Read())
-            {
-                ListeFamilles.Add(Reader.GetString(0));
-            }
-
-            return ListeFamilles;
         }
     }
 }

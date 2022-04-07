@@ -3,6 +3,9 @@ using System.Data.SQLite;
 
 namespace Hector
 {
+    /// <summary>
+    /// Classe DAO des sous-familles
+    /// </summary>
     internal class SousFamilleDAO : DAO<SousFamille>
     {
         /// <summary>
@@ -19,8 +22,7 @@ namespace Hector
         {
             this.Connexion = Connexion;
         }
-
-        public SousFamilleDAO() { }
+        
 
         /// <summary>
         /// Méthode d'insertion d'un objet SousFamille dans la base de données.
@@ -41,7 +43,7 @@ namespace Hector
                 "   SELECT 1 FROM SousFamilles WHERE Nom = @nom " +
                 ") RETURNING RefSousFamille;";
 
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
@@ -124,7 +126,7 @@ namespace Hector
 
             string Commande = "SELECT RefFamille, Nom FROM SousFamilles WHERE RefSousFamille = @refSousFamille;";
 
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
@@ -159,16 +161,16 @@ namespace Hector
         /// Méthode pour obtenir toutes les SousFamilles depuis la base de données.
         /// </summary>
         /// <returns>La liste des sous-familles stockées en base de données</returns>
-        public List<SousFamille> ObtenirTout()
+        public Dictionary<string, SousFamille> ObtenirTout()
         {
             FamilleDAO FamilleDAO = new FamilleDAO(Connexion);
 
             string Commande = "SELECT RefFamille, Nom FROM SousFamilles;";
 
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+            TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
 
-            List<SousFamille> ListeSousFamilles = new List<SousFamille>();
+            Dictionary<string, SousFamille> SousFamilles = new Dictionary<string, SousFamille>();
             Dictionary<int, Famille> Familles = new Dictionary<int, Famille>();
 
             int RefFamille;
@@ -193,17 +195,15 @@ namespace Hector
                 {
                     LaFamille = new Famille(RefFamille);
                     FamilleDAO.Obtenir(LaFamille);
-                    Familles.Add(RefFamille, SousFamille.Famille);
+                    Familles.Add(RefFamille, LaFamille);
                 }
                 
                 SousFamille.Famille = LaFamille;
 
-                ListeSousFamilles.Add(SousFamille);
+                SousFamilles[SousFamille.RefSousFamille.ToString()] = SousFamille;
             }
 
-            
-
-            return ListeSousFamilles;
+            return SousFamilles;
         }
 
 
@@ -214,7 +214,13 @@ namespace Hector
         /// <returns>true si réussi, false sinon</returns>
         public bool Supprimer(SousFamille SousFamille)
         {
-            return true;
+            //Liste des paramètres SQL à passer à la requête
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
+                new SQLiteParameter("@refSousFamille", SousFamille.RefSousFamille)
+            };
+
+            string Commande = "DELETE FROM SousFamilles WHERE RefSousFamille = @refSousFamille;";
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
         }
 
 

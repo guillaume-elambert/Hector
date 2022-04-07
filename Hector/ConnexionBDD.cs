@@ -5,6 +5,9 @@ using System.Data.SQLite;
 
 namespace Hector
 {
+    /// <summary>
+    /// Clase de connexion vers la BDD.
+    /// </summary>
     internal class ConnexionBDD
     {
         /// <summary>
@@ -80,11 +83,13 @@ namespace Hector
                 SQLiteCommand CommandeSQLite = new SQLiteCommand(Commande, Connexion);
                 CommandeSQLite.CommandType = CommandType.Text;
 
+                //On ajoute tous les paramètres à la commande
                 foreach (SQLiteParameter Parametre in Parametres)
                 {
                     CommandeSQLite.Parameters.Add(Parametre);
                 }
 
+                //On retourne le nombre de ligne afféctées par la requête ou -1 si erreur
                 try
                 {
                     return CommandeSQLite.ExecuteNonQuery();
@@ -108,8 +113,8 @@ namespace Hector
         /// </summary>
         /// <param name="Commande">La commande à effectuer.</param>
         /// <param name="Parametres">Les paramètres de la commande.</param>
-        /// <returns>L'objet ResultatSQLite correspondant au résultat de la requête ou null si erreur</returns>
-        public ResultatSQLite ExecuterCommandeAvecResultat(string Commande, List<SQLiteParameter> Parametres)
+        /// <returns>L'objet TableSQLite correspondant au résultat de la requête ou null si erreur</returns>
+        public TableSQLite ExecuterCommandeAvecResultat(string Commande, List<SQLiteParameter> Parametres)
         {
             try
             {
@@ -117,14 +122,16 @@ namespace Hector
                 SQLiteCommand CommandeSQLite = new SQLiteCommand(Commande, Connexion);
                 CommandeSQLite.CommandType = CommandType.Text;
 
+                //On ajoute tous les paramètres à la commande
                 foreach (SQLiteParameter Parametre in Parametres)
                 {
                     CommandeSQLite.Parameters.Add(Parametre);
                 }
 
+                //On retourne le résultat ou null si erreur
                 try
                 {
-                    ResultatSQLite ContenuRequete = new ResultatSQLite(CommandeSQLite.ExecuteReader());
+                    TableSQLite ContenuRequete = new TableSQLite(CommandeSQLite.ExecuteReader());
                     return ContenuRequete;
                 }
                 catch (SQLiteException e)
@@ -144,15 +151,10 @@ namespace Hector
         /// Méthode qui permet d'executer une commande qui retourne un résulat.
         /// </summary>
         /// <param name="Commande">La commande à effectuer.</param>
-        /// <returns>L'objet ResultatSQLite correspondant au résultat de la requête ou null si erreur</returns>
-        public ResultatSQLite ExecuterCommandeAvecResultat(string Commande)
+        /// <returns>L'objet TableSQLite correspondant au résultat de la requête ou null si erreur</returns>
+        public TableSQLite ExecuterCommandeAvecResultat(string Commande)
         {
             return ExecuterCommandeAvecResultat(Commande, new List<SQLiteParameter>());
-        }
-
-        public SQLiteConnection getConnexion()
-        {
-            return this.Connexion;
         }
        
     }
