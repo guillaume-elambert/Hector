@@ -90,6 +90,12 @@
   <ItemGroup>
     <Compile Include="Article.cs" />
     <Compile Include="ArticleDAO.cs" />
+    <Compile Include="ArticleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArticleForm.Designer.cs">
+      <DependentUpon>ArticleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConnexionBDD.cs" />
     <Compile Include="DAO.cs" />
     <Compile Include="Famille.cs" />
@@ -105,12 +111,6 @@
     </Compile>
     <Compile Include="FenetreImporter.Designer.cs">
       <DependentUpon>FenetreImporter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ArticleForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ArticleForm.Designer.cs">
-      <DependentUpon>ArticleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>

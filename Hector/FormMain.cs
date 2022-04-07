@@ -109,8 +109,6 @@ namespace Hector
 
             //On récupère les données stockées en BDD
             ActualiserDonnees();
-
-
         }
 
 
@@ -255,13 +253,6 @@ namespace Hector
                     {
                         Familles[RefFamille] = SousFamille.Famille;
                     }
-
-                    /*
-                    Normalement inutile car duplicata déjà éviter dans SousFamilleDAO.ObtenirTout()
-                    else
-                    {
-                        SousFamille.Famille = Familles[RefFamille];
-                    }*/
                 }
             }
 
@@ -426,6 +417,12 @@ namespace Hector
                     {
                         string RefArticle = Regex.Match(NomElementTreeViewAAfficher, "^" + PrefixeArticle + "(.*)$").Groups[1].Value;
 
+                        if(!Articles.ContainsKey(RefArticle))
+                        {
+                            NomDernierElementTreeViewClicke = null;
+                            return;
+                        }
+
                         //On affiche dans la ListView uniquement l'article sur lequel on à cliqué
                         AfficherArticlesListView(new Dictionary<string, Article>() {
                             {
@@ -442,6 +439,12 @@ namespace Hector
                     {
                         string RefMarque = Regex.Match(NomElementTreeViewAAfficher, "^" + PrefixeMarque + "(.*)$").Groups[1].Value;
 
+                        if (!Marques.ContainsKey(RefMarque))
+                        {
+                            NomDernierElementTreeViewClicke = null;
+                            return;
+                        }
+
                         //On affiche dans la ListView uniquement les articles de la marque sur laquelle on à cliqué
                         AfficherArticlesListView(Marques[RefMarque].Articles);
 
@@ -455,6 +458,13 @@ namespace Hector
                     {
                         string RefSousFamille = Regex.Match(NomElementTreeViewAAfficher, "^" + PrefixeSousFamille + "(.*)$").Groups[1].Value;
 
+                        if (!SousFamilles.ContainsKey(RefSousFamille))
+                        {
+                            NomDernierElementTreeViewClicke = null;
+                            return;
+                        }
+
+
                         //On affiche dans la ListView uniquement les articles de la sous-famille sur laquelle on à cliqué
                         AfficherArticlesListView(SousFamilles[RefSousFamille].Articles);
 
@@ -467,6 +477,13 @@ namespace Hector
                     if (Regex.IsMatch(NomElementTreeViewAAfficher, "^Famille_.*$"))
                     {
                         string RefFamille = Regex.Match(NomElementTreeViewAAfficher, "^" + PrefixeFamille + "(.*)$").Groups[1].Value;
+
+                        if (!Familles.ContainsKey(RefFamille))
+                        {
+                            NomDernierElementTreeViewClicke = null;
+                            return;
+                        }
+
 
                         //On affiche dans la ListView toutes les sous-familles de la famille
                         AfficherSousFamillesListView(Familles[RefFamille].SousFamilles);
@@ -522,7 +539,6 @@ namespace Hector
             {
 
                 string[] Valeurs = {
-                    Article.RefArticle,
                     Article.Description,
                     Article.SousFamille.Famille.Nom,
                     Article.SousFamille.Nom,
@@ -531,7 +547,8 @@ namespace Hector
                     Article.Quantite.ToString()
                 };
 
-                Ligne = new ListViewItem(Valeurs);
+                Ligne = new ListViewItem(Article.RefArticle);
+                Ligne.SubItems.AddRange(Valeurs);
                 ListView.Items.Add(Ligne);
             }
         }
@@ -561,10 +578,10 @@ namespace Hector
             {
                 string[] Valeurs = {
                     //Marque.RefMarque.ToString(),
-                    Marque.Nom
                 };
 
-                Ligne = new ListViewItem(Valeurs);
+                Ligne = new ListViewItem(Marque.Nom);
+                Ligne.SubItems.AddRange(Valeurs);
                 ListView.Items.Add(Ligne);
             }
         }
@@ -588,10 +605,10 @@ namespace Hector
             {
                 string[] Valeurs = {
                     //Famille.RefFamille.ToString(),
-                    Famille.Nom
                 };
 
-                Ligne = new ListViewItem(Valeurs);
+                Ligne = new ListViewItem(Famille.Nom);
+                Ligne.SubItems.AddRange(Valeurs);
                 ListView.Items.Add(Ligne);
             }
         }
@@ -616,10 +633,10 @@ namespace Hector
             {
                 string[] Valeurs = {
                     //SousFamille.RefSousFamille.ToString(),
-                    SousFamille.Nom
                 };
 
-                Ligne = new ListViewItem(Valeurs);
+                Ligne = new ListViewItem(SousFamille.Nom);
+                Ligne.SubItems.AddRange(Valeurs);
                 ListView.Items.Add(Ligne);
             }
         }
@@ -748,6 +765,136 @@ namespace Hector
             }
         }
 
+        private void ListView_MouseDoubleClick(object Emetteur, MouseEventArgs Evenement)
+        {
+            OuvrirFenetreCreerSupprimer();
+        }
+
+
+
+        private void ListView_KeyDown(object Emetteur, KeyEventArgs Evenement)
+        {
+            if (Evenement.KeyCode == Keys.Enter || Evenement.KeyCode == Keys.Space)
+            {
+                OuvrirFenetreCreerSupprimer();
+                return;
+            }
+
+            if(Evenement.KeyCode == Keys.Delete || Evenement.KeyCode == Keys.EraseEof)
+            {
+                SupprimerElement();
+            }
+        }
+
+        public void SupprimerElement()
+        {
+            if (ListView.Columns == null || ListView.Columns.Count == 0 || ListView.SelectedItems == null || ListView.SelectedItems.Count == 0) return;
+
+
+            ListViewItem ObjetSelectionne = ListView.SelectedItems[0];
+
+            //Liste des expressions régulière des noms de colonne possibles
+            Regex ExpressionReguliereFamille = new Regex("^" + PrefixeFamille + "(.*)$");
+            Regex ExpressionReguliereMarque = new Regex("^" + PrefixeMarque + "(.*)$");
+            Regex ExpressionReguliereSousFamille = new Regex("^" + PrefixeSousFamille + "(.*)$");
+            Regex ExpressionReguliereArticle = new Regex("^" + PrefixeArticle + "(.*)$");
+
+            if (ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name))
+            {
+                if (ArticleDAO.Supprimer(Articles[ObjetSelectionne.Text]))
+                {
+                    Articles.Remove(ObjetSelectionne.Name);
+                }
+            }
+
+            ActualiserDonnees();
+            ActualiserListView(NomDernierElementTreeViewClicke);
+        }
+
+        /// <summary>
+        /// Ouvre le menu de création/modification d'élément (Article, Marque, Famille ou Sous-Famille).
+        /// </summary>
+        private void OuvrirFenetreCreerSupprimer()
+        {
+            if (ListView.Columns == null || ListView.Columns.Count == 0) return;
+
+            Form FormulaireAjoutModification = null;
+            bool Create = true;
+            ListViewItem ObjetSelectionne = null;
+
+            // Si un élément de la ListView est sélectionné, alors on cherche à le modifier
+            if (ListView.SelectedItems != null && ListView.SelectedItems.Count == 1)
+            {
+                Create = false;
+                ObjetSelectionne = ListView.SelectedItems[0];
+            }
+
+
+            //Liste des expressions régulière des noms de colonne possibles
+            Regex ExpressionReguliereFamille = new Regex("^" + PrefixeFamille + "(.*)$");
+            Regex ExpressionReguliereMarque = new Regex("^" + PrefixeMarque + "(.*)$");
+            Regex ExpressionReguliereSousFamille = new Regex("^" + PrefixeSousFamille + "(.*)$");
+            Regex ExpressionReguliereArticle = new Regex("^" + PrefixeArticle + "(.*)$");
+
+            // On veut créer/modifier un article
+            if ( ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name) )
+            {
+                if (Create)
+                {
+                    FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, null);
+                }
+                else
+                {
+                    FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, Articles[ObjetSelectionne.Text]);
+                }
+            }
+            /*// On veut créer/modifier une famille
+            else if (ListViewDisplay == "FAMILLES")
+            {
+                if (Create)
+                {
+                    Form = new FamilleForm();
+                }
+                else
+                {
+                    Form = new FamilleForm(SelectedItem);
+                }
+            }
+            // On veut créer/modifier une marque
+            else if (ListViewDisplay == "MARQUES")
+            {
+                if (Create)
+                {
+                    Form = new MarqueForm();
+                }
+                else
+                {
+                    Form = new MarqueForm(SelectedItem);
+                }
+            }
+            // On veut créer/modifier une sous-famille
+            else if (ListViewDisplay == "SOUSFAMILLES")
+            {
+                if (Create)
+                {
+                    Form = new SousFamilleForm();
+                }
+                else
+                {
+                    Form = new SousFamilleForm(ListViewValue, SelectedItem);
+                }
+            }*/
+
+
+            // Affiche la fenêtre si on en a créé une
+            if (FormulaireAjoutModification != null)
+            {
+                FormulaireAjoutModification.ShowDialog();
+
+                ActualiserDonnees();
+                ActualiserListView(NomDernierElementTreeViewClicke);
+            }
+        }
 
 
         /// <summary>
@@ -790,12 +937,14 @@ namespace Hector
             /// </returns>
             public int Compare(object Objet1, object Objet2)
             {
-                return String.Compare(
+                return string.Compare(
                     ((ListViewItem)Objet1).SubItems[IndiceColonne].Text, 
                     ((ListViewItem)Objet2).SubItems[IndiceColonne].Text
                 );
             }
         }
+
+        
     }
 } 
 

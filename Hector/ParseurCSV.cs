@@ -67,9 +67,9 @@ namespace Hector
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception Evenement)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(Evenement.Message);
                 return;
             }
         }

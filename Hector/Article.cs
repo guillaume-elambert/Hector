@@ -59,12 +59,21 @@
             this.Quantite = Quantite;
         }
 
-
         /// <summary>
         /// Méthode qui permet de retourner une chaîne de caractères qui représente l'objet
         /// </summary>
         /// <returns>Une chaîne de caractères qui représente l'objet</returns>
         public override string ToString()
+        {
+            return Description;
+        }
+
+
+        /// <summary>
+        /// Méthode qui permet de retourner une chaîne de caractères qui représente l'objet
+        /// </summary>
+        /// <returns>Une chaîne de caractères qui représente l'objet</returns>
+        public string ToDebugString()
         {
             return RefArticle + "; " + Description + "; Marque : {" + Marque + "}; Sous-famille : {" + SousFamille + "}; " + Prix + "; " + Quantite;
         }

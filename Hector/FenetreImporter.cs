@@ -326,7 +326,7 @@ namespace Hector
                 {
                     if (!SousFamilleDAO.Inserer(SousFamille))
                     {
-                        ListeErreurObjets.Add("Sous-famille : " + SousFamille.ToString());
+                        ListeErreurObjets.Add("Sous-famille : " + SousFamille.ToDebugString());
                     }
                 });
                 IncrementerBarresProgression();
@@ -359,7 +359,7 @@ namespace Hector
                 {
                     if (!ArticleDAO.Inserer(Article))
                     {
-                        ListeErreurObjets.Add("Article : " + Article.ToString());
+                        ListeErreurObjets.Add("Article : " + Article.ToDebugString());
                     }
                 });
                 IncrementerBarresProgression();

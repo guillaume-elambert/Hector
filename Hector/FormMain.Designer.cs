@@ -37,12 +37,12 @@ namespace Hector
             this.ImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
+            this.TexteStatusStrip = new System.Windows.Forms.ToolStripStatusLabel();
             this.SplitContainer = new System.Windows.Forms.SplitContainer();
             this.ArbreArticles = new System.Windows.Forms.TreeView();
             this.TreeView = new System.Windows.Forms.TreeView();
             this.ListView = new System.Windows.Forms.ListView();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.TexteStatusStrip = new System.Windows.Forms.ToolStripStatusLabel();
             this.MenuStrip.SuspendLayout();
             this.StatusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
@@ -75,21 +75,21 @@ namespace Hector
             // 
             this.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem";
             this.ActualiserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.ActualiserToolStripMenuItem.Text = "Actualiser";
             this.ActualiserToolStripMenuItem.Click += new System.EventHandler(this.ActualiserToolStripMenuItem_Click);
             // 
             // ImporterToolStripMenuItem
             // 
             this.ImporterToolStripMenuItem.Name = "ImporterToolStripMenuItem";
-            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.ImporterToolStripMenuItem.Text = "Importer";
             this.ImporterToolStripMenuItem.Click += new System.EventHandler(this.ImporterToolStripMenuItem_Click);
             // 
             // ExporterToolStripMenuItem
             // 
             this.ExporterToolStripMenuItem.Name = "ExporterToolStripMenuItem";
-            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.ExporterToolStripMenuItem.Text = "Exporter";
             this.ExporterToolStripMenuItem.Click += new System.EventHandler(this.ExporterToolStripMenuItem_Click);
             // 
@@ -101,6 +101,11 @@ namespace Hector
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.Size = new System.Drawing.Size(800, 22);
             this.StatusStrip.TabIndex = 1;
+            // 
+            // TexteStatusStrip
+            // 
+            this.TexteStatusStrip.Name = "TexteStatusStrip";
+            this.TexteStatusStrip.Size = new System.Drawing.Size(0, 17);
             // 
             // SplitContainer
             // 
@@ -143,6 +148,7 @@ namespace Hector
             // ListView
             // 
             this.ListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListView.FullRowSelect = true;
             this.ListView.HideSelection = false;
             this.ListView.Location = new System.Drawing.Point(0, 0);
             this.ListView.Name = "ListView";
@@ -151,11 +157,8 @@ namespace Hector
             this.ListView.UseCompatibleStateImageBehavior = false;
             this.ListView.View = System.Windows.Forms.View.Details;
             this.ListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListView_ColumnClick);
-            // 
-            // TexteStatusStrip
-            // 
-            this.TexteStatusStrip.Name = "TexteStatusStrip";
-            this.TexteStatusStrip.Size = new System.Drawing.Size(0, 17);
+            this.ListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListView_KeyDown);
+            this.ListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_MouseDoubleClick);
             // 
             // FormMain
             // 

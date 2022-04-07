@@ -70,6 +70,16 @@ namespace Hector
         /// <returns>Une chaîne de caractères qui représente l'objet</returns>
         public override string ToString()
         {
+            return Nom;
+        }
+
+
+        /// <summary>
+        /// Méthode qui permet de retourner une chaîne de caractères qui représente l'objet
+        /// </summary>
+        /// <returns>Une chaîne de caractères qui représente l'objet</returns>
+        public string ToDebugString()
+        {
             return Nom + "; Famille : {" + Famille + "}";
         }
     }

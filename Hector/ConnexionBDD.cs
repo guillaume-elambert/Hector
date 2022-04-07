@@ -94,9 +94,9 @@ namespace Hector
                 {
                     return CommandeSQLite.ExecuteNonQuery();
                 }
-                catch (SQLiteException e)
+                catch (SQLiteException Evenement)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(Evenement.Message);
                     return -1;
                 }
             }
@@ -134,9 +134,9 @@ namespace Hector
                     TableSQLite ContenuRequete = new TableSQLite(CommandeSQLite.ExecuteReader());
                     return ContenuRequete;
                 }
-                catch (SQLiteException e)
+                catch (SQLiteException Evenement)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(Evenement.Message);
                     return null;
                 }
             }

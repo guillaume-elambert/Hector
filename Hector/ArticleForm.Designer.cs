@@ -1,5 +1,4 @@
-﻿
-namespace Hector
+﻿namespace Hector
 {
     partial class ArticleForm
     {
@@ -29,162 +28,308 @@ namespace Hector
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.RefTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.ComboMarque = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.PrixTextBox = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.ChampsFormulaire = new System.Windows.Forms.TableLayoutPanel();
+            this.QuantiteNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.MarqueComboBox = new System.Windows.Forms.ComboBox();
             this.QuantiteLabel = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.BoutonConfirm = new System.Windows.Forms.Button();
-            this.ButtonAnnuler = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.SousFamilleComboBox = new System.Windows.Forms.ComboBox();
+            this.PrixLabel = new System.Windows.Forms.Label();
+            this.FamilleComboBox = new System.Windows.Forms.ComboBox();
+            this.DescTextBox = new System.Windows.Forms.TextBox();
+            this.MarqueLabel = new System.Windows.Forms.Label();
+            this.SousFamilleLabel = new System.Windows.Forms.Label();
+            this.RefTextBox = new System.Windows.Forms.TextBox();
+            this.FamilleLabel = new System.Windows.Forms.Label();
+            this.DescLabel = new System.Windows.Forms.Label();
+            this.RefLabel = new System.Windows.Forms.Label();
+            this.PrixNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.ConfirmButton = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.ChampsFormulaire.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.QuantiteNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PrixNumericUpDown)).BeginInit();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
+            // flowLayoutPanel1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Référence de l\'article";
+            this.flowLayoutPanel1.Controls.Add(this.ChampsFormulaire);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(341, 327);
+            this.flowLayoutPanel1.TabIndex = 0;
             // 
-            // RefTextBox
+            // ChampsFormulaire
             // 
-            this.RefTextBox.Location = new System.Drawing.Point(126, 22);
-            this.RefTextBox.Name = "RefTextBox";
-            this.RefTextBox.Size = new System.Drawing.Size(201, 20);
-            this.RefTextBox.TabIndex = 1;
+            this.ChampsFormulaire.ColumnCount = 2;
+            this.ChampsFormulaire.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.ChampsFormulaire.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.ChampsFormulaire.Controls.Add(this.QuantiteNumericUpDown, 1, 6);
+            this.ChampsFormulaire.Controls.Add(this.MarqueComboBox, 1, 4);
+            this.ChampsFormulaire.Controls.Add(this.QuantiteLabel, 0, 6);
+            this.ChampsFormulaire.Controls.Add(this.SousFamilleComboBox, 1, 3);
+            this.ChampsFormulaire.Controls.Add(this.PrixLabel, 0, 5);
+            this.ChampsFormulaire.Controls.Add(this.FamilleComboBox, 1, 2);
+            this.ChampsFormulaire.Controls.Add(this.DescTextBox, 1, 1);
+            this.ChampsFormulaire.Controls.Add(this.MarqueLabel, 0, 4);
+            this.ChampsFormulaire.Controls.Add(this.SousFamilleLabel, 0, 3);
+            this.ChampsFormulaire.Controls.Add(this.RefTextBox, 1, 0);
+            this.ChampsFormulaire.Controls.Add(this.FamilleLabel, 0, 2);
+            this.ChampsFormulaire.Controls.Add(this.DescLabel, 0, 1);
+            this.ChampsFormulaire.Controls.Add(this.RefLabel, 0, 0);
+            this.ChampsFormulaire.Controls.Add(this.PrixNumericUpDown, 1, 5);
+            this.ChampsFormulaire.Location = new System.Drawing.Point(2, 2);
+            this.ChampsFormulaire.Margin = new System.Windows.Forms.Padding(2);
+            this.ChampsFormulaire.Name = "ChampsFormulaire";
+            this.ChampsFormulaire.Padding = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.ChampsFormulaire.RowCount = 7;
+            this.ChampsFormulaire.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.ChampsFormulaire.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.ChampsFormulaire.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.ChampsFormulaire.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.ChampsFormulaire.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.ChampsFormulaire.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.ChampsFormulaire.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.ChampsFormulaire.Size = new System.Drawing.Size(339, 277);
+            this.ChampsFormulaire.TabIndex = 2;
             // 
-            // label2
+            // QuantiteNumericUpDown
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 74);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Marque";
+            this.QuantiteNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.QuantiteNumericUpDown.Location = new System.Drawing.Point(74, 244);
+            this.QuantiteNumericUpDown.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.QuantiteNumericUpDown.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.QuantiteNumericUpDown.Name = "QuantiteNumericUpDown";
+            this.QuantiteNumericUpDown.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.QuantiteNumericUpDown.Size = new System.Drawing.Size(261, 20);
+            this.QuantiteNumericUpDown.TabIndex = 6;
+            this.QuantiteNumericUpDown.ValueChanged += new System.EventHandler(this.QuantiteNumericUpDown_ValueChanged);
             // 
-            // ComboMarque
+            // MarqueComboBox
             // 
-            this.ComboMarque.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboMarque.FormattingEnabled = true;
-            this.ComboMarque.Location = new System.Drawing.Point(126, 71);
-            this.ComboMarque.Name = "ComboMarque";
-            this.ComboMarque.Size = new System.Drawing.Size(201, 21);
-            this.ComboMarque.TabIndex = 3;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 127);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Sous-Famille";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(126, 124);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(201, 21);
-            this.comboBox1.TabIndex = 5;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 178);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Prix de l\'article";
-            // 
-            // PrixTextBox
-            // 
-            this.PrixTextBox.Location = new System.Drawing.Point(126, 175);
-            this.PrixTextBox.Name = "PrixTextBox";
-            this.PrixTextBox.Size = new System.Drawing.Size(201, 20);
-            this.PrixTextBox.TabIndex = 7;
+            this.MarqueComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MarqueComboBox.FormattingEnabled = true;
+            this.MarqueComboBox.Location = new System.Drawing.Point(74, 166);
+            this.MarqueComboBox.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.MarqueComboBox.Name = "MarqueComboBox";
+            this.MarqueComboBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.MarqueComboBox.Size = new System.Drawing.Size(261, 21);
+            this.MarqueComboBox.TabIndex = 5;
+            this.MarqueComboBox.SelectedIndexChanged += new System.EventHandler(this.MarqueComboBox_SelectedIndexChanged);
             // 
             // QuantiteLabel
             // 
+            this.QuantiteLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.QuantiteLabel.AutoSize = true;
-            this.QuantiteLabel.Location = new System.Drawing.Point(13, 232);
+            this.QuantiteLabel.Location = new System.Drawing.Point(6, 249);
+            this.QuantiteLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.QuantiteLabel.Name = "QuantiteLabel";
             this.QuantiteLabel.Size = new System.Drawing.Size(47, 13);
-            this.QuantiteLabel.TabIndex = 8;
+            this.QuantiteLabel.TabIndex = 6;
             this.QuantiteLabel.Text = "Quantité";
             // 
-            // numericUpDown1
+            // SousFamilleComboBox
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(126, 230);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown1.TabIndex = 9;
+            this.SousFamilleComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SousFamilleComboBox.FormattingEnabled = true;
+            this.SousFamilleComboBox.Location = new System.Drawing.Point(74, 127);
+            this.SousFamilleComboBox.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.SousFamilleComboBox.Name = "SousFamilleComboBox";
+            this.SousFamilleComboBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.SousFamilleComboBox.Size = new System.Drawing.Size(261, 21);
+            this.SousFamilleComboBox.TabIndex = 4;
+            this.SousFamilleComboBox.SelectedIndexChanged += new System.EventHandler(this.SousFamilleComboBox_SelectedIndexChanged);
             // 
-            // BoutonConfirm
+            // PrixLabel
             // 
-            this.BoutonConfirm.Location = new System.Drawing.Point(311, 415);
-            this.BoutonConfirm.Name = "BoutonConfirm";
-            this.BoutonConfirm.Size = new System.Drawing.Size(161, 23);
-            this.BoutonConfirm.TabIndex = 10;
-            this.BoutonConfirm.Text = "Confirmer";
-            this.BoutonConfirm.UseVisualStyleBackColor = true;
+            this.PrixLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.PrixLabel.AutoSize = true;
+            this.PrixLabel.Location = new System.Drawing.Point(6, 208);
+            this.PrixLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.PrixLabel.Name = "PrixLabel";
+            this.PrixLabel.Size = new System.Drawing.Size(42, 13);
+            this.PrixLabel.TabIndex = 5;
+            this.PrixLabel.Text = "Prix HT";
             // 
-            // ButtonAnnuler
+            // FamilleComboBox
             // 
-            this.ButtonAnnuler.Location = new System.Drawing.Point(144, 415);
-            this.ButtonAnnuler.Name = "ButtonAnnuler";
-            this.ButtonAnnuler.Size = new System.Drawing.Size(161, 23);
-            this.ButtonAnnuler.TabIndex = 11;
-            this.ButtonAnnuler.Text = "Annuler";
-            this.ButtonAnnuler.UseVisualStyleBackColor = true;
+            this.FamilleComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FamilleComboBox.FormattingEnabled = true;
+            this.FamilleComboBox.Location = new System.Drawing.Point(74, 88);
+            this.FamilleComboBox.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.FamilleComboBox.Name = "FamilleComboBox";
+            this.FamilleComboBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.FamilleComboBox.Size = new System.Drawing.Size(261, 21);
+            this.FamilleComboBox.TabIndex = 0;
+            this.FamilleComboBox.SelectedIndexChanged += new System.EventHandler(this.FamilleComboBox_SelectedIndexChanged);
+            // 
+            // DescTextBox
+            // 
+            this.DescTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DescTextBox.Location = new System.Drawing.Point(74, 49);
+            this.DescTextBox.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.DescTextBox.Name = "DescTextBox";
+            this.DescTextBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.DescTextBox.Size = new System.Drawing.Size(261, 20);
+            this.DescTextBox.TabIndex = 2;
+            this.DescTextBox.TextChanged += new System.EventHandler(this.DescTextBox_TextChanged);
+            // 
+            // MarqueLabel
+            // 
+            this.MarqueLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.MarqueLabel.AutoSize = true;
+            this.MarqueLabel.Location = new System.Drawing.Point(6, 169);
+            this.MarqueLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.MarqueLabel.Name = "MarqueLabel";
+            this.MarqueLabel.Size = new System.Drawing.Size(43, 13);
+            this.MarqueLabel.TabIndex = 4;
+            this.MarqueLabel.Text = "Marque";
+            // 
+            // SousFamilleLabel
+            // 
+            this.SousFamilleLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.SousFamilleLabel.AutoSize = true;
+            this.SousFamilleLabel.Location = new System.Drawing.Point(6, 130);
+            this.SousFamilleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.SousFamilleLabel.Name = "SousFamilleLabel";
+            this.SousFamilleLabel.Size = new System.Drawing.Size(66, 13);
+            this.SousFamilleLabel.TabIndex = 3;
+            this.SousFamilleLabel.Text = "Sous-Famille";
+            // 
+            // RefTextBox
+            // 
+            this.RefTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RefTextBox.Location = new System.Drawing.Point(74, 10);
+            this.RefTextBox.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.RefTextBox.Name = "RefTextBox";
+            this.RefTextBox.ReadOnly = true;
+            this.RefTextBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.RefTextBox.Size = new System.Drawing.Size(261, 20);
+            this.RefTextBox.TabIndex = 1;
+            this.RefTextBox.TextChanged += new System.EventHandler(this.RefTextBox_TextChanged);
+            // 
+            // FamilleLabel
+            // 
+            this.FamilleLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.FamilleLabel.AutoSize = true;
+            this.FamilleLabel.Location = new System.Drawing.Point(6, 91);
+            this.FamilleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.FamilleLabel.Name = "FamilleLabel";
+            this.FamilleLabel.Size = new System.Drawing.Size(39, 13);
+            this.FamilleLabel.TabIndex = 2;
+            this.FamilleLabel.Text = "Famille";
+            // 
+            // DescLabel
+            // 
+            this.DescLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.DescLabel.AutoSize = true;
+            this.DescLabel.Location = new System.Drawing.Point(6, 52);
+            this.DescLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.DescLabel.Name = "DescLabel";
+            this.DescLabel.Size = new System.Drawing.Size(60, 13);
+            this.DescLabel.TabIndex = 1;
+            this.DescLabel.Text = "Description";
+            // 
+            // RefLabel
+            // 
+            this.RefLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.RefLabel.AutoSize = true;
+            this.RefLabel.Location = new System.Drawing.Point(6, 13);
+            this.RefLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RefLabel.Name = "RefLabel";
+            this.RefLabel.Size = new System.Drawing.Size(57, 13);
+            this.RefLabel.TabIndex = 0;
+            this.RefLabel.Text = "Réference";
+            // 
+            // PrixNumericUpDown
+            // 
+            this.PrixNumericUpDown.DecimalPlaces = 2;
+            this.PrixNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PrixNumericUpDown.Location = new System.Drawing.Point(74, 205);
+            this.PrixNumericUpDown.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.PrixNumericUpDown.Maximum = new decimal(new int[] {
+            1874919423,
+            2328306,
+            0,
+            0});
+            this.PrixNumericUpDown.Name = "PrixNumericUpDown";
+            this.PrixNumericUpDown.Size = new System.Drawing.Size(261, 20);
+            this.PrixNumericUpDown.TabIndex = 7;
+            this.PrixNumericUpDown.ValueChanged += new System.EventHandler(this.PrixNumericUpDown_ValueChanged);
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.ConfirmButton);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 286);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(8);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(341, 41);
+            this.flowLayoutPanel2.TabIndex = 1;
+            // 
+            // ConfirmButton
+            // 
+            this.ConfirmButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ConfirmButton.Location = new System.Drawing.Point(10, 10);
+            this.ConfirmButton.Margin = new System.Windows.Forms.Padding(2);
+            this.ConfirmButton.Name = "ConfirmButton";
+            this.ConfirmButton.Size = new System.Drawing.Size(319, 20);
+            this.ConfirmButton.TabIndex = 0;
+            this.ConfirmButton.Text = "Ajouter";
+            this.ConfirmButton.UseVisualStyleBackColor = true;
+            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 
             // ArticleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 450);
-            this.Controls.Add(this.ButtonAnnuler);
-            this.Controls.Add(this.BoutonConfirm);
-            this.Controls.Add(this.numericUpDown1);
-            this.Controls.Add(this.QuantiteLabel);
-            this.Controls.Add(this.PrixTextBox);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.ComboMarque);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.RefTextBox);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(341, 327);
+            this.Controls.Add(this.flowLayoutPanel2);
+            this.Controls.Add(this.flowLayoutPanel1);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximumSize = new System.Drawing.Size(357, 366);
+            this.MinimumSize = new System.Drawing.Size(357, 366);
             this.Name = "ArticleForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Ajout ou Modification d\'un article";
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.Text = "Ajouter / Modifier un article";
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.ChampsFormulaire.ResumeLayout(false);
+            this.ChampsFormulaire.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.QuantiteNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PrixNumericUpDown)).EndInit();
+            this.flowLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox RefTextBox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox ComboMarque;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox PrixTextBox;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.Button ConfirmButton;
+        private System.Windows.Forms.TableLayoutPanel ChampsFormulaire;
         private System.Windows.Forms.Label QuantiteLabel;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Button BoutonConfirm;
-        private System.Windows.Forms.Button ButtonAnnuler;
+        private System.Windows.Forms.Label PrixLabel;
+        private System.Windows.Forms.Label MarqueLabel;
+        private System.Windows.Forms.Label SousFamilleLabel;
+        private System.Windows.Forms.Label FamilleLabel;
+        private System.Windows.Forms.Label DescLabel;
+        private System.Windows.Forms.Label RefLabel;
+        private System.Windows.Forms.ComboBox MarqueComboBox;
+        private System.Windows.Forms.ComboBox SousFamilleComboBox;
+        private System.Windows.Forms.TextBox DescTextBox;
+        private System.Windows.Forms.ComboBox FamilleComboBox;
+        private System.Windows.Forms.TextBox RefTextBox;
+        private System.Windows.Forms.NumericUpDown QuantiteNumericUpDown;
+        private System.Windows.Forms.NumericUpDown PrixNumericUpDown;
     }
 }

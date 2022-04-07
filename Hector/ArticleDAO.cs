@@ -85,10 +85,10 @@ namespace Hector
             //La commande
             string Commande = "UPDATE Articles SET " +
                 "Description = @description, " +
-                "RefSousFamille = @refSousFamille," +
-                "RefMarque = @refMarque," +
-                "PrixHT = @prix," +
-                "Quantite = @quantite" +
+                "RefSousFamille = @refSousFamille, " +
+                "RefMarque = @refMarque, " +
+                "PrixHT = @prix, " +
+                "Quantite = @quantite " +
                 "WHERE RefArticle = @refArticle;";
 
             return Connexion.ExecuterCommande(Commande, Parametres) != -1;
