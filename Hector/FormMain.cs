@@ -109,6 +109,8 @@ namespace Hector
 
             //On récupère les données stockées en BDD
             ActualiserDonnees();
+
+
         }
 
 

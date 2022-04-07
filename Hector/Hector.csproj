@@ -106,6 +106,12 @@
     <Compile Include="FenetreImporter.Designer.cs">
       <DependentUpon>FenetreImporter.cs</DependentUpon>
     </Compile>
+    <Compile Include="ArticleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArticleForm.Designer.cs">
+      <DependentUpon>ArticleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +127,9 @@
     <Compile Include="TableSQLite.cs" />
     <Compile Include="SousFamille.cs" />
     <Compile Include="SousFamilleDAO.cs" />
+    <EmbeddedResource Include="ArticleForm.resx">
+      <DependentUpon>ArticleForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FenetreExporter.resx">
       <DependentUpon>FenetreExporter.cs</DependentUpon>
     </EmbeddedResource>
