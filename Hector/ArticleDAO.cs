@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
-using System;
 
 namespace Hector
 {
+    /// <summary>
+    /// Classe DAO des articles.
+    /// </summary>
     internal class ArticleDAO : DAO<Article>
     {
         /// <summary>
@@ -21,7 +23,7 @@ namespace Hector
             this.Connexion = Connexion;
         }
 
-        public ArticleDAO() { }
+
         /// <summary>
         /// Méthode d'insertion d'un objet Article dans la base de données.
         /// </summary>
@@ -70,6 +72,7 @@ namespace Hector
         /// <returns>true si réussi, false sinon</returns>
         public bool Modifier(Article Article)
         {
+            //Liste des paramètre SQL à passer à la requête
             List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refArticle", Article.RefArticle),
                 new SQLiteParameter("@description", Article.Description),
@@ -79,6 +82,7 @@ namespace Hector
                 new SQLiteParameter("@quantite", Article.Quantite)
             };
 
+            //La commande
             string Commande = "UPDATE Articles SET " +
                 "Description = @description, " +
                 "RefSousFamille = @refSousFamille," +
@@ -100,6 +104,7 @@ namespace Hector
         {
             bool ARetourner = true;
 
+            //On modifie chaque article
             foreach (Article Article in ListeArticles)
             {
                 ARetourner &= Modifier(Article);
@@ -119,16 +124,21 @@ namespace Hector
             SousFamilleDAO SousFamilleDAO = new SousFamilleDAO(Connexion);
             MarqueDAO MarqueDAO = new MarqueDAO(Connexion);
 
+            //Liste des paramètres SQL à passer à la requête
             List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@refArticle", Article.RefArticle)
             };
 
+            //On execute la commande
             string Commande = "SELECT Description, RefSousFamille, RefMarque, PrixHT, Quantite FROM Articles WHERE RefArticle = @refArticle;";
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+            TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande, Parametres);
+
+            //On renvoie false si aucun résultat
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return false;
 
             LigneSQLite Resultat = ResultatSQLite[0];
 
+            //On récupère les données
             Article.Description = Resultat.Attribut<string>(0);
             Article.Prix = Resultat.Attribut<float>(3);
             Article.Quantite = Resultat.Attribut<int>(4);
@@ -150,6 +160,7 @@ namespace Hector
         {
             bool ARetourner = true;
 
+            //On obtient chaque article
             foreach (Article Article in ListeArticles)
             {
                 ARetourner &= Obtenir(Article);
@@ -157,6 +168,7 @@ namespace Hector
 
             return ARetourner;
         }
+
 
         /// <summary>
         /// Méthode pour obtenir tous les d'Articles depuis la base de données.
@@ -168,10 +180,13 @@ namespace Hector
             MarqueDAO MarqueDAO = new MarqueDAO(Connexion);
 
             string Commande = "SELECT RefArticle, Description, RefSousFamille, RefMarque, PrixHT, Quantite FROM Articles;";
-            
-            ResultatSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+
+            TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
+
+            //On renvoie false si aucun résultat
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
 
+            //Initialisation des dictionnaires (pour éviter duplicata)
             Dictionary<string, Article> Articles = new Dictionary<string, Article>();
             Dictionary<int, Marque> Marques = new Dictionary<int, Marque>();
             Dictionary<int, SousFamille> SousFamilles = new Dictionary<int, SousFamille>();
@@ -183,14 +198,16 @@ namespace Hector
             Famille LaFamille;
             Article Article;
 
+            //On parcourt les résultats
             foreach (LigneSQLite Ligne in ResultatSQLite)
             {
+                //On récupère les données
                 Article = new Article();
                 Article.RefArticle = Ligne.Attribut<string>(0);
                 Article.Description = Ligne.Attribut<string>(1);
                 Article.Prix = Ligne.Attribut<float>(4);
                 Article.Quantite = Ligne.Attribut<int>(5);
-                
+
                 RefMarque = Ligne.Attribut<int>(3);
                 RefSousFamille = Ligne.Attribut<int>(2);
 
@@ -200,13 +217,14 @@ namespace Hector
                 if (Marques.ContainsKey(RefMarque))
                 {
                     LaMarque = Marques[RefMarque];
-                } else
+                }
+                else
                 {
                     LaMarque = new Marque(RefMarque);
                     MarqueDAO.Obtenir(LaMarque);
                     Marques.Add(RefMarque, LaMarque);
                 }
-                
+
                 Article.Marque = LaMarque;
                 LaMarque.AjouterArticle(Article);
 
@@ -215,7 +233,8 @@ namespace Hector
                 if (SousFamilles.ContainsKey(RefSousFamille))
                 {
                     LaSousFamille = SousFamilles[RefSousFamille];
-                } else
+                }
+                else
                 {
                     LaSousFamille = new SousFamille(RefSousFamille);
                     SousFamilleDAO.Obtenir(LaSousFamille);
@@ -233,12 +252,13 @@ namespace Hector
                 {
                     LaFamille = Familles[RefFamille];
                     LaSousFamille.Famille = LaFamille;
-                } else
+                }
+                else
                 {
                     LaFamille = LaSousFamille.Famille;
                     Familles.Add(RefFamille, LaFamille);
                 }
-                
+
                 LaFamille.AjouterSousFamille(LaSousFamille);
                 Articles[Article.RefArticle] = Article;
             };
@@ -250,22 +270,30 @@ namespace Hector
         /// <summary>
         /// Méthode de supression d'un Article en base de données.
         /// </summary>
-        /// <param name="Article"></param>
+        /// <param name="Article">L'article à supprimer</param>
         /// <returns>true si réussi, false sinon</returns>
         public bool Supprimer(Article Article)
         {
-            return true;
+            //Liste des paramètres SQL à passer à la requête
+            List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
+                new SQLiteParameter("@refArticle", Article.RefArticle)
+            };
+
+            string Commande = "DELETE FROM Articles WHERE RefArticle = @refArticle;";
+            return Connexion.ExecuterCommande(Commande, Parametres) != -1;
         }
+
 
         /// <summary>
         /// Méthode de supression d'une liste d'Articles en base de données.
         /// </summary>
-        /// <param name="ListeArticles"></param>
+        /// <param name="ListeArticles">La liste des articles à supprimer</param>
         /// <returns>true si toutes les suppressions réussies, false sinon</returns>
         public bool Supprimer(List<Article> ListeArticles)
         {
             bool ARetourner = true;
 
+            //On supprime chaque article
             foreach (Article Article in ListeArticles)
             {
                 ARetourner &= Supprimer(Article);
@@ -284,57 +312,6 @@ namespace Hector
             string Commande = "DELETE FROM Articles;";
             return Connexion.ExecuterCommande(Commande) != -1;
 
-        }
-
-        public Article ObtenirArticle(string RefArticle)
-        {
-            string Commande = "SELECT * FROM Articles WHERE RefArticle = '" + RefArticle + "'";
-            ConnexionBDD Connection = new ConnexionBDD("CheminAVoir");
-            Connexion.Open();
-
-            //Commande fait a la base de donnees
-            SQLiteCommand CommandeSQL = new SQLiteCommand(Commande, Connection.getConnexion());
-
-            //On va lire le resultat
-            SQLiteDataReader DataReader = CommandeSQL.ExecuteReader();
-
-            if (DataReader.Read())
-            {
-                MarqueDAO MarqueDAO = new MarqueDAO();
-                SousFamilleDAO SousFamilleDAO = new SousFamilleDAO();
-                Article ArticleCourant = new Article();
-                ArticleCourant.RefArticle = DataReader.GetString(0);
-                ArticleCourant.Description = DataReader.GetString(1);
-                //GROS PROBLEME ICI IL FAUDRAIT QUE LES BEAN SOIT DES INT POUR LES SOUSFAMILLE ET MARQUES
-                //ArticleCourant.SousFamille = (SousFamille) DataReader.GetString(2);
-                //Article.Marque = DataReader.GetInt16(3);
-                ArticleCourant.Prix = DataReader.GetFloat(4);
-                ArticleCourant.Quantite = DataReader.GetInt16(5);
-
-
-                return ArticleCourant;
-            }
-            return null;
-        }
-
-        public List<Article> ObtenirTousArticles()
-        {
-            List<Article> ListArticles = new List<Article>();
-            string Commande = "SELECT RefArticle FROM Articles";
-
-            ConnexionBDD Connection = new ConnexionBDD("CheminAVoir");
-            Connexion.Open();
-
-            SQLiteCommand CommandeSQL = new SQLiteCommand(Commande, Connection.getConnexion());
-
-            SQLiteDataReader DataReader = CommandeSQL.ExecuteReader();
-
-            while (DataReader.Read())
-            {
-                Article Article = ObtenirArticle(DataReader.GetString(0));
-                ListArticles.Add(Article);
-            }
-            return ListArticles;
         }
     }
 }

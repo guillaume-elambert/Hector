@@ -42,7 +42,9 @@ namespace Hector
             this.TreeView = new System.Windows.Forms.TreeView();
             this.ListView = new System.Windows.Forms.ListView();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.TexteStatusStrip = new System.Windows.Forms.ToolStripStatusLabel();
             this.MenuStrip.SuspendLayout();
+            this.StatusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
             this.SplitContainer.Panel1.SuspendLayout();
             this.SplitContainer.Panel2.SuspendLayout();
@@ -93,11 +95,12 @@ namespace Hector
             // 
             // StatusStrip
             // 
+            this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TexteStatusStrip});
             this.StatusStrip.Location = new System.Drawing.Point(0, 428);
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.Size = new System.Drawing.Size(800, 22);
             this.StatusStrip.TabIndex = 1;
-            this.StatusStrip.Text = "StatusStrip";
             // 
             // SplitContainer
             // 
@@ -149,6 +152,11 @@ namespace Hector
             this.ListView.View = System.Windows.Forms.View.Details;
             this.ListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListView_ColumnClick);
             // 
+            // TexteStatusStrip
+            // 
+            this.TexteStatusStrip.Name = "TexteStatusStrip";
+            this.TexteStatusStrip.Size = new System.Drawing.Size(0, 17);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,6 +170,8 @@ namespace Hector
             this.Text = "Hector";
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
+            this.StatusStrip.ResumeLayout(false);
+            this.StatusStrip.PerformLayout();
             this.SplitContainer.Panel1.ResumeLayout(false);
             this.SplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).EndInit();
@@ -184,6 +194,7 @@ namespace Hector
         private System.Windows.Forms.ListView ListView;
         private ColorDialog colorDialog1;
         private TreeView ArbreArticles;
+        private ToolStripStatusLabel TexteStatusStrip;
     }
 }
 
