@@ -61,15 +61,7 @@ namespace Hector
                     break;
                 case "Marques":
                     //Recuperer seulement les marques
-                    break;
-                case "EcritureEtCorrection":
-                    //Recuperer les objets qui appartiennent à la sous famille ecriture et correction
-                    break;
-                case "SousFamilleEC":
-                    break;
-                case "Clairefontaine":
-                    //Recuperer les elements avec clairefontaines
-                    break;
+                    break; 
             }
         }
     }
