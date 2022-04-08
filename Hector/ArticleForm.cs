@@ -281,6 +281,32 @@ namespace Hector
 
 
         /// <summary>
+        /// Méthode pour fermer la fernêtre lors de l'appuie sur la touche "Echap" ou "Entrée".
+        /// </summary>
+        /// <param name="Touche">La touche</param>
+        /// <returns></returns>
+        protected override bool ProcessDialogKey(Keys Touche)
+        {
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
+            {
+                Dispose(true);
+                return true;
+            }
+
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Enter)
+            {
+                if (ConfirmButton.Enabled)
+                {
+                    ConfirmButton.PerformClick();
+                    return true;
+                }
+            }
+            
+            return base.ProcessDialogKey(Touche);
+        }
+
+
+        /// <summary>
         /// Vérifie si chaque champs a une valeur valide
         /// Desc         : Champ non null
         /// Famille      : Champ non null
@@ -289,9 +315,14 @@ namespace Hector
         /// Prix         : float (virgule et pas point)
         /// </summary>
         /// <returns>Vrai si tout les champs sont valides, faux sinon.</returns>
-        public bool VerifierFormulaire()
+        public bool VerifierChamps()
         {
-            if (string.Compare(DescTextBox.Text, "") == 0)
+            if (RefTextBox.Text == "" || RefTextBox.Text.Length > 8)
+            {
+                return false;
+            }
+
+            if (DescTextBox.Text == "" || RefTextBox.Text.Length > 150)
             {
                 return false;
             }
@@ -324,7 +355,7 @@ namespace Hector
         /// </summary>
         public void ValidationFormulaire()
         {
-            if (VerifierFormulaire())
+            if (VerifierChamps())
             {
                 ConfirmButton.Enabled = true;
             }

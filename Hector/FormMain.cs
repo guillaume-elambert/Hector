@@ -110,6 +110,13 @@ namespace Hector
 
             //On récupère les données stockées en BDD
             ActualiserDonnees();
+
+            //On séléctionne le premier noeud par défaut
+            TreeNode PremierNoeud = ArbreArticles.Nodes[0];
+            if (PremierNoeud != null)
+            {
+                ArbreArticles.SelectedNode = PremierNoeud;
+            }
         }
 
 
@@ -215,6 +222,22 @@ namespace Hector
             {
                 SupprimerElement();
             }
+        }
+
+
+        /// <summary>
+        /// Méthode pour fermer la fernêtre lors de l'appuie sur la touche "Echap"
+        /// </summary>
+        /// <param name="Touche">La touche</param>
+        /// <returns></returns>
+        protected override bool ProcessDialogKey(Keys Touche)
+        {
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
+            {
+                Dispose(true);
+                return true;
+            }
+            return base.ProcessDialogKey(Touche);
         }
 
 
@@ -1014,6 +1037,8 @@ namespace Hector
             Dictionary<string, SousFamille> SousFamillesASupprimer = new Dictionary<string, SousFamille>();
 
 
+            DialogResult ChoixUtilisateur = DialogResult.No;
+
             //On parcours tous les objets de la ListView qui sont séléctionnés
             foreach (ListViewItem ObjetSelectionne in ListView.SelectedItems)
             {
@@ -1027,57 +1052,117 @@ namespace Hector
                 else if (ExpressionReguliereMarque.IsMatch(ListView.Columns[0].Name))
                 {
                     string RefMarque = ExpressionReguliereMarque.Match(ObjetSelectionne.Name).Groups[1].Value;
+
+                    if(Marques[RefMarque].Articles.Count > 0)
+                    {
+                        string NomMarque = Marques[RefMarque].Nom.Length > 30 ? Marques[RefMarque].Nom + "..." : Marques[RefMarque].Nom;
+
+                        ChoixUtilisateur = MessageBox.Show(
+                            "La marque \"" + NomMarque + "\" contient des articles.\nVouslez-vous vraiment la supprimer ?",
+                            "Suppression d'une famille",
+                            MessageBoxButtons.OKCancel,
+                            MessageBoxIcon.Warning,
+                            MessageBoxDefaultButton.Button1,
+                            MessageBoxOptions.ServiceNotification
+                        );
+
+                        if (ChoixUtilisateur == DialogResult.Cancel)
+                        {
+                            continue;
+                        }
+                    }
+
                     if (MarqueDAO.Supprimer(Marques[RefMarque]))
                     {
                         Marques.Remove(RefMarque);
                     }
+
+
                 }
                 //Si l'élément séléctionné est une famille, on la supprime
                 else if (ExpressionReguliereFamille.IsMatch(ListView.Columns[0].Name))
                 {
                     string RefFamille = ExpressionReguliereFamille.Match(ObjetSelectionne.Name).Groups[1].Value;
-
-                    if (FamilleDAO.Supprimer(Familles[RefFamille]))
+                    
+                    //On supprime toutes les sous-familles de la famille
+                    foreach (SousFamille SousFamille in Familles[RefFamille].SousFamilles.Values)
                     {
-                        //On supprime toutes les sous-familles de la famille
-                        foreach (SousFamille SousFamille in Familles[RefFamille].SousFamilles.Values)
+                        if(SousFamille.Articles.Count > 0)
                         {
-                            if (!SousFamillesASupprimer.ContainsKey(SousFamille.RefSousFamille.ToString()))
-                            {
-                                SousFamillesASupprimer[SousFamille.RefSousFamille.ToString()] = SousFamille;
-                            }
+                            string NomFamille = Familles[RefFamille].Nom.Length > 30 ? Familles[RefFamille].Nom + "..." : Familles[RefFamille].Nom;
 
-                        };
+                            ChoixUtilisateur = MessageBox.Show(
+                                "La famille \"" + NomFamille + "\" contient des articles.\nVouslez-vous vraiment la supprimer ?",
+                                "Suppression d'une famille",
+                                MessageBoxButtons.OKCancel,
+                                MessageBoxIcon.Warning,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.ServiceNotification
+                            );
+                            
+                            if (ChoixUtilisateur == DialogResult.Cancel)
+                            {
+                                continue;
+                            }
+                        }
+                        
+                        if (!SousFamillesASupprimer.ContainsKey(SousFamille.RefSousFamille.ToString()))
+                        {
+                            SousFamillesASupprimer[SousFamille.RefSousFamille.ToString()] = SousFamille;
+                        }                       
                     }
+                    
                 }
                 //Si l'élément séléctionné est une sous-famille, on la supprime
                 else if (ExpressionReguliereSousFamille.IsMatch(ListView.Columns[0].Name))
                 {
                     string RefSousFamille = ExpressionReguliereSousFamille.Match(ObjetSelectionne.Name).Groups[1].Value;
+
+                    if (SousFamilles[RefSousFamille].Articles.Count > 0)
+                    {
+                        string NomSousFamille = SousFamilles[RefSousFamille].Nom.Length > 30 ? SousFamilles[RefSousFamille].Nom + "..." : SousFamilles[RefSousFamille].Nom;
+                        
+                        ChoixUtilisateur = MessageBox.Show(
+                            "La sous-famille \"" + NomSousFamille + "\" contient des articles.\nVouslez-vous vraiment la supprimer ?",
+                            "Suppression d'une famille",
+                            MessageBoxButtons.OKCancel,
+                            MessageBoxIcon.Warning,
+                            MessageBoxDefaultButton.Button1,
+                            MessageBoxOptions.ServiceNotification
+                        );
+                        
+                        if (ChoixUtilisateur == DialogResult.Cancel)
+                        {
+                            continue;
+                        }
+                    }
+
                     SousFamillesASupprimer[RefSousFamille] = SousFamilles[RefSousFamille];
                 }
             }
-
+            
 
             //On supprime certaines sous familles et tous leurs articles
             foreach (SousFamille SousFamille in SousFamillesASupprimer.Values)
             {
+                //On supprime tous les articles de la sous-famille
+                foreach (Article Article in SousFamille.Articles.Values)
+                {
+                    if (!ArticlesASupprimer.ContainsKey(Article.RefArticle))
+                    {
+                        ArticlesASupprimer[Article.RefArticle] = Article;
+                    }
+                }
+
                 if (SousFamilleDAO.Supprimer(SousFamilles[SousFamille.RefSousFamille.ToString()]))
                 {
-                    //On supprime tous les articles de la sous-famille
-                    foreach (Article Article in SousFamille.Articles.Values)
-                    {
-                        if (!ArticlesASupprimer.ContainsKey(Article.RefArticle))
-                        {
-                            ArticlesASupprimer[Article.RefArticle] = Article;
-                        }
-                    }
-
                     SousFamilles.Remove(SousFamille.RefSousFamille.ToString());
                 }
             }
 
-            //On supprime certains articles
+
+                
+            //On supprime les articles
             foreach (Article Article in ArticlesASupprimer.Values)
             {
                 if (ArticleDAO.Supprimer(Article))
@@ -1085,6 +1170,7 @@ namespace Hector
                     Articles.Remove(Article.RefArticle);
                 }
             }
+            
 
             ActualiserDonnees();
             ActualiserListView(NomDernierElementTreeViewClicke);

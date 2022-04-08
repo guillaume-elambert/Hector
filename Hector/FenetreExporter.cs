@@ -145,5 +145,31 @@ namespace Hector
 
             Fichier.Close();
         }
+
+
+        /// <summary>
+        /// Méthode pour fermer la fernêtre lors de l'appuie sur la touche "Echap" ou "Entrée".
+        /// </summary>
+        /// <param name="Touche">La touche</param>
+        /// <returns></returns>
+        protected override bool ProcessDialogKey(Keys Touche)
+        {
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
+            {
+                Dispose(true);
+                return true;
+            }
+
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Enter)
+            {
+                if (BoutonExporter.Enabled)
+                {
+                    BoutonExporter.PerformClick();
+                    return true;
+                }
+            }
+
+            return base.ProcessDialogKey(Touche);
+        }
     }
 }

@@ -110,7 +110,7 @@
             this.QuantiteNumericUpDown.Name = "QuantiteNumericUpDown";
             this.QuantiteNumericUpDown.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.QuantiteNumericUpDown.Size = new System.Drawing.Size(261, 20);
-            this.QuantiteNumericUpDown.TabIndex = 6;
+            this.QuantiteNumericUpDown.TabIndex = 7;
             this.QuantiteNumericUpDown.ValueChanged += new System.EventHandler(this.QuantiteNumericUpDown_ValueChanged);
             // 
             // MarqueComboBox
@@ -133,7 +133,7 @@
             this.QuantiteLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.QuantiteLabel.Name = "QuantiteLabel";
             this.QuantiteLabel.Size = new System.Drawing.Size(47, 13);
-            this.QuantiteLabel.TabIndex = 6;
+            this.QuantiteLabel.TabIndex = 7;
             this.QuantiteLabel.Text = "Quantité";
             // 
             // SousFamilleComboBox
@@ -156,7 +156,7 @@
             this.PrixLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.PrixLabel.Name = "PrixLabel";
             this.PrixLabel.Size = new System.Drawing.Size(42, 13);
-            this.PrixLabel.TabIndex = 5;
+            this.PrixLabel.TabIndex = 6;
             this.PrixLabel.Text = "Prix HT";
             // 
             // FamilleComboBox
@@ -168,7 +168,7 @@
             this.FamilleComboBox.Name = "FamilleComboBox";
             this.FamilleComboBox.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.FamilleComboBox.Size = new System.Drawing.Size(261, 21);
-            this.FamilleComboBox.TabIndex = 0;
+            this.FamilleComboBox.TabIndex = 3;
             this.FamilleComboBox.SelectedIndexChanged += new System.EventHandler(this.FamilleComboBox_SelectedIndexChanged);
             // 
             // DescTextBox
@@ -190,7 +190,7 @@
             this.MarqueLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.MarqueLabel.Name = "MarqueLabel";
             this.MarqueLabel.Size = new System.Drawing.Size(43, 13);
-            this.MarqueLabel.TabIndex = 4;
+            this.MarqueLabel.TabIndex = 5;
             this.MarqueLabel.Text = "Marque";
             // 
             // SousFamilleLabel
@@ -201,7 +201,7 @@
             this.SousFamilleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.SousFamilleLabel.Name = "SousFamilleLabel";
             this.SousFamilleLabel.Size = new System.Drawing.Size(66, 13);
-            this.SousFamilleLabel.TabIndex = 3;
+            this.SousFamilleLabel.TabIndex = 4;
             this.SousFamilleLabel.Text = "Sous-Famille";
             // 
             // RefTextBox
@@ -224,7 +224,7 @@
             this.FamilleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FamilleLabel.Name = "FamilleLabel";
             this.FamilleLabel.Size = new System.Drawing.Size(39, 13);
-            this.FamilleLabel.TabIndex = 2;
+            this.FamilleLabel.TabIndex = 3;
             this.FamilleLabel.Text = "Famille";
             // 
             // DescLabel
@@ -235,7 +235,7 @@
             this.DescLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.DescLabel.Name = "DescLabel";
             this.DescLabel.Size = new System.Drawing.Size(60, 13);
-            this.DescLabel.TabIndex = 1;
+            this.DescLabel.TabIndex = 2;
             this.DescLabel.Text = "Description";
             // 
             // RefLabel
@@ -246,7 +246,7 @@
             this.RefLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RefLabel.Name = "RefLabel";
             this.RefLabel.Size = new System.Drawing.Size(57, 13);
-            this.RefLabel.TabIndex = 0;
+            this.RefLabel.TabIndex = 1;
             this.RefLabel.Text = "Réference";
             // 
             // PrixNumericUpDown
@@ -262,7 +262,7 @@
             0});
             this.PrixNumericUpDown.Name = "PrixNumericUpDown";
             this.PrixNumericUpDown.Size = new System.Drawing.Size(261, 20);
-            this.PrixNumericUpDown.TabIndex = 7;
+            this.PrixNumericUpDown.TabIndex = 6;
             this.PrixNumericUpDown.ValueChanged += new System.EventHandler(this.PrixNumericUpDown_ValueChanged);
             // 
             // flowLayoutPanel2
@@ -283,7 +283,7 @@
             this.ConfirmButton.Margin = new System.Windows.Forms.Padding(2);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(319, 20);
-            this.ConfirmButton.TabIndex = 0;
+            this.ConfirmButton.TabIndex = 8;
             this.ConfirmButton.Text = "Ajouter";
             this.ConfirmButton.UseVisualStyleBackColor = true;
             this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);

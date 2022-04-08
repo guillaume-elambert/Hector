@@ -40,14 +40,14 @@
             this.NomFichierTextBox.Name = "NomFichierTextBox";
             this.NomFichierTextBox.ReadOnly = true;
             this.NomFichierTextBox.Size = new System.Drawing.Size(481, 20);
-            this.NomFichierTextBox.TabIndex = 4;
+            this.NomFichierTextBox.TabIndex = 2;
             // 
             // BoutonChoixFichier
             // 
             this.BoutonChoixFichier.Location = new System.Drawing.Point(8, 15);
             this.BoutonChoixFichier.Name = "BoutonChoixFichier";
             this.BoutonChoixFichier.Size = new System.Drawing.Size(162, 23);
-            this.BoutonChoixFichier.TabIndex = 3;
+            this.BoutonChoixFichier.TabIndex = 1;
             this.BoutonChoixFichier.Text = "Séléctionner un fichier .csv";
             this.BoutonChoixFichier.UseVisualStyleBackColor = true;
             this.BoutonChoixFichier.Click += new System.EventHandler(this.BoutonChoixFichier_Click);
@@ -58,7 +58,7 @@
             this.BoutonExporter.Location = new System.Drawing.Point(549, 59);
             this.BoutonExporter.Name = "BoutonExporter";
             this.BoutonExporter.Size = new System.Drawing.Size(109, 23);
-            this.BoutonExporter.TabIndex = 5;
+            this.BoutonExporter.TabIndex = 4;
             this.BoutonExporter.Text = "Exporter";
             this.BoutonExporter.UseVisualStyleBackColor = true;
             this.BoutonExporter.Click += new System.EventHandler(this.BoutonExporter_Click);
@@ -68,7 +68,7 @@
             this.BoutonAnnuler.Location = new System.Drawing.Point(430, 59);
             this.BoutonAnnuler.Name = "BoutonAnnuler";
             this.BoutonAnnuler.Size = new System.Drawing.Size(109, 23);
-            this.BoutonAnnuler.TabIndex = 6;
+            this.BoutonAnnuler.TabIndex = 3;
             this.BoutonAnnuler.Text = "Annuler";
             this.BoutonAnnuler.UseVisualStyleBackColor = true;
             this.BoutonAnnuler.Click += new System.EventHandler(this.BoutonAnnuler_Click);

@@ -105,15 +105,16 @@ namespace Hector
             }
             Fichier.Close();
 
-            //On active les boutons
-            BoutonAjout.Enabled = true;
-            BoutonEcrasement.Enabled = true;
-
 
             //On parse le fichier en tâche de fond
             BackgroundWorker BackgroundWorker = new BackgroundWorker();
             BackgroundWorker.DoWork += (s, args) => RecupererDepuisCSV(DialogueFichier.FileName);
             BackgroundWorker.RunWorkerAsync();
+
+            //On active les boutons
+            BoutonAjout.Enabled = true;
+            BoutonAjout.Focus();
+            BoutonEcrasement.Enabled = true;
         }
 
 
@@ -433,6 +434,35 @@ namespace Hector
 
                 ++BarreProgressionTotale.Value;
             });
+        }
+
+
+        /// <summary>
+        /// Méthode pour fermer la fernêtre lors de l'appuie sur la touche "Echap" ou "Entrée".
+        /// </summary>
+        /// <param name="Touche">La touche</param>
+        /// <returns></returns>
+        protected override bool ProcessDialogKey(Keys Touche)
+        {
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
+            {
+                Dispose(true);
+                return true;
+            }
+
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Enter)
+            {
+                if (BoutonAjout.Enabled && BoutonAjout.Focused)
+                {
+                    BoutonAjout.PerformClick();
+                }
+                else if (BoutonEcrasement.Enabled && BoutonEcrasement.Focused)
+                {
+                    BoutonEcrasement.PerformClick();
+                }
+            }
+
+            return base.ProcessDialogKey(Touche);
         }
     }
 }

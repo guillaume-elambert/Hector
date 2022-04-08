@@ -28,11 +28,6 @@ namespace Hector
         /// </summary>
         SousFamille SousFamille;
 
-        /// <summary>
-        /// La liste des familles disponibles
-        /// </summary>
-        Dictionary<string, Famille> Familles;
-
 
         /// <summary>
         /// Constructeur
@@ -145,16 +140,40 @@ namespace Hector
         /// </summary>
         private void UpdateConfirmButton()
         {
-            if (NomTextBox.Text != "" && FamilleComboBox.SelectedIndex != -1 && Famille != null)
+            if (NomTextBox.Text == "" || NomTextBox.Text.Length > 50 || FamilleComboBox.SelectedIndex == -1 || Famille == null)
             {
-                ConfirmButton.Enabled = true;
+                ConfirmButton.Enabled = false;
             }
             else
             {
-                ConfirmButton.Enabled = false;
+                ConfirmButton.Enabled = true;
             }
         }
 
 
+        /// <summary>
+        /// Méthode pour fermer la fernêtre lors de l'appuie sur la touche "Echap" ou "Entrée".
+        /// </summary>
+        /// <param name="Touche">La touche</param>
+        /// <returns></returns>
+        protected override bool ProcessDialogKey(Keys Touche)
+        {
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
+            {
+                Dispose(true);
+                return true;
+            }
+
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Enter)
+            {
+                if (ConfirmButton.Enabled)
+                {
+                    ConfirmButton.PerformClick();
+                    return true;
+                }
+            }
+
+            return base.ProcessDialogKey(Touche);
+        }
     }
 }

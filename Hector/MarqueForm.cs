@@ -88,7 +88,7 @@ namespace Hector
         /// <param name="Evenement">L'evenement</param>
         private void NomTextBox_TextChanged(object Emetteur, EventArgs Evenement)
         {
-            if (NomTextBox.Text == "")
+            if (NomTextBox.Text == "" || NomTextBox.Text.Length > 50)
             {
                 ConfirmButton.Enabled = false;
             }
@@ -96,6 +96,32 @@ namespace Hector
             {
                 ConfirmButton.Enabled = true;
             }
+        }
+
+
+        /// <summary>
+        /// Méthode pour fermer la fernêtre lors de l'appuie sur la touche "Echap" ou "Entrée".
+        /// </summary>
+        /// <param name="Touche">La touche</param>
+        /// <returns></returns>
+        protected override bool ProcessDialogKey(Keys Touche)
+        {
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
+            {
+                Dispose(true);
+                return true;
+            }
+
+            if (Form.ModifierKeys == Keys.None && Touche == Keys.Enter)
+            {
+                if (ConfirmButton.Enabled)
+                {
+                    ConfirmButton.PerformClick();
+                    return true;
+                }
+            }
+
+            return base.ProcessDialogKey(Touche);
         }
     }
 }

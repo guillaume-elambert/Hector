@@ -77,7 +77,7 @@
             this.NomTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.NomTextBox.Name = "NomTextBox";
             this.NomTextBox.Size = new System.Drawing.Size(226, 20);
-            this.NomTextBox.TabIndex = 3;
+            this.NomTextBox.TabIndex = 2;
             this.NomTextBox.TextChanged += new System.EventHandler(this.NomTextBox_TextChanged);
             // 
             // RefLabel
@@ -88,7 +88,7 @@
             this.RefLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RefLabel.Name = "RefLabel";
             this.RefLabel.Size = new System.Drawing.Size(57, 13);
-            this.RefLabel.TabIndex = 0;
+            this.RefLabel.TabIndex = 1;
             this.RefLabel.Text = "Réference";
             // 
             // NomLabel
@@ -99,7 +99,7 @@
             this.NomLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.NomLabel.Name = "NomLabel";
             this.NomLabel.Size = new System.Drawing.Size(29, 13);
-            this.NomLabel.TabIndex = 1;
+            this.NomLabel.TabIndex = 2;
             this.NomLabel.Text = "Nom";
             // 
             // RefTextBox
@@ -111,7 +111,7 @@
             this.RefTextBox.Name = "RefTextBox";
             this.RefTextBox.ReadOnly = true;
             this.RefTextBox.Size = new System.Drawing.Size(226, 20);
-            this.RefTextBox.TabIndex = 2;
+            this.RefTextBox.TabIndex = 1;
             // 
             // flowLayoutPanel2
             // 
@@ -131,7 +131,7 @@
             this.ConfirmButton.Margin = new System.Windows.Forms.Padding(2);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(322, 20);
-            this.ConfirmButton.TabIndex = 0;
+            this.ConfirmButton.TabIndex = 3;
             this.ConfirmButton.UseVisualStyleBackColor = true;
             this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 

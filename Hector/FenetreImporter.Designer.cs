@@ -46,7 +46,7 @@
             this.BoutonChoixFichier.Location = new System.Drawing.Point(9, 12);
             this.BoutonChoixFichier.Name = "BoutonChoixFichier";
             this.BoutonChoixFichier.Size = new System.Drawing.Size(162, 23);
-            this.BoutonChoixFichier.TabIndex = 0;
+            this.BoutonChoixFichier.TabIndex = 1;
             this.BoutonChoixFichier.Text = "Séléctionner un fichier .csv";
             this.BoutonChoixFichier.UseVisualStyleBackColor = true;
             this.BoutonChoixFichier.Click += new System.EventHandler(this.BoutonChoixFichier_Click);
@@ -59,7 +59,7 @@
             this.ContenuFichierTextBox.ReadOnly = true;
             this.ContenuFichierTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ContenuFichierTextBox.Size = new System.Drawing.Size(638, 223);
-            this.ContenuFichierTextBox.TabIndex = 1;
+            this.ContenuFichierTextBox.TabIndex = 3;
             // 
             // NomFichierTextBox
             // 
@@ -104,7 +104,7 @@
             this.BoutonEcrasement.Location = new System.Drawing.Point(397, 23);
             this.BoutonEcrasement.Name = "BoutonEcrasement";
             this.BoutonEcrasement.Size = new System.Drawing.Size(180, 23);
-            this.BoutonEcrasement.TabIndex = 1;
+            this.BoutonEcrasement.TabIndex = 5;
             this.BoutonEcrasement.Text = "Écraser";
             this.BoutonEcrasement.UseVisualStyleBackColor = true;
             this.BoutonEcrasement.Click += new System.EventHandler(this.BoutonEcrasement_Click);
@@ -115,7 +115,7 @@
             this.BoutonAjout.Location = new System.Drawing.Point(73, 23);
             this.BoutonAjout.Name = "BoutonAjout";
             this.BoutonAjout.Size = new System.Drawing.Size(180, 23);
-            this.BoutonAjout.TabIndex = 0;
+            this.BoutonAjout.TabIndex = 4;
             this.BoutonAjout.Text = "Ajouter";
             this.BoutonAjout.UseVisualStyleBackColor = true;
             this.BoutonAjout.Click += new System.EventHandler(this.BoutonAjout_Click);

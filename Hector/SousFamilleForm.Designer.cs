@@ -84,7 +84,7 @@
             this.NomLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.NomLabel.Name = "NomLabel";
             this.NomLabel.Size = new System.Drawing.Size(29, 13);
-            this.NomLabel.TabIndex = 4;
+            this.NomLabel.TabIndex = 3;
             this.NomLabel.Text = "Nom";
             // 
             // FamilleLabel
@@ -106,7 +106,7 @@
             this.ReferenceLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ReferenceLabel.Name = "ReferenceLabel";
             this.ReferenceLabel.Size = new System.Drawing.Size(57, 13);
-            this.ReferenceLabel.TabIndex = 5;
+            this.ReferenceLabel.TabIndex = 2;
             this.ReferenceLabel.Text = "Réference";
             // 
             // RefTextBox
@@ -118,7 +118,7 @@
             this.RefTextBox.Name = "RefTextBox";
             this.RefTextBox.ReadOnly = true;
             this.RefTextBox.Size = new System.Drawing.Size(226, 20);
-            this.RefTextBox.TabIndex = 6;
+            this.RefTextBox.TabIndex = 2;
             // 
             // NomTextBox
             // 
@@ -127,7 +127,7 @@
             this.NomTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.NomTextBox.Name = "NomTextBox";
             this.NomTextBox.Size = new System.Drawing.Size(226, 20);
-            this.NomTextBox.TabIndex = 7;
+            this.NomTextBox.TabIndex = 3;
             this.NomTextBox.TextChanged += new System.EventHandler(this.NomTextBox_TextChanged);
             // 
             // FamilleComboBox
@@ -138,7 +138,7 @@
             this.FamilleComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.FamilleComboBox.Name = "FamilleComboBox";
             this.FamilleComboBox.Size = new System.Drawing.Size(226, 21);
-            this.FamilleComboBox.TabIndex = 8;
+            this.FamilleComboBox.TabIndex = 1;
             this.FamilleComboBox.SelectedValueChanged += new System.EventHandler(this.FamilleComboBox_SelectedValueChanged);
             // 
             // flowLayoutPanel2
@@ -159,7 +159,7 @@
             this.ConfirmButton.Margin = new System.Windows.Forms.Padding(2);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(322, 20);
-            this.ConfirmButton.TabIndex = 0;
+            this.ConfirmButton.TabIndex = 4;
             this.ConfirmButton.UseVisualStyleBackColor = true;
             this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 
