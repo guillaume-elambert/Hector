@@ -156,6 +156,6 @@ namespace Hector
         {
             return ExecuterCommandeAvecResultat(Commande, new List<SQLiteParameter>());
         }
-       
+
     }
 }

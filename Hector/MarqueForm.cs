@@ -1,25 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hector
 {
+    /// <summary>
+    /// Formulaire pour la modification ou la création d'une MarqueFamille.
+    /// </summary>
     internal partial class MarqueForm : Form
     {
+        /// <summary>
+        /// Le DAO des Marques.
+        /// </summary>
         MarqueDAO MarqueDAO;
+        /// <summary>
+        /// La connexion vers la BDD
+        /// </summary>
         ConnexionBDD Connexion;
+        /// <summary>
+        /// La marque
+        /// </summary>
         Marque Marque;
 
         /// <summary>
         /// Constructeur
         /// </summary>
-        /// <param name="Marque"></param>
+        /// <param name="Connexion">La connexion vers la BDD</param>
+        /// <param name="Marque">La marque à modifier</param>
         public MarqueForm(ConnexionBDD Connexion, Marque Marque = null)
         {
             this.Connexion = Connexion;
@@ -54,8 +60,8 @@ namespace Hector
         /// Event déclenché lors d'un clic sur le bouton de confirmation.
         /// Ajoute ou modifie la marque
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void ConfirmButton_Click(object Emetteur, EventArgs Evenement)
         {
             Marque.Nom = NomTextBox.Text;
@@ -70,7 +76,7 @@ namespace Hector
             {
                 MarqueDAO.Modifier(Marque);
             }
-            
+
             Close();
         }
 
@@ -78,8 +84,8 @@ namespace Hector
         /// Event déclenché lorsque le texte de la NomTextBox change.
         /// Utilisé pour vérifié la validité des champs entrés par l'utilisateur.
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void NomTextBox_TextChanged(object Emetteur, EventArgs Evenement)
         {
             if (NomTextBox.Text == "")

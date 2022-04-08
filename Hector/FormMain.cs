@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Hector
 {
@@ -29,7 +29,7 @@ namespace Hector
         /// Dictionnaire des Familles.
         /// </summary>
         private Dictionary<string, Famille> Familles;
-        
+
         /// <summary>
         /// Objet DAO des Articles.
         /// </summary>
@@ -94,7 +94,7 @@ namespace Hector
         {
             //Initialisation de l'IHM
             InitializeComponent();
-            
+
             //Initialisation des objets BDD
             Connexion = new ConnexionBDD(CheminVersSQLite);
             ArticleDAO = new ArticleDAO(Connexion);
@@ -187,6 +187,193 @@ namespace Hector
 
 
         /// <summary>
+        /// Méthode qui gère le double clic dans la ListView
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void ListView_MouseDoubleClick(object Emetteur, MouseEventArgs Evenement)
+        {
+            //On affiche la fenêtre de modification correspondant au type d'objet
+            OuvrirFenetreCreerModifier();
+        }
+
+
+        /// <summary>
+        /// Méthode qui gère l'appuie sur des touches dans la ListView
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void ListView_KeyDown(object Emetteur, KeyEventArgs Evenement)
+        {
+            if (Evenement.KeyCode == Keys.Enter || Evenement.KeyCode == Keys.Space)
+            {
+                OuvrirFenetreCreerModifier();
+                return;
+            }
+
+            if (Evenement.KeyCode == Keys.Delete || Evenement.KeyCode == Keys.EraseEof)
+            {
+                SupprimerElement();
+            }
+        }
+
+
+        /// <summary>
+        /// Méthode qui gère le clic droit dans la ListView
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void ListView_MouseDown(object Emetteur, MouseEventArgs Evenement)
+        {
+            //On ne gère que le clic droit
+            if (Evenement.Button != MouseButtons.Right || ListView.Columns == null || ListView.Columns.Count == 0) return;
+
+            //Liste des expressions régulière des noms de colonne possibles
+            Regex ExpressionReguliereFamille = new Regex("^" + PrefixeFamille + "(.*)$");
+            Regex ExpressionReguliereMarque = new Regex("^" + PrefixeMarque + "(.*)$");
+            Regex ExpressionReguliereSousFamille = new Regex("^" + PrefixeSousFamille + "(.*)$");
+            Regex ExpressionReguliereArticle = new Regex("^" + PrefixeArticle + "(.*)$");
+
+            //On récupère la position du clic
+            Point PointDuClick = PointToClient(new Point(MousePosition.X, MousePosition.Y));
+            //On récupère l'élément qui a été cliqué
+            ListViewItem ObjetSelectionne = ListView.GetItemAt(Evenement.X, Evenement.Y);
+
+            string NomElement = "";
+
+            //On désélectionne toutes les lignes de la ListView
+            ListView.SelectedItems.Clear();
+
+            //Entrée : Le clic droit à été fait sur une ligne
+            //      => On le séléctionne et on récupère son nom
+            if (ObjetSelectionne != null)
+            {
+                ObjetSelectionne.Selected = true;
+                NomElement = ObjetSelectionne.Text.Length > 30 ? ObjetSelectionne.Text.Substring(0, 30) + "..." : ObjetSelectionne.Text;
+            }
+
+            bool DesactiverModifSuppr = false;
+
+            //Les action possibles
+            MenuItem Ajouter = new MenuItem("Ajouter");
+            MenuItem Modifier = new MenuItem("Modifier");
+            MenuItem Supprimer = new MenuItem("Supprimer");
+
+
+            //Entrée : Le clic droit à été fait lors de l'affichage des Articles
+            //      => On affiche les actions possibles
+            if (ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name))
+            {
+                Ajouter.Text = "Ajouter un article";
+
+                //Entrée : Le clic droit n'a pas été fait sur un article
+                //      => On désactive les actions de modification et suppression
+                if (ObjetSelectionne == null)
+                {
+                    DesactiverModifSuppr = true;
+                    goto AfficherMenu;
+                }
+
+                //Personalisation des textes
+                Modifier.Text = "Modifier l'article \"" + NomElement + "\"";
+                Supprimer.Text = "Supprimer l'article \"" + NomElement + "\"";
+
+            }
+            //Entrée : Le clic droit à été fait lors de l'affichage des Marques
+            //      => On affiche les actions possibles
+            else if (ExpressionReguliereMarque.IsMatch(ListView.Columns[0].Name))
+            {
+
+                Ajouter.Text = "Ajouter une marque";
+
+                //Entrée : Le clic droit n'a pas été fait sur un article
+                //      => On désactive les actions de modification et suppression
+                if (ObjetSelectionne == null)
+                {
+                    DesactiverModifSuppr = true;
+                    goto AfficherMenu;
+                }
+
+                //Personalisation des textes
+                Modifier.Text = "Modifier la marque \"" + NomElement + "\"";
+                Supprimer.Text = "Supprimer la marque \"" + NomElement + "\"";
+            }
+            else if (ExpressionReguliereSousFamille.IsMatch(ListView.Columns[0].Name))
+            {
+
+                Ajouter.Text = "Ajouter une sous-famille";
+
+                //Entrée : Le clic droit n'a pas été fait sur un article
+                //      => On désactive les actions de modification et suppression
+                if (ObjetSelectionne == null)
+                {
+                    DesactiverModifSuppr = true;
+                    goto AfficherMenu;
+                }
+
+                Modifier.Text = "Modifier la sous-famille \"" + NomElement + "\"";
+                Supprimer.Text = "Supprimer la sous-famille \"" + NomElement + "\"";
+            }
+            else if (ExpressionReguliereFamille.IsMatch(ListView.Columns[0].Name))
+            {
+
+                Ajouter.Text = "Ajouter une famille";
+
+                //Entrée : Le clic droit n'a pas été fait sur un article
+                //      => On désactive les actions de modification et suppression
+                if (ObjetSelectionne == null)
+                {
+                    DesactiverModifSuppr = true;
+                    goto AfficherMenu;
+                }
+
+                Modifier.Text = "Modifier la famille \"" + NomElement + "\"";
+                Supprimer.Text = "Supprimer la famille \"" + NomElement + "\"";
+            }
+
+
+        AfficherMenu:
+
+            //On définit les actions du menu "Ajouter"
+            Ajouter.Click += (sender, e) =>
+            {
+                ListView.SelectedItems.Clear();
+                OuvrirFenetreCreerModifier();
+            };
+
+
+            //On définit les actions du menu "Modifier"
+            Modifier.Click += (sender, e) =>
+            {
+                OuvrirFenetreCreerModifier();
+            };
+
+
+            //On définit les actions du menu "Supprimer"
+            Supprimer.Click += (sender, e) =>
+            {
+                SupprimerElement();
+            };
+
+            //Entrée : Le clic droit n'a pas été fait sur un article
+            //      => On désactive les actions de modification et suppression
+            if (DesactiverModifSuppr)
+            {
+                Modifier.Enabled = false;
+                Supprimer.Enabled = false;
+            }
+
+            //On initialise le menu
+            ContextMenu ContextMenu = new ContextMenu();
+            ContextMenu.MenuItems.Add(Ajouter);
+            ContextMenu.MenuItems.Add(Modifier);
+            ContextMenu.MenuItems.Add(Supprimer);
+            ContextMenu.Show(this, PointDuClick);
+
+        }
+
+
+        /// <summary>
         /// Méthode qui permet d'aller récupérer les objets en BDD.
         /// </summary>
         private void ActualiserDonnees()
@@ -214,16 +401,16 @@ namespace Hector
 
             string RefMarque, RefSousFamille, RefFamille;
 
-            //Entrée : Il n'y pas d'Articles
-            //      => On récupère les marques, familles et sous familles
-            //         On ajoute ces objets dans les dictionnaires
+
+            //On réinitialise le dictionnaire des articles (pour éviter erreur si null)
             if (Articles == null || Articles.Count == 0)
             {
                 //On réinitialise le dictionnaire des articles (pour éviter erreur si null)
                 Articles = new Dictionary<string, Article>();
             }
-                
-                
+
+
+            //On réinitialise le dictionnaire des familles (pour éviter erreur si null)
             if (TempFamilles == null || TempFamilles.Count == 0)
             {
                 //On réinitialise le dictionnaire des familles (pour éviter erreur si null)
@@ -231,7 +418,7 @@ namespace Hector
                 TempFamilles = new Dictionary<string, Famille>();
             }
 
-            //On réinitialise le dictionnaire des familles (pour éviter erreur si null)
+            //On réinitialise le dictionnaire des sous-familles (pour éviter erreur si null)
             if (TempSousFamilles == null || TempSousFamilles.Count == 0)
             {
                 //On réinitialise le dictionnaire des sous-familles (pour éviter erreur si null)
@@ -239,7 +426,7 @@ namespace Hector
                 TempSousFamilles = new Dictionary<string, SousFamille>();
             }
 
-            if(TempMarques == null || TempMarques.Count == 0)
+            if (TempMarques == null || TempMarques.Count == 0)
             {
                 //On réinitialise le dictionnaire des marques (pour éviter erreur si null)
                 Marques = new Dictionary<string, Marque>();
@@ -375,9 +562,9 @@ namespace Hector
             }
 
             TreeNode LeNoeudMarque;
-            
+
             //Pour chaque marque on ajoute les Article dans l'abre
-            foreach(Marque Marque in Marques.Values)
+            foreach (Marque Marque in Marques.Values)
             {
                 //On ajoute la marque dans l'arbre
                 LeNoeudMarque = ArbreArticles.Nodes["Marques"].Nodes.Add(
@@ -386,7 +573,7 @@ namespace Hector
                 );
 
                 //On ajoute le articles de la marque dans l'arbre
-                foreach(Article Article in Marque.Articles.Values)
+                foreach (Article Article in Marque.Articles.Values)
                 {
                     //On ajoute un noeud pour l'article
                     LeNoeudMarque.Nodes.Add(
@@ -403,6 +590,8 @@ namespace Hector
             int NombreFamilles = Familles.Count;
             int NombreEnregistrements = NombreArticles + NombreMarques + NombreSousFamilles + NombreFamilles;
 
+
+            //On affiche le nombre d'éléments en bas de la fenêtre
             TexteStatusStrip.Text = "Enregistrements : " + NombreEnregistrements + "  |  " +
                 "Articles : " + NombreArticles + " - " +
                 "Marques : " + NombreMarques + " - " +
@@ -457,7 +646,7 @@ namespace Hector
                     {
                         string RefArticle = Regex.Match(NomElementTreeViewAAfficher, "^" + PrefixeArticle + "(.*)$").Groups[1].Value;
 
-                        if(!Articles.ContainsKey(RefArticle))
+                        if (!Articles.ContainsKey(RefArticle))
                         {
                             NomDernierElementTreeViewClicke = null;
                             return;
@@ -511,7 +700,7 @@ namespace Hector
                         break;
                     }
 
-                    
+
                     //Entrée: le dernier objet clické est une famille spécifique
                     //  => on affiche uniquement les sous-familles correspondantes
                     if (Regex.IsMatch(NomElementTreeViewAAfficher, "^Famille_.*$"))
@@ -543,13 +732,13 @@ namespace Hector
 
             //Entrée : L'utilisateur avait clické sur une colonne de la ListView
             //      => On trie les nouvelles valeurs sur la même colonne
-            if(NomDerniereColonneListViewClickee != null)
+            if (NomDerniereColonneListViewClickee != null)
             {
                 TrierListViewSurColonne(NomDerniereColonneListViewClickee);
             }
         }
 
-    
+
         /// <summary>
         /// Méthode qui ajoute des Articles à la TreeView
         /// </summary>
@@ -558,7 +747,7 @@ namespace Hector
         {
             //Le préfixe à utiliser dans la clé des colonnes de la ListView
             string Prefixe = PrefixeArticle;
-            
+
             //On ajoute les colonnes dans la ListView si elles n'existent pas déjà
             if (!ListView.Columns.ContainsKey(Prefixe + "Référence")) ListView.Columns.Add(Prefixe + "Référence", "Référence", 80);
             if (!ListView.Columns.ContainsKey(Prefixe + "Description")) ListView.Columns.Add(Prefixe + "Description", "Description", 200);
@@ -567,8 +756,8 @@ namespace Hector
             if (!ListView.Columns.ContainsKey(Prefixe + "Marque")) ListView.Columns.Add(Prefixe + "Marque", "Marque", 100);
             //if (!ListView.Columns.ContainsKey(Prefixe + "Prix")) ListView.Columns.Add(Prefixe + "Prix", "Prix", 50);
             if (!ListView.Columns.ContainsKey(Prefixe + "Quantité")) ListView.Columns.Add(Prefixe + "Quantité", "Quantité", 60);
-            
-            
+
+
             //On sort s'il n'y a pas d'articles
             if (Articles == null || Articles.Count == 0) return;
 
@@ -647,7 +836,7 @@ namespace Hector
             {
                 string[] Valeurs = {
                     //Famille.RefFamille.ToString(),
-                    Famille.Nom                    
+                    Famille.Nom
                 };
 
                 Ligne = new ListViewItem(Valeurs);
@@ -699,7 +888,7 @@ namespace Hector
             //On récupère la colonne qui correspond au nom
             ColumnHeader LaColonne = ListView.Columns[NomColonneATrier];
             //S'il n'y en a pas, on sort
-            if (LaColonne == null) 
+            if (LaColonne == null)
                 return;
 
             //On supprime tous les groupes existants
@@ -809,27 +998,6 @@ namespace Hector
             }
         }
 
-        private void ListView_MouseDoubleClick(object Emetteur, MouseEventArgs Evenement)
-        {
-            OuvrirFenetreCreerModifier();
-        }
-
-
-
-        private void ListView_KeyDown(object Emetteur, KeyEventArgs Evenement)
-        {
-            if (Evenement.KeyCode == Keys.Enter || Evenement.KeyCode == Keys.Space)
-            {
-                OuvrirFenetreCreerModifier();
-                return;
-            }
-
-            if(Evenement.KeyCode == Keys.Delete || Evenement.KeyCode == Keys.EraseEof)
-            {
-                SupprimerElement();
-            }
-        }
-
         public void SupprimerElement()
         {
             if (ListView.Columns == null || ListView.Columns.Count == 0 || ListView.SelectedItems == null || ListView.SelectedItems.Count == 0) return;
@@ -847,7 +1015,8 @@ namespace Hector
 
 
             //On parcours tous les objets de la ListView qui sont séléctionnés
-            foreach (ListViewItem ObjetSelectionne in ListView.SelectedItems) {
+            foreach (ListViewItem ObjetSelectionne in ListView.SelectedItems)
+            {
 
                 //Si l'élément séléctionné est un article, on le supprime
                 if (ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name))
@@ -921,7 +1090,7 @@ namespace Hector
             ActualiserListView(NomDernierElementTreeViewClicke);
         }
 
-        
+
         /// <summary>
         /// Ouvre le menu de création/modification d'élément (Article, Marque, Famille ou Sous-Famille).
         /// </summary>
@@ -948,15 +1117,33 @@ namespace Hector
             Regex ExpressionReguliereArticle = new Regex("^" + PrefixeArticle + "(.*)$");
 
             // On veut créer / modifier un article
-            if ( ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name) )
+            if (ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name))
             {
+
                 if (Create)
                 {
-                    FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, null);
+
+                    SousFamille LaSousFamilleFamille = null;
+                    Marque LaMarque = null;
+
+                    //On récupère la famille dans laquelle on se trouve actuellement
+                    if (ExpressionReguliereSousFamille.IsMatch(NomDernierElementTreeViewClicke))
+                    {
+                        string RefFamille = ExpressionReguliereSousFamille.Match(NomDernierElementTreeViewClicke).Groups[1].Value;
+                        LaSousFamilleFamille = SousFamilles[RefFamille];
+                    }
+                    //On récupère la marque dans laquelle on se trouve actuellement
+                    else if (ExpressionReguliereMarque.IsMatch(NomDernierElementTreeViewClicke))
+                    {
+                        string RefMarque = ExpressionReguliereMarque.Match(NomDernierElementTreeViewClicke).Groups[1].Value;
+                        LaMarque = Marques[RefMarque];
+                    }
+
+                    FormulaireAjoutModification = new ArticleForm(Connexion, Marques, SousFamilles, Familles, LaSousFamilleFamille, LaMarque, null);
                 }
                 else
                 {
-                    FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, Articles[ObjetSelectionne.Text]);
+                    FormulaireAjoutModification = new ArticleForm(Connexion, Marques, SousFamilles, Familles, null, null, Articles[ObjetSelectionne.Text]);
                 }
             }
             // On veut créé / modifier une marque
@@ -991,7 +1178,8 @@ namespace Hector
                 Famille LaFamille = null;
 
                 //On récupère la famille dans laquelle on se trouve actuellement
-                if (ExpressionReguliereFamille.IsMatch(NomDernierElementTreeViewClicke)){
+                if (ExpressionReguliereFamille.IsMatch(NomDernierElementTreeViewClicke))
+                {
                     string RefFamille = ExpressionReguliereFamille.Match(NomDernierElementTreeViewClicke).Groups[1].Value;
                     LaFamille = Familles[RefFamille];
                 }
@@ -1007,43 +1195,6 @@ namespace Hector
                 }
             }
 
-            /*// On veut créer/modifier une famille
-            else if (ListViewDisplay == "FAMILLES")
-            {
-                if (Create)
-                {
-                    Form = new FamilleForm();
-                }
-                else
-                {
-                    Form = new FamilleForm(SelectedItem);
-                }
-            }
-            // On veut créer/modifier une marque
-            else if (ListViewDisplay == "MARQUES")
-            {
-                if (Create)
-                {
-                    Form = new MarqueForm();
-                }
-                else
-                {
-                    Form = new MarqueForm(SelectedItem);
-                }
-            }
-            // On veut créer/modifier une sous-famille
-            else if (ListViewDisplay == "SOUSFAMILLES")
-            {
-                if (Create)
-                {
-                    Form = new SousFamilleForm();
-                }
-                else
-                {
-                    Form = new SousFamilleForm(ListViewValue, SelectedItem);
-                }
-            }*/
-
 
             // Affiche la fenêtre si on en a créé une
             if (FormulaireAjoutModification != null)
@@ -1053,131 +1204,6 @@ namespace Hector
                 ActualiserDonnees();
                 ActualiserListView(NomDernierElementTreeViewClicke);
             }
-        }
-
-
-
-        private void ListView_MouseDown(object Emetteur, MouseEventArgs Evenement)
-        {
-            //On ne gère que le clic droit
-            if (Evenement.Button != MouseButtons.Right || ListView.Columns == null || ListView.Columns.Count == 0) return;
-
-            //Liste des expressions régulière des noms de colonne possibles
-            Regex ExpressionReguliereFamille = new Regex("^" + PrefixeFamille + "(.*)$");
-            Regex ExpressionReguliereMarque = new Regex("^" + PrefixeMarque + "(.*)$");
-            Regex ExpressionReguliereSousFamille = new Regex("^" + PrefixeSousFamille + "(.*)$");
-            Regex ExpressionReguliereArticle = new Regex("^" + PrefixeArticle + "(.*)$");
-
-            //On récupère la position du clic
-            Point PointDuClick = PointToClient(new Point(MousePosition.X, MousePosition.Y));
-            //On récupère l'élément qui a été cliqué
-            ListViewItem ObjetSelectionne = ListView.GetItemAt(Evenement.X, Evenement.Y);
-
-            string NomElement = "";
-            
-            ListView.SelectedItems.Clear();
-            if (ObjetSelectionne != null)
-            {
-                ObjetSelectionne.Selected = true;
-                NomElement = ObjetSelectionne.Text.Length > 30 ? ObjetSelectionne.Text.Substring(0, 30) + "..." : ObjetSelectionne.Text;
-            }
-
-            bool DesactiverModifSuppr = false;
-            MenuItem Ajouter = new MenuItem("Ajouter");
-            MenuItem Modifier = new MenuItem("Modifier");
-            MenuItem Supprimer = new MenuItem("Supprimer");
-
-
-
-            if (ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name))
-            {
-                Ajouter.Text = "Ajouter un article";
-
-                if (ObjetSelectionne == null)
-                {
-                    DesactiverModifSuppr = true;
-                    goto AfficherMenu;
-                }
-
-                Modifier.Text = "Modifier l'article \"" + NomElement + "\"";
-                Supprimer.Text = "Supprimer l'article \"" + NomElement + "\"";
-
-            }
-            else if (ExpressionReguliereMarque.IsMatch(ListView.Columns[0].Name))
-            {
-
-                Ajouter.Text = "Ajouter une marque";
-
-                if (ObjetSelectionne == null)
-                {
-                    DesactiverModifSuppr = true;
-                    goto AfficherMenu;
-                }
-
-                Modifier.Text = "Modifier la marque \"" + NomElement + "\"";
-                Supprimer.Text = "Supprimer la marque \"" + NomElement + "\"";
-            }
-            else if (ExpressionReguliereSousFamille.IsMatch(ListView.Columns[0].Name))
-            {
-
-                Ajouter.Text = "Ajouter une sous-famille";
-
-                if (ObjetSelectionne == null)
-                {
-                    DesactiverModifSuppr = true;
-                    goto AfficherMenu;
-                }
-
-                Modifier.Text = "Modifier la sous-famille \"" + NomElement + "\"";
-                Supprimer.Text = "Supprimer la sous-famille \"" + NomElement + "\"";
-            }
-            else if (ExpressionReguliereFamille.IsMatch(ListView.Columns[0].Name))
-            {
-
-                Ajouter.Text = "Ajouter une famille";
-
-                if (ObjetSelectionne == null)
-                {
-                    DesactiverModifSuppr = true;
-                    goto AfficherMenu;
-                }
-
-                Modifier.Text = "Modifier la famille \"" + NomElement + "\"";
-                Supprimer.Text = "Supprimer la famille \"" + NomElement + "\"";
-            }
-
-
-        AfficherMenu:
-
-            Ajouter.Click += (sender, e) =>
-            {
-                ListView.SelectedItems.Clear();
-                OuvrirFenetreCreerModifier();
-            };
-
-            
-            Modifier.Click += (sender, e) =>
-            {
-                OuvrirFenetreCreerModifier();
-            };
-
-            Supprimer.Click += (sender, e) =>
-            {
-                SupprimerElement();
-            };
-
-            if (DesactiverModifSuppr)
-            {
-                Modifier.Enabled = false;
-                Supprimer.Enabled = false;
-            }
-            
-            ContextMenu ContextMenu = new ContextMenu();
-            ContextMenu.MenuItems.Add(Ajouter);
-            ContextMenu.MenuItems.Add(Modifier);
-            ContextMenu.MenuItems.Add(Supprimer);
-            ContextMenu.Show(this, PointDuClick);
-            
         }
 
 
@@ -1222,11 +1248,10 @@ namespace Hector
             public int Compare(object Objet1, object Objet2)
             {
                 return string.Compare(
-                    ((ListViewItem)Objet1).SubItems[IndiceColonne].Text, 
+                    ((ListViewItem)Objet1).SubItems[IndiceColonne].Text,
                     ((ListViewItem)Objet2).SubItems[IndiceColonne].Text
                 );
             }
         }
     }
-} 
-
+}

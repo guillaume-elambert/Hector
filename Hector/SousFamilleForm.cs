@@ -1,34 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hector
 {
+    /// <summary>
+    /// Formulaire pour la modification ou la création d'une SousFamille.
+    /// </summary>
     internal partial class SousFamilleForm : Form
     {
+        /// <summary>
+        /// La connexion vers la BDD.
+        /// </summary>
         ConnexionBDD Connexion;
+        /// <summary>
+        /// Le DAO des sous-familles.
+        /// </summary>
         SousFamilleDAO SousFamilleDAO;
 
+        /// <summary>
+        /// La famille de la sous-famille
+        /// </summary>
         Famille Famille;
+        /// <summary>
+        /// La sous-famille
+        /// </summary>
         SousFamille SousFamille;
+
+        /// <summary>
+        /// La liste des familles disponibles
+        /// </summary>
         Dictionary<string, Famille> Familles;
 
 
         /// <summary>
         /// Constructeur
         /// </summary>
-        /// <param name="Famille"></param>
-        /// <param name="SousFamille"></param>
+        /// <param name="Connexion">La connexion vers la BDD</param>
+        /// <param name="Familles">La liste des familles disponibles</param>
+        /// <param name="Famille">La famille par dfaut de la sous-famille</param>
+        /// <param name="SousFamille">La sous famille</param>
         public SousFamilleForm(ConnexionBDD Connexion, Dictionary<string, Famille> Familles, Famille Famille = null, SousFamille SousFamille = null)
         {
             InitializeComponent();
 
+            //Initialisation des variables
             this.SousFamille = SousFamille;
             this.Connexion = Connexion;
             SousFamilleDAO = new SousFamilleDAO(this.Connexion);
@@ -57,29 +74,31 @@ namespace Hector
             }
 
             FamilleComboBox.SelectedIndex = 0;
+
+            //Si on a passé une famille en paramètre, on la séléctionne dans le ComboBox
             if (Famille != null)
             {
-                FamilleComboBox.SelectedIndex = FamilleComboBox.Items.IndexOf(Famille);
+                FamilleComboBox.SelectedItem = Famille;
             }
             UpdateConfirmButton();
         }
 
-        
+
         /// <summary>
         /// Event déclenché lors d'un clic sur le bouton de confirmation.
         /// Ajoute ou modifie la sous-famille.
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void ConfirmButton_Click(object Emetteur, EventArgs Evenement)
         {
             SousFamille.Nom = NomTextBox.Text;
-            
+
             if (SousFamille.Famille != null)
             {
                 SousFamille.Famille.SousFamilles.Remove(SousFamille.RefSousFamille.ToString());
             }
-            
+
             SousFamille.Famille = Famille;
 
             // Si on veut créer une sous-famille
@@ -97,30 +116,30 @@ namespace Hector
             Close();
         }
 
-        
+
         /// <summary>
         /// Event déclenché lorsque le texte de la NameTextBox change.
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void NomTextBox_TextChanged(object Emetteur, EventArgs Evenement)
         {
             UpdateConfirmButton();
         }
 
-        
+
         /// <summary>
         /// Event déclenché lorsque l'item sélectionné dans la ComboBox change
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void FamilleComboBox_SelectedValueChanged(object Emetteur, EventArgs Evenement)
         {
             Famille = (Famille)FamilleComboBox.SelectedValue;
             UpdateConfirmButton();
         }
 
-        
+
         /// <summary>
         /// Fonction qui active ou non le bouton de confirmation en fonction de la validité des champs.
         /// </summary>

@@ -1,29 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hector
 {
+    /// <summary>
+    /// Formulaire pour la modification ou la création d'une Famille.
+    /// </summary>
     internal partial class FamilleForm : Form
     {
+        /// <summary>
+        /// La connxion vers la BDD
+        /// </summary>
         ConnexionBDD Connexion;
+        /// <summary>
+        /// Le DAO des familles
+        /// </summary>
         FamilleDAO FamilleDAO;
+        /// <summary>
+        /// La famille
+        /// </summary>
         Famille Famille;
 
         /// <summary>
         /// Constructeur
         /// </summary>
-        /// <param name="Famille"></param>
+        /// <param name="Connexion">La connexion vers la BDD</param>
+        /// <param name="Famille">La famille à modifier</param>
         public FamilleForm(ConnexionBDD Connexion, Famille Famille = null)
         {
             InitializeComponent();
 
+            //Initialisation des variables
             this.Connexion = Connexion;
             FamilleDAO = new FamilleDAO(this.Connexion);
             this.Famille = Famille;
@@ -53,12 +60,12 @@ namespace Hector
         /// Event déclenché lors d'un clic sur le bouton de confirmation.
         /// Ajoute ou modifie la famille
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void ConfirmButton_Click(object Emetteur, EventArgs Evenement)
         {
             Famille.Nom = NomTextBox.Text;
-            
+
             // Si on veut créer une famille
             if (Famille.RefFamille == -1)
             {
@@ -69,7 +76,7 @@ namespace Hector
             {
                 FamilleDAO.Modifier(Famille);
             }
-            
+
             Close();
         }
 
@@ -77,8 +84,8 @@ namespace Hector
         /// Event déclenché lorsque le texte de la NomTextBox change.
         /// Utilisé pour vérifié la validité des champs entrés par l'utilisateur.
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void NomTextBox_TextChanged(object Emetteur, EventArgs Evenement)
         {
             if (NomTextBox.Text == "")

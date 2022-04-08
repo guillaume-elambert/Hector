@@ -15,7 +15,7 @@ namespace Hector
         /// <returns>true si réussi, false sinon</returns>
         bool Inserer(T Objet);
 
-        
+
         /// <summary>
         /// Méthode d'insertion d'une liste d'objets dans la base de données.
         /// </summary>
@@ -38,7 +38,7 @@ namespace Hector
         /// <param name="ListeObjets">La liste des objets à supprimer</param>
         /// <returns>true si toutes les suppressions réussies, false sinon</returns>
         bool Supprimer(List<T> ListeObjets);
-        
+
 
         /// <summary>
         /// Méthode de modification d'un objet en base de données.
@@ -54,7 +54,7 @@ namespace Hector
         /// <param name="ListeObjets">La liste des objets à modifier.</param>
         /// <returns>true si toutes les modifications réussies, false sinon</returns>
         bool Modifier(List<T> ListeObjets);
-        
+
 
         /// <summary>
         /// Méthode pour obtenir un objet depuis la base de données.
@@ -71,7 +71,7 @@ namespace Hector
         /// <returns>true si toutes les obtentions réussies, false sinon</returns>
         bool Obtenir(List<T> ListeObjets);
 
-        
+
         /// <summary>
         /// Méthode pour obtenir tous les objets depuis la base de données.
         /// </summary>

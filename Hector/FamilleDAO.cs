@@ -23,7 +23,7 @@ namespace Hector
         {
             this.Connexion = Connexion;
         }
-        
+
 
         /// <summary>
         /// Méthode d'insertion d'un objet Famille dans la base de données.
@@ -33,7 +33,7 @@ namespace Hector
         public bool Inserer(Famille Famille)
         {
             //if(Connexion.ExecuterCommandeAvecRes)
-            
+
             List<SQLiteParameter> Parametres = new List<SQLiteParameter>() {
                 new SQLiteParameter("@nom", Famille.Nom)
             };
@@ -195,7 +195,7 @@ namespace Hector
             return Connexion.ExecuterCommande(Commande, Parametres) != -1;
         }
 
-        
+
         /// <summary>
         /// Méthode de supression d'une liste de Familles en base de données.
         /// </summary>
@@ -212,7 +212,7 @@ namespace Hector
 
             return ARetourner;
         }
-        
+
 
         /// <summary>
         /// Méthode pour supprimer le contenu de la table.

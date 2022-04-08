@@ -376,15 +376,15 @@ namespace Hector
             });
 
 
-            #if DEBUG
-                //Debug erreurs (100% si insertion avec les mêmes données)
-                foreach (string err in ListeErreurObjets)
-                {
-                    Console.WriteLine("ERREUR : "+err);
-                }
+#if DEBUG
+            //Debug erreurs (100% si insertion avec les mêmes données)
+            foreach (string err in ListeErreurObjets)
+            {
+                Console.WriteLine("ERREUR : " + err);
+            }
 
-                Console.WriteLine(ListeErreurObjets.Count + " erreurs sur " + NombreEnregistrements + " enregistrements");
-            #endif
+            Console.WriteLine(ListeErreurObjets.Count + " erreurs sur " + NombreEnregistrements + " enregistrements");
+#endif
 
             return ListeErreurObjets;
         }

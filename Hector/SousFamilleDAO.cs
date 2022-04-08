@@ -22,7 +22,7 @@ namespace Hector
         {
             this.Connexion = Connexion;
         }
-        
+
 
         /// <summary>
         /// Méthode d'insertion d'un objet SousFamille dans la base de données.
@@ -182,7 +182,7 @@ namespace Hector
                 SousFamille = new SousFamille(Ligne.Attribut<int>(0));
                 SousFamille.Nom = Ligne.Attribut<string>(2);
 
-                
+
                 //On récupère la famille de la sous famille
                 RefFamille = Ligne.Attribut<int>(1);
 
@@ -197,7 +197,7 @@ namespace Hector
                     FamilleDAO.Obtenir(LaFamille);
                     Familles.Add(RefFamille, LaFamille);
                 }
-                
+
                 SousFamille.Famille = LaFamille;
 
                 SousFamilles[SousFamille.RefSousFamille.ToString()] = SousFamille;

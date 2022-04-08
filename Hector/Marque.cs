@@ -27,7 +27,7 @@ namespace Hector
         /// </summary>
         public Marque() : this(-1, null) { }
 
-        
+
         /// <summary>
         /// Constructeur
         /// </summary>

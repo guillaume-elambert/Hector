@@ -1,34 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hector
 {
+    /// <summary>
+    /// Formulaire pour la modification ou la création d'un Article.
+    /// </summary>
     internal partial class ArticleForm : Form
     {
+        /// <summary>
+        /// Les types d'action possible
+        /// </summary>
         enum ModeEnum
         {
             Add,
             Edit
         }
-        
-
-        ArticleDAO ArticleDAO;
-        FamilleDAO FamilleDAO;
-        SousFamilleDAO SousFamilleDAO;
-        MarqueDAO MarqueDAO;
 
 
-        /// <summary>
-        /// Dictionnaire des Articles.
-        /// </summary>
-        private Dictionary<string, Article> Articles;
         /// <summary>
         /// Dictionnaire des Marques
         /// </summary>
@@ -42,47 +33,60 @@ namespace Hector
         /// </summary>
         private Dictionary<string, Famille> Familles;
 
-        
 
+        /// <summary>
+        /// L'article à créer ou modifier
+        /// </summary>
         private Article Article;
+
+        /// <summary>
+        /// L'objet de connexeion vers la BDD
+        /// </summary>
         private ConnexionBDD Connexion;
+
+        /// <summary>
+        /// L'objet DAO des Articles
+        /// </summary>
+        ArticleDAO ArticleDAO;
+
+        /// <summary>
+        /// L'action à effectuer
+        /// </summary>
         private ModeEnum Mode;
+
+
 
         /// <summary>
         /// Constructeur
         /// </summary>
         /// <param name="Connexion">Connexion vers la BDD</param>
-        /// <param name="Article">L'article</param>
-        public ArticleForm(ConnexionBDD Connexion, Dictionary<string, Article> Articles, Dictionary<string, Marque> Marques, Dictionary<string, SousFamille> SousFamilles, Dictionary<string, Famille> Familles, Article Article)
+        /// <param name="Marques">La liste des Marques disponibles</param>
+        /// <param name="SousFamilles">La liste des SousFamilles disponibles</param>
+        /// <param name="Familles">La liste des Familles disponibles</param>
+        /// <param name="SousFamille">La sous-famille par défaut de l'article</param> 
+        /// <param name="Marque">La marque par défaut de l'article.</param>
+        /// <param name="Article">L'article à modifier</param>
+        public ArticleForm(ConnexionBDD Connexion, Dictionary<string, Marque> Marques, Dictionary<string, SousFamille> SousFamilles, Dictionary<string, Famille> Familles, SousFamille SousFamille = null, Marque Marque = null, Article Article = null)
         {
             InitializeComponent();
-            
+
+            //Initialisation des variables
             this.Connexion = Connexion;
-            this.Articles = Articles;
             this.Marques = Marques;
             this.SousFamilles = SousFamilles;
             this.Familles = Familles;
-
-            
-            ArticleDAO = new ArticleDAO(Connexion);
-            FamilleDAO = new FamilleDAO(Connexion);
-            SousFamilleDAO = new SousFamilleDAO(Connexion);
-            MarqueDAO = new MarqueDAO(Connexion);
-            
-
-            //Si l'article est null, c'est qu'on veut ajouter un article
-            if (Article == null)
-            {
-                Article = new Article();
-            }
             this.Article = Article;
+
+
+            ArticleDAO = new ArticleDAO(Connexion);
 
             ConfirmButton.Enabled = false;
 
-            
-            // Si RefArticle est vide ==> création d'un nouvel Article
-            if (this.Article.RefArticle == null)
+
+            // Si l'article est null ==> création d'un nouvel Article
+            if (Article == null)
             {
+                this.Article = new Article();
                 Text = "Créer un nouvel Article";
                 ConfirmButton.Text = "Ajouter l'Article";
                 RefTextBox.ReadOnly = false;
@@ -98,18 +102,21 @@ namespace Hector
                 ArticleDAO ArticleDAO = new ArticleDAO(Connexion);
                 ChargerArticle(this.Article);
             }
-            
-            InitialiserComboBox();
+
+            InitialiserComboBox(SousFamille, Marque);
         }
+
 
         /// <summary>
         /// Charge les données de chaque ComboBox (ie : La liste des familles, La liste des sous familles de cette famille et la liste des marques)
         /// </summary>
-        public void InitialiserComboBox()
+        public void InitialiserComboBox(SousFamille SousFamille = null, Marque Marque = null)
         {
+            //On lie les ComboBox avec les dictionnaires de familles, sous familles et marques
             FamilleComboBox.DataSource = new BindingSource(Familles.Values.ToArray(), null);
             MarqueComboBox.DataSource = new BindingSource(Marques.Values.ToArray(), null);
             SousFamilleComboBox.DataSource = new BindingSource(SousFamilles.Values.ToArray(), null);
+
 
             //Si on modifie un Article, on initialise la valeur de la comboBox correspondante à la famille originale de l'Article
             if (Mode == ModeEnum.Edit)
@@ -118,17 +125,36 @@ namespace Hector
                 SousFamilleComboBox.DataSource = new BindingSource(Article.SousFamille.Famille.SousFamilles.Values.ToArray(), null);
 
                 //On initialise les choix par défaut des ComboBox des familles, sous-familles et marques
-                FamilleComboBox.SelectedIndex = FamilleComboBox.Items.IndexOf(Article.SousFamille.Famille);
-                SousFamilleComboBox.SelectedIndex = SousFamilleComboBox.Items.IndexOf(Article.SousFamille);
-                MarqueComboBox.SelectedIndex = MarqueComboBox.Items.IndexOf(Article.Marque);
+                FamilleComboBox.SelectedItem = Article.SousFamille.Famille;
+                SousFamilleComboBox.SelectedItem = Article.SousFamille;
+                MarqueComboBox.SelectedItem = Article.Marque;
+                return;
+            }
+
+
+            //Entrée : On a passé une sous-famille en paramètre du constructeur
+            //      => On selectionne la sous-famille et sa famille dans leur ComboBox respectifs
+            if (SousFamille != null)
+            {
+                FamilleComboBox.SelectedItem = SousFamille.Famille;
+                SousFamilleComboBox.DataSource = new BindingSource(SousFamille.Famille.SousFamilles.Values.ToArray(), null);
+                SousFamilleComboBox.SelectedItem = SousFamille;
+            }
+
+
+            //Entrée : On a passé une marque en paramètre du constructeur
+            //      => On selectionne la marque dans sa ComboBox
+            if (Marque != null)
+            {
+                MarqueComboBox.SelectedItem = Marque;
             }
         }
-        
+
 
         /// <summary>
         /// Initialise les champs "Référence", "Description", "Prix HT" et quantité en fonction d'un Article
         /// </summary>
-        /// <param name="Article">Article à partir duquel initialiser les champs énoncés plus haut.</param>
+        /// <param name="Article">Article à partir duquel initialiser les champs du formulaire</param>
         public void ChargerArticle(Article Article)
         {
             RefTextBox.Text = Article.RefArticle;
@@ -137,32 +163,122 @@ namespace Hector
             QuantiteNumericUpDown.Value = Article.Quantite;
         }
 
+
         /// <summary>
         /// Valide la création ou la modification d'un Article dans la BDD.
         /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
         private void ConfirmButton_Click(object Emetteur, EventArgs Evenement)
         {
+            //On initialise les valeurs de l'article
             Article.RefArticle = RefTextBox.Text;
             Article.Description = DescTextBox.Text;
             Article.Prix = Convert.ToSingle(PrixNumericUpDown.Value);
             Article.Quantite = Convert.ToInt32(QuantiteNumericUpDown.Value);
-            
+
             Article.Marque = (Marque)MarqueComboBox.SelectedItem;
             Article.SousFamille = (SousFamille)SousFamilleComboBox.SelectedItem;
 
-            if(Mode == ModeEnum.Edit)
+            //Entrée : On veut modifier un article
+            if (Mode == ModeEnum.Edit)
             {
                 ArticleDAO.Modifier(Article);
             }
+            //Sino c'est qu'on veut l'ajouter
             else
             {
                 ArticleDAO.Inserer(Article);
             }
-            
+
             Close();
         }
+
+
+        /// <summary>
+        /// Méthode appelée lorsque l'on modifie le champ du nom.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void RefTextBox_TextChanged(object Emetteur, EventArgs Evenement)
+        {
+            ValidationFormulaire();
+        }
+
+
+        /// <summary>
+        /// Méthode appelée lorsque l'on modifie le champ de la description.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void DescTextBox_TextChanged(object Emetteur, EventArgs Evenement)
+        {
+            ValidationFormulaire();
+        }
+
+
+        /// <summary>
+        /// Méthode appelée lorsque l'on modifie le champ de la famille.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void SousFamilleComboBox_SelectedIndexChanged(object Emetteur, EventArgs Evenement)
+        {
+            ValidationFormulaire();
+        }
+
+
+        /// <summary>
+        /// Méthode appelée lorsque l'on modifie le champ de la marque.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void MarqueComboBox_SelectedIndexChanged(object Emetteur, EventArgs Evenement)
+        {
+            ValidationFormulaire();
+        }
+
+
+        /// <summary>
+        /// Méthode appelée lorsque l'on modifie le champ du prix.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void PrixNumericUpDown_ValueChanged(object Emetteur, EventArgs Evenement)
+        {
+            ValidationFormulaire();
+        }
+
+
+        /// <summary>
+        /// Méthode appelée lorsque l'on modifie le champ de la quantité.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void QuantiteNumericUpDown_ValueChanged(object Emetteur, EventArgs Evenement)
+        {
+            ValidationFormulaire();
+        }
+
+
+        /// <summary>
+        /// Recharge la liste de sous-famille de la comboBox correspondante lorsque la famille sélectionnée change.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void FamilleComboBox_SelectedIndexChanged(object Emetteur, EventArgs Evenement)
+        {
+            Famille FamilleSelectionnee = (Famille)FamilleComboBox.SelectedItem;
+
+            if (FamilleSelectionnee == null) return;
+
+            //On ajoute toutes les sous-familles de la famille séléctionnée dans la ComboBox
+            SousFamilleComboBox.DataSource = new BindingSource(FamilleSelectionnee.SousFamilles.Values.ToArray(), null);
+            SousFamilleComboBox.SelectedIndex = 0;
+
+            ValidationFormulaire();
+        }
+
 
         /// <summary>
         /// Vérifie si chaque champs a une valeur valide
@@ -173,7 +289,7 @@ namespace Hector
         /// Prix         : float (virgule et pas point)
         /// </summary>
         /// <returns>Vrai si tout les champs sont valides, faux sinon.</returns>
-        public bool AreFieldsValid()
+        public bool VerifierFormulaire()
         {
             if (string.Compare(DescTextBox.Text, "") == 0)
             {
@@ -195,7 +311,8 @@ namespace Hector
                 return false;
             }
 
-            if(PrixNumericUpDown.Value < 0){
+            if (PrixNumericUpDown.Value < 0)
+            {
                 return false;
             }
 
@@ -205,9 +322,9 @@ namespace Hector
         /// <summary>
         /// Active ou désactive le bouton de validation des modifications en fonction de la validité de chacun des champs.
         /// </summary>
-        public void CheckFields()
+        public void ValidationFormulaire()
         {
-            if (AreFieldsValid())
+            if (VerifierFormulaire())
             {
                 ConfirmButton.Enabled = true;
             }
@@ -215,56 +332,6 @@ namespace Hector
             {
                 ConfirmButton.Enabled = false;
             }
-        }
-
-
-
-        private void RefTextBox_TextChanged(object Emetteur, EventArgs Evenement)
-        {
-            CheckFields();
-        }
-
-        private void DescTextBox_TextChanged(object Emetteur, EventArgs Evenement)
-        {
-            CheckFields();
-        }
-
-        private void SousFamilleComboBox_SelectedIndexChanged(object Emetteur, EventArgs Evenement)
-        {
-            CheckFields();
-        }
-
-        private void MarqueComboBox_SelectedIndexChanged(object Emetteur, EventArgs Evenement)
-        {
-            CheckFields();
-        }
-
-
-        private void PrixNumericUpDown_ValueChanged(object Emetteur, EventArgs Evenement)
-        {
-            CheckFields();
-        }
-
-        private void QuantiteNumericUpDown_ValueChanged(object Emetteur, EventArgs Evenement)
-        {
-            CheckFields();
-        }
-
-        /// <summary>
-        /// Recharge la liste de sous-famille de la comboBox correspondante lorsque la famille sélectionnée change.
-        /// </summary>
-        /// <param name="Emetteur"></param>
-        /// <param name="Evenement"></param>
-        private void FamilleComboBox_SelectedIndexChanged(object Emetteur, EventArgs Evenement)
-        {
-            Famille FamilleSelectionnee = (Famille)FamilleComboBox.SelectedItem;
-
-            if (FamilleSelectionnee == null) return;
-
-            SousFamilleComboBox.DataSource = new BindingSource(FamilleSelectionnee.SousFamilles.Values.ToArray(), null);
-            SousFamilleComboBox.SelectedIndex = 0;
-            
-            CheckFields();
         }
     }
 }
