@@ -85,8 +85,8 @@ namespace Hector
             };
 
             string Commande = "UPDATE SousFamilles SET " +
-                "RefFamille = @refFamille" +
-                "Nom = @nom" +
+                "RefFamille = @refFamille, " +
+                "Nom = @nom " +
                 "WHERE RefSousFamille = @refSousFamille;";
 
             return Connexion.ExecuterCommande(Commande, Parametres) != -1;
@@ -165,7 +165,7 @@ namespace Hector
         {
             FamilleDAO FamilleDAO = new FamilleDAO(Connexion);
 
-            string Commande = "SELECT RefFamille, Nom FROM SousFamilles;";
+            string Commande = "SELECT RefSousFamille, RefFamille, Nom FROM SousFamilles;";
 
             TableSQLite ResultatSQLite = Connexion.ExecuterCommandeAvecResultat(Commande);
             if (ResultatSQLite == null || ResultatSQLite.Count == 0) return null;
@@ -180,11 +180,11 @@ namespace Hector
             foreach (LigneSQLite Ligne in ResultatSQLite)
             {
                 SousFamille = new SousFamille(Ligne.Attribut<int>(0));
-                SousFamille.Nom = Ligne.Attribut<string>(1);
+                SousFamille.Nom = Ligne.Attribut<string>(2);
 
                 
                 //On récupère la famille de la sous famille
-                RefFamille = Ligne.Attribut<int>(0);
+                RefFamille = Ligne.Attribut<int>(1);
 
                 //Si la Famille avait déjà été chargée et créée on la récupère
                 if (Familles.ContainsKey(RefFamille))

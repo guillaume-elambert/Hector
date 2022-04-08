@@ -23,8 +23,7 @@ namespace Hector
         {
             this.Connexion = Connexion;
         }
-
-        public FamilleDAO() { }
+        
 
         /// <summary>
         /// Méthode d'insertion d'un objet Famille dans la base de données.
@@ -87,7 +86,7 @@ namespace Hector
             };
 
             string Commande = "UPDATE Familles SET " +
-                "Nom = @nom" +
+                "Nom = @nom " +
                 "WHERE RefFamille = @refFamille;";
 
             return Connexion.ExecuterCommande(Commande, Parametres) != -1;

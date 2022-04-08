@@ -1,6 +1,6 @@
 ﻿namespace Hector
 {
-    partial class MarqueForm
+    partial class FamilleForm
     {
         /// <summary>
         /// Required designer variable.
@@ -135,18 +135,19 @@
             this.ConfirmButton.UseVisualStyleBackColor = true;
             this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 
-            // MarqueForm
+            // FamilleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(343, 148);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(359, 187);
             this.MinimumSize = new System.Drawing.Size(359, 187);
-            this.Name = "MarqueForm";
+            this.Name = "FamilleForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Créer / Modifier une marque";
+            this.Text = "Créer / Modifier une famille";
             this.flowLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

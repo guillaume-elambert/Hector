@@ -306,26 +306,6 @@ namespace Hector
                 }
             }
 
-            //On ajoute les sous-familles qui n'ont pas d'article dans le dictionnaire
-            foreach (SousFamille SousFamille in TempSousFamilles.Values)
-            {
-                RefSousFamille = SousFamille.RefSousFamille.ToString();
-
-                //Entrée : La référence de la sous-famille n'existe pas dans le dictionnaire
-                //      => On l'ajoute
-                if (!SousFamilles.ContainsKey(RefSousFamille))
-                {
-                    SousFamilles[RefSousFamille] = SousFamille;
-                }
-
-                //On ajoute les familles qui n'ont pas d'article dans le dictionnaire
-                RefFamille = SousFamille.Famille.RefFamille.ToString();
-                if (!Familles.ContainsKey(RefFamille))
-                {
-                    Familles[RefFamille] = SousFamille.Famille;
-                }
-            }
-
             //On ajoute les familles qui n'ont pas d'article dans le dictionnaire
             foreach (Famille Famille in TempFamilles.Values)
             {
@@ -336,6 +316,27 @@ namespace Hector
                 if (!Familles.ContainsKey(RefFamille))
                 {
                     Familles[RefFamille] = Famille;
+                }
+            }
+
+            //On ajoute les sous-familles qui n'ont pas d'article dans le dictionnaire
+            foreach (SousFamille SousFamille in TempSousFamilles.Values)
+            {
+                RefSousFamille = SousFamille.RefSousFamille.ToString();
+                RefFamille = SousFamille.Famille.RefFamille.ToString();
+
+                //Entrée : La référence de la sous-famille n'existe pas dans le dictionnaire
+                //      => On l'ajoute
+                if (!SousFamilles.ContainsKey(RefSousFamille))
+                {
+                    SousFamilles[RefSousFamille] = SousFamille;
+                    Familles[RefFamille].SousFamilles[RefSousFamille] = SousFamille;
+                }
+
+                //On ajoute les familles qui n'ont pas d'article dans le dictionnaire
+                if (!Familles.ContainsKey(RefFamille))
+                {
+                    Familles[RefFamille] = SousFamille.Famille;
                 }
             }
 
@@ -877,8 +878,7 @@ namespace Hector
                                 SousFamillesASupprimer[SousFamille.RefSousFamille.ToString()] = SousFamille;
                             }
 
-                        }
-                        Familles.Remove(ObjetSelectionne.Name);
+                        };
                     }
                 }
                 //Si l'élément séléctionné est une sous-famille, on la supprime
@@ -887,39 +887,41 @@ namespace Hector
                     string RefSousFamille = ExpressionReguliereSousFamille.Match(ObjetSelectionne.Name).Groups[1].Value;
                     SousFamillesASupprimer[RefSousFamille] = SousFamilles[RefSousFamille];
                 }
+            }
 
 
-                //On supprime certaines sous familles et tous leurs articles
-                foreach (SousFamille SousFamille in SousFamillesASupprimer.Values)
+            //On supprime certaines sous familles et tous leurs articles
+            foreach (SousFamille SousFamille in SousFamillesASupprimer.Values)
+            {
+                if (SousFamilleDAO.Supprimer(SousFamilles[SousFamille.RefSousFamille.ToString()]))
                 {
-                    if (SousFamilleDAO.Supprimer(SousFamilles[SousFamille.RefSousFamille.ToString()]))
+                    //On supprime tous les articles de la sous-famille
+                    foreach (Article Article in SousFamille.Articles.Values)
                     {
-                        //On supprime tous les articles de la sous-famille
-                        foreach (Article Article in SousFamille.Articles.Values)
+                        if (!ArticlesASupprimer.ContainsKey(Article.RefArticle))
                         {
-                            if (!ArticlesASupprimer.ContainsKey(Article.RefArticle))
-                            {
-                                ArticlesASupprimer[Article.RefArticle] = Article;
-                            }
+                            ArticlesASupprimer[Article.RefArticle] = Article;
                         }
-                        SousFamilles.Remove(SousFamille.RefSousFamille.ToString());
                     }
-                }
 
-                //On supprime certains articles
-                foreach (Article Article in ArticlesASupprimer.Values)
-                {
-                    if (ArticleDAO.Supprimer(Article))
-                    {
-                        Articles.Remove(Article.RefArticle);
-                    }
+                    SousFamilles.Remove(SousFamille.RefSousFamille.ToString());
                 }
             }
-            
+
+            //On supprime certains articles
+            foreach (Article Article in ArticlesASupprimer.Values)
+            {
+                if (ArticleDAO.Supprimer(Article))
+                {
+                    Articles.Remove(Article.RefArticle);
+                }
+            }
+
             ActualiserDonnees();
             ActualiserListView(NomDernierElementTreeViewClicke);
         }
 
+        
         /// <summary>
         /// Ouvre le menu de création/modification d'élément (Article, Marque, Famille ou Sous-Famille).
         /// </summary>
@@ -945,7 +947,7 @@ namespace Hector
             Regex ExpressionReguliereSousFamille = new Regex("^" + PrefixeSousFamille + "(.*)$");
             Regex ExpressionReguliereArticle = new Regex("^" + PrefixeArticle + "(.*)$");
 
-            // On veut créer/modifier un article
+            // On veut créer / modifier un article
             if ( ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name) )
             {
                 if (Create)
@@ -957,6 +959,7 @@ namespace Hector
                     FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, Articles[ObjetSelectionne.Text]);
                 }
             }
+            // On veut créé / modifier une marque
             else if (ExpressionReguliereMarque.IsMatch(ListView.Columns[0].Name))
             {
                 if (Create)
@@ -969,6 +972,41 @@ namespace Hector
                     FormulaireAjoutModification = new MarqueForm(Connexion, Marques[RefMarque]);
                 }
             }
+            // On veur créer / modifier une famille
+            else if (ExpressionReguliereFamille.IsMatch(ListView.Columns[0].Name))
+            {
+                if (Create)
+                {
+                    FormulaireAjoutModification = new FamilleForm(Connexion, null);
+                }
+                else
+                {
+                    string RefFamille = ExpressionReguliereFamille.Match(ObjetSelectionne.Name).Groups[1].Value;
+                    FormulaireAjoutModification = new FamilleForm(Connexion, Familles[RefFamille]);
+                }
+            }
+            // On veut créer / modifier une sous-famille
+            else if (ExpressionReguliereSousFamille.IsMatch(ListView.Columns[0].Name))
+            {
+                Famille LaFamille = null;
+
+                //On récupère la famille dans laquelle on se trouve actuellement
+                if (ExpressionReguliereFamille.IsMatch(NomDernierElementTreeViewClicke)){
+                    string RefFamille = ExpressionReguliereFamille.Match(NomDernierElementTreeViewClicke).Groups[1].Value;
+                    LaFamille = Familles[RefFamille];
+                }
+
+                if (Create)
+                {
+                    FormulaireAjoutModification = new SousFamilleForm(Connexion, Familles, LaFamille, null);
+                }
+                else
+                {
+                    string RefSousFamille = ExpressionReguliereSousFamille.Match(ObjetSelectionne.Name).Groups[1].Value;
+                    FormulaireAjoutModification = new SousFamilleForm(Connexion, Familles, LaFamille, SousFamilles[RefSousFamille]);
+                }
+            }
+
             /*// On veut créer/modifier une famille
             else if (ListViewDisplay == "FAMILLES")
             {

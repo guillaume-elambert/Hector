@@ -100,6 +100,12 @@
     <Compile Include="DAO.cs" />
     <Compile Include="Famille.cs" />
     <Compile Include="FamilleDAO.cs" />
+    <Compile Include="FamilleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FamilleForm.Designer.cs">
+      <DependentUpon>FamilleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FenetreExporter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,11 +136,20 @@
     <Compile Include="ParseurCSV.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SousFamilleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SousFamilleForm.Designer.cs">
+      <DependentUpon>SousFamilleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TableSQLite.cs" />
     <Compile Include="SousFamille.cs" />
     <Compile Include="SousFamilleDAO.cs" />
     <EmbeddedResource Include="ArticleForm.resx">
       <DependentUpon>ArticleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FamilleForm.resx">
+      <DependentUpon>FamilleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FenetreExporter.resx">
       <DependentUpon>FenetreExporter.cs</DependentUpon>
@@ -157,6 +172,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SousFamilleForm.resx">
+      <DependentUpon>SousFamilleForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Hector.SQLite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
