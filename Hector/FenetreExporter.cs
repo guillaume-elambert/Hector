@@ -115,7 +115,7 @@ namespace Hector
         /// <param name="Evenement">L'evenement</param>
         private void BoutonAnnuler_Click(object Emetteur, EventArgs Evenement)
         {
-            this.Dispose(true);
+            Close();
         }
 
 
@@ -156,7 +156,7 @@ namespace Hector
         {
             if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
             {
-                Dispose(true);
+                Close();
                 return true;
             }
 

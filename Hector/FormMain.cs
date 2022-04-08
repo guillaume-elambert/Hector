@@ -220,7 +220,7 @@ namespace Hector
 
             if (Evenement.KeyCode == Keys.Delete || Evenement.KeyCode == Keys.EraseEof)
             {
-                SupprimerElement();
+                SupprimerElementsListView();
             }
         }
 
@@ -234,7 +234,7 @@ namespace Hector
         {
             if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
             {
-                Dispose(true);
+                Close();
                 return true;
             }
             return base.ProcessDialogKey(Touche);
@@ -375,7 +375,7 @@ namespace Hector
             //On définit les actions du menu "Supprimer"
             Supprimer.Click += (sender, e) =>
             {
-                SupprimerElement();
+                SupprimerElementsListView();
             };
 
             //Entrée : Le clic droit n'a pas été fait sur un article
@@ -393,6 +393,63 @@ namespace Hector
             ContextMenu.MenuItems.Add(Supprimer);
             ContextMenu.Show(this, PointDuClick);
 
+        }
+
+
+        /// <summary>
+        /// On charge l'état de l'application de la dernière session.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void FormMain_Load(object Emetteur, EventArgs Evenement)
+        {
+
+            // Mise à niveau C# ?
+            if (Properties.Settings.Default.Taille.Width == 0) Properties.Settings.Default.Upgrade();
+
+            // Entrée : Pas d'état précédemment stocké
+            //      => On sort
+            if (Properties.Settings.Default.Taille.Width == 0 || Properties.Settings.Default.Taille.Height == 0)
+                return;
+
+            //On charge l'état de l'application de la dernière session
+            this.WindowState = Properties.Settings.Default.Etat;
+
+            //On ne veut pas que la fenêtre soit maximisée
+            if (this.WindowState == FormWindowState.Minimized)
+                this.WindowState = FormWindowState.Normal;
+
+            //On définit la taille et la position de la fenêtre
+            this.Location = Properties.Settings.Default.Position;
+            this.Size = Properties.Settings.Default.Taille;
+        }
+
+
+        /// <summary>
+        /// On stocke l'état de l'application dans les préférences.
+        /// </summary>
+        /// <param name="Emetteur">L'objet emetteur</param>
+        /// <param name="Evenement">L'evenement</param>
+        private void FormMain_FormClosing(object Emetteur, FormClosingEventArgs Evenement)
+        {
+            Properties.Settings.Default.Etat = this.WindowState;
+
+            //Entrée : L'état est normal
+            //      => On stocke la position et la taille du formulaire
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                Properties.Settings.Default.Position = this.Location;
+                Properties.Settings.Default.Taille = this.Size;
+            }
+            //Sion on récupère la taille et la position
+            else
+            {
+                Properties.Settings.Default.Position = this.RestoreBounds.Location;
+                Properties.Settings.Default.Taille = this.RestoreBounds.Size;
+            }
+
+            //On sauvegarde la paramètres
+            Properties.Settings.Default.Save();
         }
 
 
@@ -869,6 +926,10 @@ namespace Hector
         }
 
 
+        /// <summary>
+        /// Méthode qui ajoute des Sous-Familles à la ListView
+        /// </summary>
+        /// <param name="SousFamilles">Le dictionnaire des SousFamilles à afficher</param>
         private void AfficherSousFamillesListView(Dictionary<string, SousFamille> SousFamilles)
         {
             //Le préfixe à utiliser dans la clé des colonnes de la ListView
@@ -1021,7 +1082,11 @@ namespace Hector
             }
         }
 
-        public void SupprimerElement()
+
+        /// <summary>
+        /// Méthode pour supprimer les éléments séléctionnés dans la ListView
+        /// </summary>
+        public void SupprimerElementsListView()
         {
             if (ListView.Columns == null || ListView.Columns.Count == 0 || ListView.SelectedItems == null || ListView.SelectedItems.Count == 0) return;
 
@@ -1159,7 +1224,6 @@ namespace Hector
                     SousFamilles.Remove(SousFamille.RefSousFamille.ToString());
                 }
             }
-
 
                 
             //On supprime les articles

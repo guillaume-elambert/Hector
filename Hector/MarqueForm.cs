@@ -108,7 +108,7 @@ namespace Hector
         {
             if (Form.ModifierKeys == Keys.None && Touche == Keys.Escape)
             {
-                Dispose(true);
+                Close();
                 return true;
             }
 

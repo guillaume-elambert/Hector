@@ -57,7 +57,7 @@ namespace Hector
             this.FichierToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(800, 24);
+            this.MenuStrip.Size = new System.Drawing.Size(834, 24);
             this.MenuStrip.TabIndex = 0;
             this.MenuStrip.Text = "MenuStrip";
             // 
@@ -75,21 +75,21 @@ namespace Hector
             // 
             this.ActualiserToolStripMenuItem.Name = "ActualiserToolStripMenuItem";
             this.ActualiserToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ActualiserToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.ActualiserToolStripMenuItem.Text = "Actualiser";
             this.ActualiserToolStripMenuItem.Click += new System.EventHandler(this.ActualiserToolStripMenuItem_Click);
             // 
             // ImporterToolStripMenuItem
             // 
             this.ImporterToolStripMenuItem.Name = "ImporterToolStripMenuItem";
-            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ImporterToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.ImporterToolStripMenuItem.Text = "Importer";
             this.ImporterToolStripMenuItem.Click += new System.EventHandler(this.ImporterToolStripMenuItem_Click);
             // 
             // ExporterToolStripMenuItem
             // 
             this.ExporterToolStripMenuItem.Name = "ExporterToolStripMenuItem";
-            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExporterToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.ExporterToolStripMenuItem.Text = "Exporter";
             this.ExporterToolStripMenuItem.Click += new System.EventHandler(this.ExporterToolStripMenuItem_Click);
             // 
@@ -97,9 +97,9 @@ namespace Hector
             // 
             this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TexteStatusStrip});
-            this.StatusStrip.Location = new System.Drawing.Point(0, 428);
+            this.StatusStrip.Location = new System.Drawing.Point(0, 439);
             this.StatusStrip.Name = "StatusStrip";
-            this.StatusStrip.Size = new System.Drawing.Size(800, 22);
+            this.StatusStrip.Size = new System.Drawing.Size(834, 22);
             this.StatusStrip.TabIndex = 1;
             // 
             // TexteStatusStrip
@@ -122,8 +122,8 @@ namespace Hector
             // SplitContainer.Panel2
             // 
             this.SplitContainer.Panel2.Controls.Add(this.ListView);
-            this.SplitContainer.Size = new System.Drawing.Size(800, 404);
-            this.SplitContainer.SplitterDistance = 266;
+            this.SplitContainer.Size = new System.Drawing.Size(834, 415);
+            this.SplitContainer.SplitterDistance = 277;
             this.SplitContainer.TabIndex = 2;
             // 
             // ArbreArticles
@@ -133,7 +133,7 @@ namespace Hector
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ArbreArticles.Location = new System.Drawing.Point(0, 0);
             this.ArbreArticles.Name = "ArbreArticles";
-            this.ArbreArticles.Size = new System.Drawing.Size(266, 404);
+            this.ArbreArticles.Size = new System.Drawing.Size(277, 415);
             this.ArbreArticles.TabIndex = 1;
             this.ArbreArticles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ArbreArticles_AfterSelect);
             // 
@@ -142,7 +142,7 @@ namespace Hector
             this.TreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TreeView.Location = new System.Drawing.Point(0, 0);
             this.TreeView.Name = "TreeView";
-            this.TreeView.Size = new System.Drawing.Size(266, 404);
+            this.TreeView.Size = new System.Drawing.Size(277, 415);
             this.TreeView.TabIndex = 0;
             // 
             // ListView
@@ -152,7 +152,7 @@ namespace Hector
             this.ListView.HideSelection = false;
             this.ListView.Location = new System.Drawing.Point(0, 0);
             this.ListView.Name = "ListView";
-            this.ListView.Size = new System.Drawing.Size(530, 404);
+            this.ListView.Size = new System.Drawing.Size(553, 415);
             this.ListView.TabIndex = 2;
             this.ListView.UseCompatibleStateImageBehavior = false;
             this.ListView.View = System.Windows.Forms.View.Details;
@@ -165,13 +165,16 @@ namespace Hector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(834, 461);
             this.Controls.Add(this.SplitContainer);
             this.Controls.Add(this.StatusStrip);
             this.Controls.Add(this.MenuStrip);
             this.MainMenuStrip = this.MenuStrip;
+            this.MinimumSize = new System.Drawing.Size(850, 500);
             this.Name = "FormMain";
-            this.Text = "Hector";
+            this.Text = "Hector - Gestionnaire de base de donnée";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
             this.StatusStrip.ResumeLayout(false);
