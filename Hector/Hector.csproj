@@ -121,6 +121,12 @@
     <Compile Include="LigneSQLite.cs" />
     <Compile Include="Marque.cs" />
     <Compile Include="MarqueDAO.cs" />
+    <Compile Include="MarqueForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarqueForm.Designer.cs">
+      <DependentUpon>MarqueForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ParseurCSV.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarqueForm.resx">
+      <DependentUpon>MarqueForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

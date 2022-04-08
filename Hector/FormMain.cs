@@ -194,6 +194,11 @@ namespace Hector
             //On récupère tous les articles
             Articles = ArticleDAO.ObtenirTout();
 
+            //On récupère les marques, familles et sous-familles dans des dictionnaires temporaires
+            Dictionary<string, Marque> TempMarques = MarqueDAO.ObtenirTout();
+            Dictionary<string, SousFamille> TempSousFamilles = SousFamilleDAO.ObtenirTout();
+            Dictionary<string, Famille> TempFamilles = FamilleDAO.ObtenirTout();
+
             //On supprime toutes les marques, familles et sous familles stockées précédemment
             Marques.Clear();
             SousFamilles.Clear();
@@ -216,46 +221,31 @@ namespace Hector
             {
                 //On réinitialise le dictionnaire des articles (pour éviter erreur si null)
                 Articles = new Dictionary<string, Article>();
-
-                //On récupère les marques et sous-familles
-                Marques = MarqueDAO.ObtenirTout();
-                SousFamilles = SousFamilleDAO.ObtenirTout();
-
-                //S'il n'y a pas de sous-familles, on utilise les Familles qui sont stockées en BDD et non celles stockées dans les objets
-                if (SousFamilles == null || SousFamilles.Count == 0)
-                {
-                    //On réinitialise le dictionnaire des sous-familles (pour éviter erreur si null)
-                    SousFamilles = new Dictionary<string, SousFamille>();
-
-                    Familles = FamilleDAO.ObtenirTout();
-
-                    if (Familles == null || Familles.Count == 0)
-                    {
-                        //On réinitialise le dictionnaire des marques (pour éviter erreur si null)
-                        Familles = new Dictionary<string, Famille>();
-                    }
-                }
-
-                if(Marques == null || Marques.Count == 0)
-                {
-                    //On réinitialise le dictionnaire des marques (pour éviter erreur si null)
-                    Marques = new Dictionary<string, Marque>();
-                }
-
-
-                //Pour chaque sous-familles, on regarde si sa famille  existe dans le dictionnaire des Familles
-                foreach (SousFamille SousFamille in SousFamilles.Values)
-                {
-                    RefFamille = SousFamille.Famille.RefFamille.ToString();
-
-                    //Entrée : La référence de la famille n'existe pas dans le dictionnaire
-                    //      => On l'ajoute
-                    if (!Familles.ContainsKey(RefFamille))
-                    {
-                        Familles[RefFamille] = SousFamille.Famille;
-                    }
-                }
             }
+                
+                
+            if (TempFamilles == null || TempFamilles.Count == 0)
+            {
+                //On réinitialise le dictionnaire des familles (pour éviter erreur si null)
+                Familles = new Dictionary<string, Famille>();
+                TempFamilles = new Dictionary<string, Famille>();
+            }
+
+            //On réinitialise le dictionnaire des familles (pour éviter erreur si null)
+            if (TempSousFamilles == null || TempSousFamilles.Count == 0)
+            {
+                //On réinitialise le dictionnaire des sous-familles (pour éviter erreur si null)
+                SousFamilles = new Dictionary<string, SousFamille>();
+                TempSousFamilles = new Dictionary<string, SousFamille>();
+            }
+
+            if(TempMarques == null || TempMarques.Count == 0)
+            {
+                //On réinitialise le dictionnaire des marques (pour éviter erreur si null)
+                Marques = new Dictionary<string, Marque>();
+                TempMarques = new Dictionary<string, Marque>();
+            }
+
 
 
             //On parcours tous les Articles (s'il y en a)
@@ -298,6 +288,54 @@ namespace Hector
                 {
                     //On stocke la famille dans la liste des familles
                     Familles[RefFamille] = Article.SousFamille.Famille;
+                }
+            }
+
+
+
+            //On ajoute les marques qui n'ont pas d'article dans le dictionnaire
+            foreach (Marque Marque in TempMarques.Values)
+            {
+                RefMarque = Marque.RefMarque.ToString();
+
+                //Entrée : La référence de la marque n'existe pas dans le dictionnaire
+                //      => On l'ajoute
+                if (!Marques.ContainsKey(RefMarque))
+                {
+                    Marques[RefMarque] = Marque;
+                }
+            }
+
+            //On ajoute les sous-familles qui n'ont pas d'article dans le dictionnaire
+            foreach (SousFamille SousFamille in TempSousFamilles.Values)
+            {
+                RefSousFamille = SousFamille.RefSousFamille.ToString();
+
+                //Entrée : La référence de la sous-famille n'existe pas dans le dictionnaire
+                //      => On l'ajoute
+                if (!SousFamilles.ContainsKey(RefSousFamille))
+                {
+                    SousFamilles[RefSousFamille] = SousFamille;
+                }
+
+                //On ajoute les familles qui n'ont pas d'article dans le dictionnaire
+                RefFamille = SousFamille.Famille.RefFamille.ToString();
+                if (!Familles.ContainsKey(RefFamille))
+                {
+                    Familles[RefFamille] = SousFamille.Famille;
+                }
+            }
+
+            //On ajoute les familles qui n'ont pas d'article dans le dictionnaire
+            foreach (Famille Famille in TempFamilles.Values)
+            {
+                RefFamille = Famille.RefFamille.ToString();
+
+                //Entrée : La référence de la famille n'existe pas dans le dictionnaire
+                //      => On l'ajoute
+                if (!Familles.ContainsKey(RefFamille))
+                {
+                    Familles[RefFamille] = Famille;
                 }
             }
 
@@ -796,22 +834,88 @@ namespace Hector
             if (ListView.Columns == null || ListView.Columns.Count == 0 || ListView.SelectedItems == null || ListView.SelectedItems.Count == 0) return;
 
 
-            ListViewItem ObjetSelectionne = ListView.SelectedItems[0];
-
             //Liste des expressions régulière des noms de colonne possibles
             Regex ExpressionReguliereFamille = new Regex("^" + PrefixeFamille + "(.*)$");
             Regex ExpressionReguliereMarque = new Regex("^" + PrefixeMarque + "(.*)$");
             Regex ExpressionReguliereSousFamille = new Regex("^" + PrefixeSousFamille + "(.*)$");
             Regex ExpressionReguliereArticle = new Regex("^" + PrefixeArticle + "(.*)$");
 
-            if (ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name))
-            {
-                if (ArticleDAO.Supprimer(Articles[ObjetSelectionne.Text]))
+
+            Dictionary<string, Article> ArticlesASupprimer = new Dictionary<string, Article>();
+            Dictionary<string, SousFamille> SousFamillesASupprimer = new Dictionary<string, SousFamille>();
+
+
+            //On parcours tous les objets de la ListView qui sont séléctionnés
+            foreach (ListViewItem ObjetSelectionne in ListView.SelectedItems) {
+
+                //Si l'élément séléctionné est un article, on le supprime
+                if (ExpressionReguliereArticle.IsMatch(ListView.Columns[0].Name))
                 {
-                    Articles.Remove(ObjetSelectionne.Name);
+                    ArticlesASupprimer[ObjetSelectionne.Text] = Articles[ObjetSelectionne.Text];
+                }
+                //Si l'element séléctionné est une marque, on la supprime
+                else if (ExpressionReguliereMarque.IsMatch(ListView.Columns[0].Name))
+                {
+                    string RefMarque = ExpressionReguliereMarque.Match(ObjetSelectionne.Name).Groups[1].Value;
+                    if (MarqueDAO.Supprimer(Marques[RefMarque]))
+                    {
+                        Marques.Remove(RefMarque);
+                    }
+                }
+                //Si l'élément séléctionné est une famille, on la supprime
+                else if (ExpressionReguliereFamille.IsMatch(ListView.Columns[0].Name))
+                {
+                    string RefFamille = ExpressionReguliereFamille.Match(ObjetSelectionne.Name).Groups[1].Value;
+
+                    if (FamilleDAO.Supprimer(Familles[RefFamille]))
+                    {
+                        //On supprime toutes les sous-familles de la famille
+                        foreach (SousFamille SousFamille in Familles[RefFamille].SousFamilles.Values)
+                        {
+                            if (!SousFamillesASupprimer.ContainsKey(SousFamille.RefSousFamille.ToString()))
+                            {
+                                SousFamillesASupprimer[SousFamille.RefSousFamille.ToString()] = SousFamille;
+                            }
+
+                        }
+                        Familles.Remove(ObjetSelectionne.Name);
+                    }
+                }
+                //Si l'élément séléctionné est une sous-famille, on la supprime
+                else if (ExpressionReguliereSousFamille.IsMatch(ListView.Columns[0].Name))
+                {
+                    string RefSousFamille = ExpressionReguliereSousFamille.Match(ObjetSelectionne.Name).Groups[1].Value;
+                    SousFamillesASupprimer[RefSousFamille] = SousFamilles[RefSousFamille];
+                }
+
+
+                //On supprime certaines sous familles et tous leurs articles
+                foreach (SousFamille SousFamille in SousFamillesASupprimer.Values)
+                {
+                    if (SousFamilleDAO.Supprimer(SousFamilles[SousFamille.RefSousFamille.ToString()]))
+                    {
+                        //On supprime tous les articles de la sous-famille
+                        foreach (Article Article in SousFamille.Articles.Values)
+                        {
+                            if (!ArticlesASupprimer.ContainsKey(Article.RefArticle))
+                            {
+                                ArticlesASupprimer[Article.RefArticle] = Article;
+                            }
+                        }
+                        SousFamilles.Remove(SousFamille.RefSousFamille.ToString());
+                    }
+                }
+
+                //On supprime certains articles
+                foreach (Article Article in ArticlesASupprimer.Values)
+                {
+                    if (ArticleDAO.Supprimer(Article))
+                    {
+                        Articles.Remove(Article.RefArticle);
+                    }
                 }
             }
-
+            
             ActualiserDonnees();
             ActualiserListView(NomDernierElementTreeViewClicke);
         }
@@ -851,6 +955,18 @@ namespace Hector
                 else
                 {
                     FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, Articles[ObjetSelectionne.Text]);
+                }
+            }
+            else if (ExpressionReguliereMarque.IsMatch(ListView.Columns[0].Name))
+            {
+                if (Create)
+                {
+                    FormulaireAjoutModification = new MarqueForm(Connexion, null);
+                }
+                else
+                {
+                    string RefMarque = ExpressionReguliereMarque.Match(ObjetSelectionne.Name).Groups[1].Value;
+                    FormulaireAjoutModification = new MarqueForm(Connexion, Marques[RefMarque]);
                 }
             }
             /*// On veut créer/modifier une famille
@@ -1024,22 +1140,6 @@ namespace Hector
             ContextMenu.MenuItems.Add(Supprimer);
             ContextMenu.Show(this, PointDuClick);
             
-        }
-
-        public void ModifierArticleContextMenu_Click(object Emetteur, System.EventArgs Evenement)
-        {
-            ArticleForm FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, null);
-            FormulaireAjoutModification.ShowDialog();
-            ActualiserDonnees();
-            ActualiserListView(NomDernierElementTreeViewClicke);
-        }
-
-        public void AjoutArticleContextMenu_Click(object Emetteur, System.EventArgs Evenement)
-        {
-            ArticleForm FormulaireAjoutModification = new ArticleForm(Connexion, Articles, Marques, SousFamilles, Familles, null);
-            FormulaireAjoutModification.ShowDialog();
-            ActualiserDonnees();
-            ActualiserListView(NomDernierElementTreeViewClicke);
         }
 
 

@@ -86,7 +86,7 @@ namespace Hector
             };
 
             string Commande = "UPDATE Marques SET " +
-                "Nom = @nom" +
+                "Nom = @nom " +
                 "WHERE RefMarque = @refMarque;";
 
             return Connexion.ExecuterCommande(Commande, Parametres) != -1;
